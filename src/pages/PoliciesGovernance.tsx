@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '@/components/Header';
 import { ArrowLeft, Shield, FileText, Scale, Lock, Users, AlertTriangle } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 
@@ -74,19 +73,27 @@ const PoliciesGovernance = () => {
   const [selectedPolicy, setSelectedPolicy] = useState<PolicyItem | null>(null);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-b from-indigo-50/60 via-background to-indigo-50/30">
       <Header />
-      
+
       <main className="container mx-auto px-6 py-8">
-        <Link to="/">
-          <Button variant="ghost" size="sm" className="gap-2 mb-4">
-            <ArrowLeft className="w-4 h-4" />
+        <Link
+          to="/"
+          className="group inline-flex items-center mb-4 py-1 text-sm font-medium text-slate-600 hover:text-indigo-700 transition-colors w-fit"
+        >
+          <ArrowLeft className="w-4 h-4 shrink-0 transition-transform duration-300 group-hover:-translate-x-0.5" />
+          <span className="whitespace-nowrap ml-2 transition-all duration-300 group-hover:opacity-0 group-hover:-translate-x-2 pointer-events-none">
             Back to Dashboard
-          </Button>
+          </span>
         </Link>
 
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-foreground mb-2">AI Policies & Governance</h1>
+          <div className="inline-flex items-center gap-3 mb-3">
+            <div className="w-11 h-11 rounded-xl bg-indigo-100 flex items-center justify-center">
+              <Shield className="w-5 h-5 text-indigo-600" />
+            </div>
+            <h1 className="text-3xl font-bold text-foreground">AI Policies & Governance</h1>
+          </div>
           <p className="text-muted-foreground">
             Comprehensive library of policies and governance documents for AI agents
           </p>
@@ -96,7 +103,10 @@ const PoliciesGovernance = () => {
           {policies.map((category) => {
             const Icon = category.icon;
             return (
-              <Card key={category.category}>
+              <Card
+                key={category.category}
+                className="border-indigo-100/60 bg-white/70 backdrop-blur-sm"
+              >
                 <CardHeader>
                   <CardTitle className="text-lg flex items-center gap-3">
                     <div className={`w-10 h-10 rounded-lg ${category.iconBg} flex items-center justify-center`}>
@@ -111,11 +121,11 @@ const PoliciesGovernance = () => {
                       <button
                         key={item.title}
                         onClick={() => setSelectedPolicy(item)}
-                        className="group flex items-start gap-3 p-4 rounded-lg border border-border hover:border-primary/50 hover:shadow-md transition-all duration-200 bg-background text-left w-full"
+                        className="group flex items-start gap-3 p-4 rounded-lg border border-indigo-100 hover:border-indigo-300 hover:bg-indigo-50/50 hover:shadow-md transition-all duration-200 bg-background text-left w-full"
                       >
-                        <FileText className="w-5 h-5 text-muted-foreground group-hover:text-primary mt-0.5 shrink-0" />
+                        <FileText className="w-5 h-5 text-indigo-400 group-hover:text-indigo-600 mt-0.5 shrink-0" />
                         <div className="flex-1 min-w-0">
-                          <h3 className="font-medium text-foreground group-hover:text-primary transition-colors line-clamp-1">
+                          <h3 className="font-medium text-foreground group-hover:text-indigo-700 transition-colors line-clamp-1">
                             {item.title}
                           </h3>
                           <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
@@ -136,7 +146,7 @@ const PoliciesGovernance = () => {
         <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <FileText className="w-5 h-5 text-primary" />
+              <FileText className="w-5 h-5 text-indigo-600" />
               {selectedPolicy?.title}
             </DialogTitle>
             <DialogDescription>{selectedPolicy?.description}</DialogDescription>

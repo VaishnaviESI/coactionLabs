@@ -177,20 +177,23 @@ const ProjectCatalogue = () => {
   ).length;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-b from-emerald-50/60 via-background to-emerald-50/30">
       <Header />
 
       <main className="container mx-auto px-6 py-8">
-        <Link to="/">
-          <Button variant="ghost" size="sm" className="gap-2 mb-4">
-            <ArrowLeft className="w-4 h-4" />
+        <Link
+          to="/"
+          className="group inline-flex items-center mb-4 py-1 text-sm font-medium text-slate-600 hover:text-emerald-700 transition-colors w-fit"
+        >
+          <ArrowLeft className="w-4 h-4 shrink-0 transition-transform duration-300 group-hover:-translate-x-0.5" />
+          <span className="whitespace-nowrap ml-2 transition-all duration-300 group-hover:opacity-0 group-hover:-translate-x-2 pointer-events-none">
             Back to Dashboard
-          </Button>
+          </span>
         </Link>
 
         <div className="mb-6">
           <div className="flex items-center gap-3 mb-2">
-            <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center">
+            <div className="w-11 h-11 rounded-xl bg-emerald-100 flex items-center justify-center">
               <FolderKanban className="w-5 h-5 text-emerald-600" />
             </div>
             <h1 className="text-3xl font-bold text-foreground">AI Project Catalogue</h1>
@@ -202,35 +205,35 @@ const ProjectCatalogue = () => {
 
         {/* Summary stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-          <Card>
+          <Card className="border-emerald-100/60 bg-white/70 backdrop-blur-sm">
             <CardContent className="p-5 flex items-center gap-4">
-              <div className="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center">
                 <Sparkles className="w-5 h-5 text-emerald-600" />
               </div>
               <div>
-                <div className="text-2xl font-semibold">{totalLive}</div>
+                <div className="text-2xl font-semibold text-emerald-700">{totalLive}</div>
                 <div className="text-sm text-muted-foreground">Live in production</div>
               </div>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="border-emerald-100/60 bg-white/70 backdrop-blur-sm">
             <CardContent className="p-5 flex items-center gap-4">
-              <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
-                <Users className="w-5 h-5 text-blue-600" />
+              <div className="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center">
+                <Users className="w-5 h-5 text-emerald-700" />
               </div>
               <div>
-                <div className="text-2xl font-semibold">{totalPiloting}</div>
+                <div className="text-2xl font-semibold text-emerald-700">{totalPiloting}</div>
                 <div className="text-sm text-muted-foreground">Active pilots</div>
               </div>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="border-emerald-100/60 bg-white/70 backdrop-blur-sm">
             <CardContent className="p-5 flex items-center gap-4">
-              <div className="w-10 h-10 rounded-lg bg-amber-50 flex items-center justify-center">
-                <CalendarDays className="w-5 h-5 text-amber-600" />
+              <div className="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center">
+                <CalendarDays className="w-5 h-5 text-emerald-700" />
               </div>
               <div>
-                <div className="text-2xl font-semibold">{totalInFlight}</div>
+                <div className="text-2xl font-semibold text-emerald-700">{totalInFlight}</div>
                 <div className="text-sm text-muted-foreground">In discovery / build</div>
               </div>
             </CardContent>
@@ -286,7 +289,7 @@ const ProjectCatalogue = () => {
             {filtered.map((project) => (
               <Card
                 key={project.id}
-                className="hover:shadow-card-hover transition-shadow duration-300"
+                className="border-emerald-100/60 bg-white/70 backdrop-blur-sm hover:border-emerald-300 hover:shadow-md transition-all duration-300"
               >
                 <CardHeader className="pb-2">
                   <div className="flex items-start justify-between gap-3">
