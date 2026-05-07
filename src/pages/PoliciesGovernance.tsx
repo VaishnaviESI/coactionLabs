@@ -15,7 +15,7 @@ const policies = [
   {
     category: 'Core Policies',
     icon: Shield,
-    iconColor: 'text-indigo-600',
+    iconColor: 'text-black',
     iconBg: 'bg-indigo-50',
     items: [
       { title: 'AI Acceptable Use Policy', description: 'Guidelines for appropriate use of AI tools and agents within the organization.', fullText: 'This policy establishes the acceptable use guidelines for AI tools and agents within our organization. All employees must use AI systems responsibly, ensuring outputs are reviewed before use in business decisions. AI should augment human judgment, not replace it. Users must not input confidential client information into external AI systems without proper authorization. Any AI-generated content must be clearly labeled when shared externally. Violations of this policy may result in disciplinary action. Regular training on AI acceptable use will be provided to all staff members.' },
@@ -26,7 +26,7 @@ const policies = [
   {
     category: 'Data & Privacy',
     icon: Lock,
-    iconColor: 'text-emerald-600',
+    iconColor: 'text-black',
     iconBg: 'bg-emerald-50',
     items: [
       { title: 'Data Handling in AI Interactions', description: 'Rules for managing sensitive data when using AI agents.', fullText: 'This policy defines rules for managing sensitive data in AI interactions. Personal Identifiable Information (PII) must be anonymized or pseudonymized before processing by AI systems. Data retention periods for AI interactions are limited to 90 days unless otherwise required. All data transfers to AI systems must use encrypted channels. Users must classify data sensitivity before AI processing. High-sensitivity data requires additional approval workflows. Regular data audits ensure compliance with these requirements.' },
@@ -37,7 +37,7 @@ const policies = [
   {
     category: 'Compliance & Regulatory',
     icon: Scale,
-    iconColor: 'text-amber-600',
+    iconColor: 'text-black',
     iconBg: 'bg-amber-50',
     items: [
       { title: 'Insurance Industry AI Regulations', description: 'Overview of regulatory requirements specific to insurance AI applications.', fullText: 'This document provides an overview of regulatory requirements for AI in insurance. AI systems used in underwriting must comply with fair lending laws and anti-discrimination regulations. Explainability requirements mandate that AI decisions affecting customers can be explained in plain language. State-specific regulations on AI in claims processing are catalogued and updated quarterly. Regulatory reporting requirements for AI systems are defined. Compliance testing protocols ensure ongoing adherence to evolving regulations. Staff training on insurance-specific AI regulations is mandatory.' },
@@ -48,7 +48,7 @@ const policies = [
   {
     category: 'Ethics & Accountability',
     icon: Users,
-    iconColor: 'text-rose-600',
+    iconColor: 'text-black',
     iconBg: 'bg-rose-50',
     items: [
       { title: 'AI Ethics Guidelines', description: 'Principles for responsible and fair AI usage.', fullText: 'These guidelines establish principles for responsible AI usage. AI systems must be designed and operated with fairness, transparency, and accountability. Human dignity and autonomy must be respected in all AI applications. AI should not perpetuate or amplify societal biases. Environmental impact of AI systems should be considered and minimized. Stakeholder interests must be balanced in AI decision-making. Regular ethics reviews assess AI systems against these principles. An AI Ethics Committee provides guidance on complex ethical issues.' },
@@ -59,7 +59,7 @@ const policies = [
   {
     category: 'Risk Management',
     icon: AlertTriangle,
-    iconColor: 'text-orange-600',
+    iconColor: 'text-black',
     iconBg: 'bg-orange-50',
     items: [
       { title: 'AI Risk Assessment Framework', description: 'Methodology for evaluating risks associated with AI implementations.', fullText: 'This framework provides methodology for evaluating AI implementation risks. Risk categories include operational, reputational, regulatory, and strategic risks. Risk assessment is required before AI project approval. Risk scoring considers likelihood, impact, and velocity. Risk mitigation plans are mandatory for medium and high risks. Residual risk acceptance requires appropriate management approval. Risk registers are maintained for all AI systems. Quarterly risk reviews identify emerging threats. Risk appetite statements guide AI investment decisions.' },
@@ -73,7 +73,7 @@ const PoliciesGovernance = () => {
   const [selectedPolicy, setSelectedPolicy] = useState<PolicyItem | null>(null);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-indigo-50/60 via-background to-indigo-50/30">
+    <div className="min-h-screen bg-slate-50">
       <Header />
 
       <main className="container mx-auto px-6 py-8">
@@ -90,7 +90,7 @@ const PoliciesGovernance = () => {
         <div className="mb-8 text-center">
           <div className="inline-flex items-center gap-3 mb-3">
             <div className="w-11 h-11 rounded-xl bg-indigo-100 flex items-center justify-center">
-              <Shield className="w-5 h-5 text-indigo-600" />
+              <Shield className="w-5 h-5 text-black" />
             </div>
             <h1 className="text-3xl font-bold text-foreground">AI Policies & Governance</h1>
           </div>
@@ -123,7 +123,7 @@ const PoliciesGovernance = () => {
                         onClick={() => setSelectedPolicy(item)}
                         className="group flex items-start gap-3 p-4 rounded-lg border border-indigo-100 hover:border-indigo-300 hover:bg-indigo-50/50 hover:shadow-md transition-all duration-200 bg-background text-left w-full"
                       >
-                        <FileText className="w-5 h-5 text-indigo-400 group-hover:text-indigo-600 mt-0.5 shrink-0" />
+                        <FileText className="w-5 h-5 text-black mt-0.5 shrink-0" />
                         <div className="flex-1 min-w-0">
                           <h3 className="font-medium text-foreground group-hover:text-indigo-700 transition-colors line-clamp-1">
                             {item.title}
@@ -146,7 +146,7 @@ const PoliciesGovernance = () => {
         <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <FileText className="w-5 h-5 text-indigo-600" />
+              <FileText className="w-5 h-5 text-black" />
               {selectedPolicy?.title}
             </DialogTitle>
             <DialogDescription>{selectedPolicy?.description}</DialogDescription>

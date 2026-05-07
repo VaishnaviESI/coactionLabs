@@ -12,10 +12,10 @@ const Header = () => {
   };
 
   return (
-    <header className="border-b border-border bg-card sticky top-0 z-50">
-      <div className="container mx-auto px-6 py-4">
-        <div className="flex items-center justify-between">
-          <Link to="/" className="flex items-center">
+    <header className="sticky top-0 z-50 border-b border-blue-900 bg-gradient-to-r from-white via-blue-100 to-blue-950">
+      <div className="w-full px-6 py-4">
+        <div className="flex w-full items-center justify-between">
+          <Link to="/" className="flex items-start gap-2">
             <img 
               src={coactionLogo} 
               alt="CO/ACTION AI Hub" 
@@ -28,18 +28,18 @@ const Header = () => {
             <Button 
               variant="ghost" 
               size="icon" 
-              className="text-muted-foreground hover:text-foreground"
+              className="text-blue-100 hover:bg-white/10 hover:text-white"
               onClick={toggleTheme}
             >
               {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </Button>
-            <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground relative">
+            <Button variant="ghost" size="icon" className="relative text-blue-100 hover:bg-white/10 hover:text-white">
               <Bell className="w-5 h-5" />
               <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-destructive text-destructive-foreground text-xs rounded-full flex items-center justify-center">
                 3
               </span>
             </Button>
-            <div className="w-9 h-9 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-semibold text-sm ml-2">
+            <div className="ml-2 flex h-9 w-9 items-center justify-center rounded-full bg-white text-blue-950 font-semibold text-sm">
               JS
             </div>
           </div>

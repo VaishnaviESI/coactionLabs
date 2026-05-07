@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom';
+import { useEffect, useMemo, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import {
   GraduationCap,
@@ -13,43 +14,49 @@ import {
   Lightbulb,
   ArrowRight,
 } from 'lucide-react';
+import {
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+} from '@/components/ui/command';
 
 const tiles = [
   {
-    title: 'AI Policies & Governance',
-    description: 'Library of policies and governance for AI agents.',
+    title: 'Policies and Governance',
+    description: 'Governance, standards, and enterprise AI policy controls.',
     icon: Shield,
     href: '/policies-governance',
     category: 'Governance',
-    imageBg: 'bg-gradient-to-br from-indigo-400 via-indigo-500 to-indigo-600',
-    cardBg: 'bg-indigo-50',
-    accentText: 'text-indigo-700',
-    pattern:
-      'radial-gradient(circle at 20% 20%, rgba(255,255,255,0.25) 0%, transparent 40%), radial-gradient(circle at 80% 80%, rgba(0,0,0,0.15) 0%, transparent 40%)',
+    value: '42 active',
   },
   {
-    title: 'AI Project Catalogue',
-    description: 'Browse the portfolio of AI projects, their owners, status, and impact.',
+    title: 'Projects',
+    description: 'Active AI initiatives, owners, status, and delivery progress.',
     icon: FolderKanban,
     href: '/project-catalogue',
     category: 'Projects',
-    imageBg: 'bg-gradient-to-br from-emerald-400 via-emerald-500 to-emerald-600',
-    cardBg: 'bg-emerald-50',
-    accentText: 'text-emerald-700',
-    pattern:
-      'radial-gradient(circle at 70% 30%, rgba(255,255,255,0.3) 0%, transparent 50%), radial-gradient(circle at 30% 70%, rgba(0,0,0,0.12) 0%, transparent 45%)',
+    value: '128 shipping',
   },
   {
-    title: 'AI Academy',
-    description: 'Learn how to use AI tools and agents effectively.',
+    title: 'Academy',
+    description: 'Courses and learning tracks to build AI fluency.',
     icon: GraduationCap,
     href: '/academy',
     category: 'Learning',
-    imageBg: 'bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600',
-    cardBg: 'bg-blue-50',
-    accentText: 'text-blue-700',
-    pattern:
-      'radial-gradient(circle at 50% 20%, rgba(255,255,255,0.3) 0%, transparent 50%), radial-gradient(circle at 20% 80%, rgba(0,0,0,0.15) 0%, transparent 40%)',
+    value: '18 courses',
+  },
+  {
+    title: 'Agents',
+    description: 'Run and manage approved automations across your teams.',
+    icon: Bot,
+    href: '/my-agents',
+    category: 'Automation',
+    value: '24 available',
+    disabled: true,
   },
   {
     title: 'Marketplace',
@@ -57,24 +64,7 @@ const tiles = [
     icon: Store,
     href: '/marketplace',
     category: 'Discover',
-    imageBg: 'bg-gradient-to-br from-purple-400 via-purple-500 to-purple-600',
-    cardBg: 'bg-purple-50',
-    accentText: 'text-purple-700',
-    pattern:
-      'radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3) 0%, transparent 45%), radial-gradient(circle at 75% 75%, rgba(0,0,0,0.12) 0%, transparent 40%)',
-    disabled: true,
-  },
-  {
-    title: 'My Agents',
-    description: 'Manage the AI agents you have built or adopted.',
-    icon: Bot,
-    href: '/my-agents',
-    category: 'Personal',
-    imageBg: 'bg-gradient-to-br from-cyan-400 via-cyan-500 to-cyan-600',
-    cardBg: 'bg-cyan-50',
-    accentText: 'text-cyan-700',
-    pattern:
-      'radial-gradient(circle at 80% 20%, rgba(255,255,255,0.3) 0%, transparent 50%), radial-gradient(circle at 20% 80%, rgba(0,0,0,0.12) 0%, transparent 40%)',
+    value: 'Coming soon',
     disabled: true,
   },
   {
@@ -83,11 +73,7 @@ const tiles = [
     icon: BarChart3,
     href: '/analytics',
     category: 'Insights',
-    imageBg: 'bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600',
-    cardBg: 'bg-orange-50',
-    accentText: 'text-orange-700',
-    pattern:
-      'radial-gradient(circle at 25% 25%, rgba(255,255,255,0.3) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(0,0,0,0.15) 0%, transparent 40%)',
+    value: 'Coming soon',
     disabled: true,
   },
   {
@@ -96,11 +82,7 @@ const tiles = [
     icon: MessageCircleQuestion,
     href: '/ask-expert',
     category: 'Support',
-    imageBg: 'bg-gradient-to-br from-pink-400 via-pink-500 to-pink-600',
-    cardBg: 'bg-pink-50',
-    accentText: 'text-pink-700',
-    pattern:
-      'radial-gradient(circle at 60% 40%, rgba(255,255,255,0.3) 0%, transparent 50%), radial-gradient(circle at 25% 75%, rgba(0,0,0,0.12) 0%, transparent 40%)',
+    value: 'Coming soon',
     disabled: true,
   },
   {
@@ -109,11 +91,7 @@ const tiles = [
     icon: Users,
     href: '/team-agents',
     category: 'Team',
-    imageBg: 'bg-gradient-to-br from-amber-400 via-amber-500 to-amber-600',
-    cardBg: 'bg-amber-50',
-    accentText: 'text-amber-700',
-    pattern:
-      'radial-gradient(circle at 35% 35%, rgba(255,255,255,0.3) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(0,0,0,0.13) 0%, transparent 40%)',
+    value: 'Coming soon',
     disabled: true,
   },
   {
@@ -122,11 +100,7 @@ const tiles = [
     icon: BadgeCheck,
     href: '/certification-queue',
     category: 'Review',
-    imageBg: 'bg-gradient-to-br from-rose-400 via-rose-500 to-rose-600',
-    cardBg: 'bg-rose-50',
-    accentText: 'text-rose-700',
-    pattern:
-      'radial-gradient(circle at 70% 25%, rgba(255,255,255,0.3) 0%, transparent 50%), radial-gradient(circle at 25% 80%, rgba(0,0,0,0.13) 0%, transparent 40%)',
+    value: 'Coming soon',
     disabled: true,
   },
   {
@@ -135,92 +109,170 @@ const tiles = [
     icon: Lightbulb,
     href: '/ideas-workshop',
     category: 'Innovate',
-    imageBg: 'bg-gradient-to-br from-yellow-400 via-yellow-500 to-yellow-600',
-    cardBg: 'bg-yellow-50',
-    accentText: 'text-yellow-700',
-    pattern:
-      'radial-gradient(circle at 50% 30%, rgba(255,255,255,0.35) 0%, transparent 50%), radial-gradient(circle at 30% 75%, rgba(0,0,0,0.13) 0%, transparent 40%)',
+    value: 'Coming soon',
     disabled: true,
   },
 ];
 
+const tileAccentStyles = [
+  { iconBg: 'bg-blue-100', stripBg: 'bg-blue-300' },
+  { iconBg: 'bg-emerald-100', stripBg: 'bg-emerald-300' },
+  { iconBg: 'bg-yellow-100', stripBg: 'bg-yellow-300' },
+  { iconBg: 'bg-violet-100', stripBg: 'bg-violet-300' },
+] as const;
+
 const Index = () => {
+  const navigate = useNavigate();
+  const [commandOpen, setCommandOpen] = useState(false);
+  const [tourStep, setTourStep] = useState(0);
+
+  const quickActions = useMemo(
+    () =>
+      tiles
+        .filter((tile) => !tile.disabled)
+        .map((tile) => ({
+          label: tile.title,
+          description: tile.description,
+          href: tile.href,
+        })),
+    [],
+  );
+
+  useEffect(() => {
+    const down = (event: KeyboardEvent) => {
+      if (event.key.toLowerCase() === 'k' && (event.metaKey || event.ctrlKey)) {
+        event.preventDefault();
+        setCommandOpen((open) => !open);
+      }
+      if (event.key === 'Escape') {
+        setTourStep(0);
+      }
+    };
+
+    window.addEventListener('keydown', down);
+    return () => window.removeEventListener('keydown', down);
+  }, []);
+
+  const isTourRunning = tourStep > 0;
+  const heroTourActive = tourStep === 1;
+  const quickAccessTourActive = tourStep === 2;
+  const tileTourActive = tourStep === 3;
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-background to-slate-50">
+    <div className="min-h-screen bg-slate-50">
       <Header />
 
-      <main className="w-full px-4 md:px-8 py-12">
-        {/* Welcome Section */}
-        <div className="mb-12 text-center animate-fade-in">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
-            Welcome back, JSmith
-          </h2>
-          <p className="text-lg text-muted-foreground">
-            Your AI journey starts here — explore, govern, and learn.
+      <main className="w-full px-4 md:px-8 py-10">
+        {/* Hero Section */}
+        <div
+          className={`mb-8 rounded-3xl bg-blue-950 p-8 md:p-10 text-white transition-all ${
+            heroTourActive ? 'ring-4 ring-blue-300/70' : ''
+          }`}
+        >
+          <p className="inline-flex items-center rounded-full bg-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-blue-50">
+            This week
           </p>
+          <h2 className="mt-5 text-4xl font-bold tracking-tight md:text-5xl">Welcome back, JSmith.</h2>
+          <p className="mt-3 max-w-2xl text-base text-blue-100 md:text-lg">
+            Explore, govern, and learn - your enterprise&apos;s AI in one place.
+          </p>
+          <div className="mt-7 flex flex-wrap items-center gap-3">
+            <button
+              onClick={() => setCommandOpen(true)}
+              className="rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-slate-900 transition-colors hover:bg-slate-100"
+            >
+              Open Command Bar
+            </button>
+            <button
+              onClick={() => setTourStep(1)}
+              className="rounded-full border border-white/40 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-white/10"
+            >
+              Take a tour
+            </button>
+          </div>
+
+          {heroTourActive && (
+            <div className="mt-4 rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-sm text-blue-50">
+              Step 1 of 3: This is your home summary area. Use the command bar for quick navigation.
+              <div className="mt-2">
+                <button
+                  onClick={() => setTourStep(2)}
+                  className="rounded-md bg-white px-3 py-1.5 text-xs font-semibold text-slate-900 hover:bg-slate-100"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Tiles Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 animate-slide-up">
+        {/* Quick access cards */}
+        <div className={`mb-4 transition-all ${quickAccessTourActive ? 'rounded-lg ring-4 ring-blue-200/70 p-2 -m-2' : ''}`}>
+          <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Quick access</h3>
+          {quickAccessTourActive && (
+            <div className="mt-2 text-sm text-slate-600">
+              Step 2 of 3: These are your core areas for day-to-day work.
+              <button
+                onClick={() => setTourStep(3)}
+                className="ml-3 rounded-md border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+              >
+                Next
+              </button>
+            </div>
+          )}
+        </div>
+
+        <div className={`grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 ${tileTourActive ? 'rounded-lg ring-4 ring-blue-200/70 p-2' : ''}`}>
           {tiles.map((tile, index) => {
             const Icon = tile.icon;
             const animationDelay = { animationDelay: `${index * 50}ms` };
+            const accent = tileAccentStyles[index % tileAccentStyles.length];
 
             const cardInner = (
               <div
-                className={`relative ${tile.cardBg} rounded-2xl shadow-card overflow-hidden h-full flex flex-col ${
-                  tile.disabled ? '' : 'hover:shadow-xl transition-all duration-300 hover:-translate-y-1.5'
+                className={`group relative h-full overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-5 transition-all duration-200 ${
+                  tile.disabled
+                    ? 'opacity-65'
+                    : 'hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-sm'
                 }`}
               >
-                {/* Colored "image" header with black icon */}
-                <div
-                  className={`relative h-56 ${tile.imageBg} overflow-hidden`}
-                  style={{ backgroundImage: tile.pattern }}
-                >
-                  {/* Decorative shapes */}
-                  <div className="absolute -top-10 -right-10 w-44 h-44 rounded-full bg-white/10 blur-xl" />
-                  <div className="absolute -bottom-12 -left-12 w-44 h-44 rounded-full bg-black/10 blur-xl" />
-
-                  {/* Category pill */}
-                  <div className="absolute top-5 left-5">
-                    <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/90 backdrop-blur-sm text-sm font-semibold text-slate-900 shadow-sm">
-                      {tile.category}
-                    </span>
+                <div className={`absolute inset-y-0 left-0 w-1 rounded-l-2xl ${accent.stripBg}`} />
+                <div className="mb-4 flex items-start justify-between">
+                  <div className="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
+                    {tile.category}
                   </div>
-
-                  {/* Black icon */}
                   <div
-                    className={`absolute bottom-5 right-5 w-20 h-20 rounded-full bg-black flex items-center justify-center shadow-lg ${
-                      tile.disabled ? '' : 'group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300'
+                    className={`flex h-9 w-9 items-center justify-center rounded-lg ${accent.iconBg} text-black transition-transform duration-200 ${
+                      tile.disabled
+                        ? ''
+                        : 'group-hover:-translate-y-0.5 group-hover:animate-icon-tilt'
                     }`}
                   >
-                    <Icon className="w-10 h-10 text-white" strokeWidth={2.25} />
+                    <Icon className="h-4 w-4" />
                   </div>
                 </div>
 
-                {/* Card body */}
-                <div className="relative p-8 flex flex-col flex-1">
-                  <h3 className="text-2xl font-bold text-slate-900 mb-3 leading-snug">
+                <div className="flex flex-1 flex-col">
+                  <h3 className="text-lg font-semibold text-slate-900 leading-snug">
                     {tile.title}
                   </h3>
-                  <p className="text-base text-slate-600 leading-relaxed mb-6 flex-1">
+                  <p className="mt-2 text-sm text-slate-600 leading-relaxed flex-1">
                     {tile.description}
                   </p>
 
-                  {/* Read more / Coming soon footer */}
-                  <div className="flex items-center justify-between pt-4 border-t border-black/5">
+                  <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-4">
                     {tile.disabled ? (
-                      <span className="text-sm font-semibold uppercase tracking-wider text-slate-400">
+                      <span className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">
                         Coming soon
                       </span>
                     ) : (
-                      <span className={`text-sm font-semibold uppercase tracking-wider ${tile.accentText}`}>
-                        Explore
+                      <span className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
+                        {tile.value}
                       </span>
                     )}
                     {!tile.disabled && (
                       <ArrowRight
-                        className={`w-5 h-5 ${tile.accentText} group-hover:translate-x-1 transition-transform duration-300`}
+                        className="h-4 w-4 text-slate-500 transition-transform duration-200 group-hover:translate-x-0.5"
                       />
                     )}
                   </div>
@@ -234,7 +286,7 @@ const Index = () => {
                   key={tile.title}
                   aria-disabled="true"
                   title="Coming soon"
-                  className="block rounded-2xl cursor-not-allowed opacity-60"
+                  className="block rounded-2xl cursor-not-allowed"
                   style={animationDelay}
                 >
                   {cardInner}
@@ -254,7 +306,62 @@ const Index = () => {
             );
           })}
         </div>
+
+        {tileTourActive && (
+          <div className="mt-4 rounded-lg border border-blue-100 bg-blue-50 px-4 py-3 text-sm text-blue-900">
+            Step 3 of 3: Select any available tile to jump to that workspace.
+            <button
+              onClick={() => setTourStep(0)}
+              className="ml-3 rounded-md border border-blue-200 bg-white px-3 py-1.5 text-xs font-semibold text-blue-900 hover:bg-blue-100"
+            >
+              Finish tour
+            </button>
+          </div>
+        )}
+
+        {isTourRunning && (
+          <div className="mt-3 text-xs text-slate-500">Press Escape to exit the tour at any time.</div>
+        )}
       </main>
+
+      <CommandDialog open={commandOpen} onOpenChange={setCommandOpen}>
+        <CommandInput placeholder="Search pages..." />
+        <CommandList>
+          <CommandEmpty>No results found.</CommandEmpty>
+          <CommandGroup heading="Navigate">
+            <CommandItem
+              onSelect={() => {
+                navigate('/');
+                setCommandOpen(false);
+              }}
+            >
+              Home
+            </CommandItem>
+            {quickActions.map((action) => (
+              <CommandItem
+                key={action.href}
+                onSelect={() => {
+                  navigate(action.href);
+                  setCommandOpen(false);
+                }}
+              >
+                {action.label}
+              </CommandItem>
+            ))}
+          </CommandGroup>
+          <CommandSeparator />
+          <CommandGroup heading="Actions">
+            <CommandItem
+              onSelect={() => {
+                setTourStep(1);
+                setCommandOpen(false);
+              }}
+            >
+              Start page tour
+            </CommandItem>
+          </CommandGroup>
+        </CommandList>
+      </CommandDialog>
     </div>
   );
 };

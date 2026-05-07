@@ -39,92 +39,155 @@ interface CatalogueProject {
 const sampleProjects: CatalogueProject[] = [
   {
     id: 'proj-001',
-    name: 'Claims Triage Copilot',
+    name: 'Standard Gen-AI Architecture',
     description:
-      'AI assistant that classifies incoming claims, routes them to the correct queue, and drafts an initial reviewer summary.',
-    category: 'Claims',
-    owner: 'Priya Patel',
-    team: 'Claims Operations',
+      'Reference architecture for GenAI across CoAction.',
+    category: 'Foundations',
+    owner: 'Enterprise Architecture',
+    team: 'Platform Engineering',
     status: 'Live',
-    lastUpdated: '2026-04-12',
-    impact: '↓ 38% triage time',
-    tags: ['Claims', 'NLP', 'Routing'],
+    lastUpdated: '2026-05-12',
+    impact: 'Build • Mid-May go-live',
+    tags: ['Layer: Foundations', 'Build', 'Reference Architecture'],
   },
   {
     id: 'proj-002',
-    name: 'Underwriting Risk Synthesizer',
+    name: 'GP Talos (AWS Build)',
     description:
-      'Summarizes broker submissions and surfaces risk signals against historical loss ratios.',
-    category: 'Underwriting',
-    owner: 'Marcus Lee',
-    team: 'Commercial Underwriting',
-    status: 'Piloting',
-    lastUpdated: '2026-04-22',
-    impact: '↑ 22% submission throughput',
-    tags: ['Underwriting', 'RAG', 'Risk'],
+      'Data platform build in AWS for PII and PHI controls.',
+    category: 'Foundations',
+    owner: 'Data Platform',
+    team: 'Infrastructure',
+    status: 'In Progress',
+    lastUpdated: '2026-05-12',
+    impact: 'Build • Q2',
+    tags: ['Layer: Foundations', 'Build', 'PII / PHI'],
   },
   {
     id: 'proj-003',
-    name: 'Policy Q&A Knowledge Agent',
+    name: 'Data Platform + Semantic Layer',
     description:
-      'Internal chat assistant that answers questions about policy wordings, endorsements, and exclusions.',
-    category: 'Policy Admin',
-    owner: 'Hannah Cohen',
-    team: 'Policy Services',
+      'Data masking and unstructured data plus semantic layer enablement.',
+    category: 'Foundations',
+    owner: 'Data Platform',
+    team: 'Data Engineering',
     status: 'In Progress',
-    lastUpdated: '2026-04-18',
-    impact: '~ pilot in May',
-    tags: ['Knowledge', 'RAG', 'Self-service'],
+    lastUpdated: '2026-05-12',
+    impact: 'Build • End of Q2',
+    tags: ['Layer: Foundations', 'Build', 'Semantic Layer'],
   },
   {
     id: 'proj-004',
-    name: 'Customer Sentiment Tracker',
+    name: 'AI Governance Framework',
     description:
-      'Analyzes call-center transcripts and post-claim surveys to flag at-risk customers.',
-    category: 'Customer Service',
-    owner: 'Diego Alvarez',
-    team: 'Customer Experience',
+      'AI governance framework and tooling evaluation.',
+    category: 'Foundations',
+    owner: 'Governance Office',
+    team: 'Risk & Compliance',
     status: 'Discovery',
-    lastUpdated: '2026-04-25',
-    impact: 'Business case in review',
-    tags: ['Sentiment', 'Voice', 'Retention'],
+    lastUpdated: '2026-05-12',
+    impact: 'Hybrid • Q2',
+    tags: ['Layer: Foundations', 'Hybrid', 'Governance'],
   },
   {
     id: 'proj-005',
-    name: 'Regulatory Change Watcher',
+    name: 'Binding Authority Chatbot',
     description:
-      'Monitors regulator publications and produces weekly impact briefs for compliance partners.',
-    category: 'Compliance',
-    owner: 'Aisha Khan',
-    team: 'Compliance',
-    status: 'Live',
-    lastUpdated: '2026-04-08',
-    impact: '↓ 60% manual scan time',
-    tags: ['Compliance', 'Monitoring', 'Summarization'],
+      'AI chatbot for Binding Authority workflows.',
+    category: 'Enterprise Capabilities',
+    owner: 'Binding Authority',
+    team: 'Operations Enablement',
+    status: 'Discovery',
+    lastUpdated: '2026-05-12',
+    impact: 'Build • June',
+    tags: ['Layer: Enterprise Capabilities', 'Build', 'Requirements'],
   },
   {
     id: 'proj-006',
-    name: 'Quote Comparison Assistant',
+    name: 'Forms Library (GenAI)',
     description:
-      'Side-by-side carrier quote comparison with plain-language explanations for producers.',
-    category: 'Sales',
-    owner: 'Tom Becker',
-    team: 'Distribution',
-    status: 'Piloting',
-    lastUpdated: '2026-04-20',
-    impact: '↑ 14% close rate (pilot)',
-    tags: ['Sales', 'Comparison', 'Producer'],
+      'AI-driven forms ingestion and insights.',
+    category: 'Enterprise Capabilities',
+    owner: 'Forms Management',
+    team: 'Enterprise Ops',
+    status: 'Discovery',
+    lastUpdated: '2026-05-12',
+    impact: 'Hybrid • July',
+    tags: ['Layer: Enterprise Capabilities', 'Hybrid', 'Discovery'],
+  },
+  {
+    id: 'proj-007',
+    name: 'Savings Acceleration',
+    description:
+      'AI-driven productivity and capacity optimization.',
+    category: 'Enterprise Capabilities',
+    owner: 'Transformation Office',
+    team: 'Enterprise Operations',
+    status: 'Discovery',
+    lastUpdated: '2026-05-12',
+    impact: 'Build • TBD',
+    tags: ['Layer: Enterprise Capabilities', 'Build', 'Discovery'],
+  },
+  {
+    id: 'proj-008',
+    name: 'UW Workbench (Convr)',
+    description:
+      'Submission ingestion and decision support workflows for underwriting.',
+    category: 'AI-Enabled Workflows',
+    owner: 'Underwriting',
+    team: 'Commercial Underwriting',
+    status: 'In Progress',
+    lastUpdated: '2026-05-12',
+    impact: 'Buy + Extend • June go-live',
+    tags: ['Layer: AI-Enabled Workflows', 'Buy + Extend', 'UAT'],
+  },
+  {
+    id: 'proj-009',
+    name: 'Loss Control (OI + Pigeon AI)',
+    description:
+      'AI-enabled inspections and risk insights.',
+    category: 'AI-Enabled Workflows',
+    owner: 'Loss Control',
+    team: 'Field Risk Engineering',
+    status: 'Live',
+    lastUpdated: '2026-05-12',
+    impact: 'Buy • Active',
+    tags: ['Layer: AI-Enabled Workflows', 'Buy', 'Live'],
+  },
+  {
+    id: 'proj-010',
+    name: 'Subjectivities (Pigeon AI)',
+    description:
+      'Subjectivity extraction and monitoring in underwriting workflows.',
+    category: 'AI-Enabled Workflows',
+    owner: 'Underwriting',
+    team: 'Policy Operations',
+    status: 'Live',
+    lastUpdated: '2026-05-12',
+    impact: 'Buy • Ongoing',
+    tags: ['Layer: AI-Enabled Workflows', 'Buy', 'Active'],
+  },
+  {
+    id: 'proj-011',
+    name: 'UW / Claims / Actuarial Workflows',
+    description:
+      'Top 3 AI-enabled workflows prioritized across key functions.',
+    category: 'Decision Intelligence',
+    owner: 'Analytics Leadership',
+    team: 'UW / Claims / Actuarial',
+    status: 'In Progress',
+    lastUpdated: '2026-05-12',
+    impact: 'Hybrid • Pending sign-off',
+    tags: ['Layer: Decision Intelligence', 'Hybrid', 'Review'],
   },
 ];
 
 const categories = [
   'All',
-  'Claims',
-  'Underwriting',
-  'Policy Admin',
-  'Customer Service',
-  'Sales',
-  'Compliance',
+  'Foundations',
+  'Enterprise Capabilities',
+  'AI-Enabled Workflows',
+  'Decision Intelligence',
 ];
 const statuses: Array<'All' | ProjectStatus> = [
   'All',
@@ -177,7 +240,7 @@ const ProjectCatalogue = () => {
   ).length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-emerald-50/60 via-background to-emerald-50/30">
+    <div className="min-h-screen bg-slate-50">
       <Header />
 
       <main className="container mx-auto px-6 py-8">
@@ -194,7 +257,7 @@ const ProjectCatalogue = () => {
         <div className="mb-6">
           <div className="flex items-center gap-3 mb-2">
             <div className="w-11 h-11 rounded-xl bg-emerald-100 flex items-center justify-center">
-              <FolderKanban className="w-5 h-5 text-emerald-600" />
+              <FolderKanban className="w-5 h-5 text-black" />
             </div>
             <h1 className="text-3xl font-bold text-foreground">AI Project Catalogue</h1>
           </div>
@@ -208,10 +271,10 @@ const ProjectCatalogue = () => {
           <Card className="border-emerald-100/60 bg-white/70 backdrop-blur-sm">
             <CardContent className="p-5 flex items-center gap-4">
               <div className="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center">
-                <Sparkles className="w-5 h-5 text-emerald-600" />
+                <Sparkles className="w-5 h-5 text-black" />
               </div>
               <div>
-                <div className="text-2xl font-semibold text-emerald-700">{totalLive}</div>
+                <div className="text-2xl font-semibold text-black">{totalLive}</div>
                 <div className="text-sm text-muted-foreground">Live in production</div>
               </div>
             </CardContent>
@@ -219,10 +282,10 @@ const ProjectCatalogue = () => {
           <Card className="border-emerald-100/60 bg-white/70 backdrop-blur-sm">
             <CardContent className="p-5 flex items-center gap-4">
               <div className="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center">
-                <Users className="w-5 h-5 text-emerald-700" />
+                <Users className="w-5 h-5 text-black" />
               </div>
               <div>
-                <div className="text-2xl font-semibold text-emerald-700">{totalPiloting}</div>
+                <div className="text-2xl font-semibold text-black">{totalPiloting}</div>
                 <div className="text-sm text-muted-foreground">Active pilots</div>
               </div>
             </CardContent>
@@ -230,10 +293,10 @@ const ProjectCatalogue = () => {
           <Card className="border-emerald-100/60 bg-white/70 backdrop-blur-sm">
             <CardContent className="p-5 flex items-center gap-4">
               <div className="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center">
-                <CalendarDays className="w-5 h-5 text-emerald-700" />
+                <CalendarDays className="w-5 h-5 text-black" />
               </div>
               <div>
-                <div className="text-2xl font-semibold text-emerald-700">{totalInFlight}</div>
+                <div className="text-2xl font-semibold text-black">{totalInFlight}</div>
                 <div className="text-sm text-muted-foreground">In discovery / build</div>
               </div>
             </CardContent>
@@ -241,40 +304,42 @@ const ProjectCatalogue = () => {
         </div>
 
         {/* Filters */}
-        <div className="flex flex-col md:flex-row gap-3 mb-6">
-          <div className="relative flex-1">
+        <div className="mb-6 rounded-2xl border border-emerald-100/80 bg-white/80 p-3 shadow-sm backdrop-blur-sm">
+          <div className="flex flex-col md:flex-row gap-3">
+            <div className="relative flex-1 rounded-xl border-l-4 border-emerald-300 bg-emerald-50/40 shadow-[inset_0_1px_0_rgba(255,255,255,0.8)]">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search projects, owners, or tags…"
-              className="pl-9"
+              className="h-11 rounded-xl border-0 bg-transparent pl-9 shadow-none focus-visible:ring-1 focus-visible:ring-emerald-300"
             />
-          </div>
-          <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-            <SelectTrigger className="md:w-56">
+            </div>
+            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+              <SelectTrigger className="h-11 rounded-xl border-l-4 border-emerald-300 bg-emerald-50/40 shadow-[inset_0_1px_0_rgba(255,255,255,0.8)] md:w-56">
               <SelectValue placeholder="Category" />
-            </SelectTrigger>
-            <SelectContent>
-              {categories.map((c) => (
-                <SelectItem key={c} value={c}>
-                  {c}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-            <SelectTrigger className="md:w-44">
+              </SelectTrigger>
+              <SelectContent>
+                {categories.map((c) => (
+                  <SelectItem key={c} value={c}>
+                    {c}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+              <SelectTrigger className="h-11 rounded-xl border-l-4 border-emerald-300 bg-emerald-50/40 shadow-[inset_0_1px_0_rgba(255,255,255,0.8)] md:w-44">
               <SelectValue placeholder="Status" />
-            </SelectTrigger>
-            <SelectContent>
-              {statuses.map((s) => (
-                <SelectItem key={s} value={s}>
-                  {s}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+              </SelectTrigger>
+              <SelectContent>
+                {statuses.map((s) => (
+                  <SelectItem key={s} value={s}>
+                    {s}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
         {/* Project grid */}
