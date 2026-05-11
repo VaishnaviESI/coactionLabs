@@ -104,7 +104,7 @@ const MyAgents = () => {
             Back to Dashboard
           </Button>
         </Link>
-        <div className="mb-6">
+        {/* <div className="mb-6">
           <div className="text-center mb-4">
             <h1 className="text-3xl font-bold text-foreground mb-2">My Agents</h1>
             <p className="text-muted-foreground">Manage and share your personal AI agents</p>
@@ -117,9 +117,32 @@ const MyAgents = () => {
               </Button>
             </Link>
           </div>
-        </div>
+        </div> */}
 
-        <Card>
+          {/* Agents Overview */}
+<Card className="mb-6">
+  <CardHeader>
+    <CardTitle className="text-lg font-bold text-center">Agents Overview</CardTitle>
+  </CardHeader>
+  <CardContent className="text-center">
+    <p className="text-sm text-muted-foreground leading-relaxed">
+      This page provides a centralized workspace for managing your personal AI agents. 
+      You can create, edit, share, and submit agents for certification before publishing them to the marketplace.
+    </p>
+
+    <div className="mt-4">
+      <p className="text-sm font-medium text-foreground mb-1">
+        Intended Functionality
+      </p>
+      <p className="text-sm text-muted-foreground">
+        Each agent is designed to encapsulate a specific workflow or automation logic. 
+        Users can iterate on prompts, track usage, and control visibility across their team and the marketplace lifecycle.
+      </p>
+    </div>
+  </CardContent>
+</Card>
+
+        {/* <Card>
           <CardHeader>
             <CardTitle className="text-lg">Your Agents</CardTitle>
           </CardHeader>
@@ -229,10 +252,10 @@ const MyAgents = () => {
               </div>
             )}
           </CardContent>
-        </Card>
+        </Card> */}
       </main>
 
-      <AlertDialog open={!!agentToShare} onOpenChange={() => setAgentToShare(null)}>
+      {/* <AlertDialog open={!!agentToShare} onOpenChange={() => setAgentToShare(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Share this agent?</AlertDialogTitle>
@@ -288,7 +311,7 @@ const MyAgents = () => {
             </Button>
           </DialogFooter>
         </DialogContent>
-      </Dialog>
+      </Dialog> */}
     </div>
   );
 };

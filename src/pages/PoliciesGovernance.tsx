@@ -1,14 +1,16 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '@/components/Header';
-import { ArrowLeft, Shield, FileText, Scale, Lock, Users, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, Shield, FileText, Scale, Lock, Users, AlertTriangle, Search, BookOpen } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import acceptableUsePdf from '@/assets/acceptable_use_of_ai_tools_policy.pdf';
 
 interface PolicyItem {
   title: string;
   description: string;
   fullText: string;
+  pdfUrl?: string;
 }
 
 const policies = [
@@ -18,7 +20,7 @@ const policies = [
     iconColor: 'text-black',
     iconBg: 'bg-indigo-50',
     items: [
-      { title: 'AI Acceptable Use Policy', description: 'Guidelines for appropriate use of AI tools and agents within the organization.', fullText: 'This policy establishes the acceptable use guidelines for AI tools and agents within our organization. All employees must use AI systems responsibly, ensuring outputs are reviewed before use in business decisions. AI should augment human judgment, not replace it. Users must not input confidential client information into external AI systems without proper authorization. Any AI-generated content must be clearly labeled when shared externally. Violations of this policy may result in disciplinary action. Regular training on AI acceptable use will be provided to all staff members.' },
+      { title: 'AI Acceptable Use Policy', description: 'Guidelines for appropriate use of AI tools and agents within the organization.', fullText: 'This policy establishes the acceptable use guidelines for AI tools and agents within our organization. All employees must use AI systems responsibly, ensuring outputs are reviewed before use in business decisions. AI should augment human judgment, not replace it. Users must not input confidential client information into external AI systems without proper authorization. Any AI-generated content must be clearly labeled when shared externally. Violations of this policy may result in disciplinary action. Regular training on AI acceptable use will be provided to all staff members.', pdfUrl: acceptableUsePdf },
       { title: 'AI Agent Development Standards', description: 'Technical and ethical standards for creating and deploying AI agents.', fullText: 'These standards govern the development and deployment of AI agents within our organization. All AI agents must undergo rigorous testing before deployment, including bias testing, performance validation, and security assessment. Developers must document all training data sources and model architectures. AI agents must include appropriate logging for audit purposes. Version control and rollback capabilities are mandatory. All agents must be reviewed by the AI Ethics Committee before production deployment. Continuous monitoring must be implemented to detect model drift or degradation.' },
       { title: 'Prompt Engineering Best Practices', description: 'Approved techniques and patterns for crafting effective AI prompts.', fullText: 'This document outlines approved techniques for crafting effective AI prompts. Prompts should be clear, specific, and include relevant context. Use structured formats when requesting specific output types. Include guardrails and constraints to prevent unwanted outputs. Test prompts with edge cases before production use. Document prompt versions and their intended purposes. Avoid prompts that could elicit harmful, biased, or confidential information. Regular prompt audits should be conducted to ensure continued effectiveness and compliance.' },
     ],
@@ -71,6 +73,22 @@ const policies = [
 
 const PoliciesGovernance = () => {
   const [selectedPolicy, setSelectedPolicy] = useState<PolicyItem | null>(null);
+  const [search, setSearch] = useState('');
+
+  const filteredPolicies = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    if (!q) return policies;
+    return policies
+      .map((category) => ({
+        ...category,
+        items: category.items.filter(
+          (item) =>
+            item.title.toLowerCase().includes(q) ||
+            item.description.toLowerCase().includes(q),
+        ),
+      }))
+      .filter((category) => category.items.length > 0);
+  }, [search]);
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -99,8 +117,40 @@ const PoliciesGovernance = () => {
           </p>
         </div>
 
+        <div className="relative mb-8 max-w-lg mx-auto">
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search policies…"
+            className="w-full rounded-xl border border-slate-200 bg-white py-2.5 pl-10 pr-4 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-200 transition-all shadow-sm"
+          />
+        </div>
+
+        {/* Standalone document button */}
+        <div className="mb-8 flex justify-center">
+          <button
+            onClick={() => {
+              const acceptableUsePolicy = policies[0].items[0];
+              setSelectedPolicy(acceptableUsePolicy);
+            }} 
+            title="View the full document for AI Acceptable Use Policy"
+            className="inline-flex items-center gap-2.5 rounded-xl border border-indigo-200 bg-indigo-50 px-5 py-3 text-sm font-medium text-indigo-700 shadow-sm hover:bg-indigo-100 hover:border-indigo-300 transition-all duration-200"
+          >
+            <BookOpen className="w-4 h-4" />
+            AI Acceptable Use Policy
+          </button>
+        </div>
+
+        {filteredPolicies.length === 0 && (
+          <p className="text-center text-sm text-slate-500 py-12">
+            No policies match &ldquo;{search}&rdquo;.
+          </p>
+        )}
+
         <div className="space-y-6">
-          {policies.map((category) => {
+          {filteredPolicies.map((category) => {
             const Icon = category.icon;
             return (
               <Card
@@ -143,17 +193,32 @@ const PoliciesGovernance = () => {
       </main>
 
       <Dialog open={!!selectedPolicy} onOpenChange={() => setSelectedPolicy(null)}>
-        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
-          <DialogHeader>
+        <DialogContent
+          className={
+            selectedPolicy?.pdfUrl
+              ? 'max-w-5xl h-[90vh] flex flex-col'
+              : 'max-w-2xl max-h-[80vh] overflow-y-auto'
+          }
+        >
+          <DialogHeader className="shrink-0">
             <DialogTitle className="flex items-center gap-2">
               <FileText className="w-5 h-5 text-black" />
               {selectedPolicy?.title}
             </DialogTitle>
             <DialogDescription>{selectedPolicy?.description}</DialogDescription>
           </DialogHeader>
-          <div className="mt-4 text-foreground leading-relaxed">
-            {selectedPolicy?.fullText}
-          </div>
+
+          {selectedPolicy?.pdfUrl ? (
+            <iframe
+              src={selectedPolicy.pdfUrl}
+              title={selectedPolicy.title}
+              className="flex-1 w-full rounded-lg border border-slate-200 mt-2"
+            />
+          ) : (
+            <div className="mt-4 text-foreground leading-relaxed">
+              {selectedPolicy?.fullText}
+            </div>
+          )}
         </DialogContent>
       </Dialog>
     </div>

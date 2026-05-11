@@ -22,6 +22,7 @@ import CertificationQueue from "./pages/CertificationQueue";
 import IdeasWorkshop from "./pages/IdeasWorkshop";
 import PoliciesGovernance from "./pages/PoliciesGovernance";
 import ProjectCatalogue from "./pages/ProjectCatalogue";
+import Toolbox from "./pages/Toolbox";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
 
@@ -69,6 +70,7 @@ const AppRoutes = () => {
               <Route path="/ideas-workshop" element={<IdeasWorkshop />} />
               <Route path="/policies-governance" element={<PoliciesGovernance />} />
               <Route path="/project-catalogue" element={<ProjectCatalogue />} />
+              <Route path="/toolbox" element={<Toolbox />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </TooltipProvider>

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
+import { useAuth } from '@/contexts/AuthContext';
 import {
   GraduationCap,
   FolderKanban,
@@ -13,6 +14,8 @@ import {
   BadgeCheck,
   Lightbulb,
   ArrowRight,
+  Wrench,
+  X,
 } from 'lucide-react';
 import {
   CommandDialog,
@@ -50,13 +53,22 @@ const tiles = [
     value: '18 courses',
   },
   {
+    title: 'AI Toolbox',
+    description: 'Create and manage your own AI apps and tools.',
+    icon: Wrench,
+    href: '/toolbox',
+    category: 'Create',
+    value: '4 tools',
+  },
+  {
     title: 'Agents',
     description: 'Run and manage approved automations across your teams.',
     icon: Bot,
     href: '/my-agents',
     category: 'Automation',
-    value: '24 available',
-    disabled: true,
+    value: 'Coming soon',
+    overview:
+      'Run, monitor, and manage approved AI automations across your teams. Browse agents assigned to you, trigger runs on demand, review execution history, and configure schedules — all from a single control panel.',
   },
   {
     title: 'Marketplace',
@@ -65,7 +77,8 @@ const tiles = [
     href: '/marketplace',
     category: 'Discover',
     value: 'Coming soon',
-    disabled: true,
+    overview:
+      'Browse a curated library of certified AI agents vetted for enterprise use. Find automations built by internal teams or verified partners, review trust scores and usage stats, and deploy approved agents to your team in a single click.',
   },
   {
     title: 'Analytics',
@@ -74,7 +87,8 @@ const tiles = [
     href: '/analytics',
     category: 'Insights',
     value: 'Coming soon',
-    disabled: true,
+    overview:
+      'Monitor AI adoption, usage patterns, and performance metrics across all agents and teams. Identify underperforming automations, track return on investment, and surface data-driven insights to continuously optimize your AI portfolio.',
   },
   {
     title: 'Ask an Expert',
@@ -83,7 +97,8 @@ const tiles = [
     href: '/ask-expert',
     category: 'Support',
     value: 'Coming soon',
-    disabled: true,
+    overview:
+      'Connect directly with internal AI champions and certified experts. Submit questions, book consultations, or browse answers to common challenges from colleagues who have already solved them. Fast-track your team\'s AI adoption with peer expertise.',
   },
   {
     title: "My Team's Agents",
@@ -92,7 +107,8 @@ const tiles = [
     href: '/team-agents',
     category: 'Team',
     value: 'Coming soon',
-    disabled: true,
+    overview:
+      'Get a clear view of every AI agent your team has deployed — their status, usage frequency, last-run details, and any pending reviews. Manage approvals, retire outdated automations, and keep your team\'s AI portfolio healthy and current.',
   },
   {
     title: 'Certification Queue',
@@ -101,7 +117,8 @@ const tiles = [
     href: '/certification-queue',
     category: 'Review',
     value: 'Coming soon',
-    disabled: true,
+    overview:
+      'Review and certify AI agents submitted for enterprise-wide use. Assess submissions against governance standards, run compliance checks, and grant or revoke approval status. Maintain the quality bar that keeps the organization\'s AI ecosystem trustworthy.',
   },
   {
     title: 'Ideas Workshop',
@@ -110,7 +127,8 @@ const tiles = [
     href: '/ideas-workshop',
     category: 'Innovate',
     value: 'Coming soon',
-    disabled: true,
+    overview:
+      'Submit ideas for new AI agents, upvote proposals from colleagues, and track which concepts are moving into development. A collaborative innovation space that connects problem owners with builders to shape the future of AI at your organization.',
   },
 ];
 
@@ -123,13 +141,16 @@ const tileAccentStyles = [
 
 const Index = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [commandOpen, setCommandOpen] = useState(false);
   const [tourStep, setTourStep] = useState(0);
+  const [overviewTile, setOverviewTile] = useState<(typeof tiles)[0] | null>(null);
+
+  const userName = user?.name || 'there';
 
   const quickActions = useMemo(
     () =>
       tiles
-        .filter((tile) => !tile.disabled)
         .map((tile) => ({
           label: tile.title,
           description: tile.description,
@@ -146,6 +167,7 @@ const Index = () => {
       }
       if (event.key === 'Escape') {
         setTourStep(0);
+        setOverviewTile(null);
       }
     };
 
@@ -172,7 +194,7 @@ const Index = () => {
           <p className="inline-flex items-center rounded-full bg-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-blue-50">
             This week
           </p>
-          <h2 className="mt-5 text-4xl font-bold tracking-tight md:text-5xl">Welcome back, JSmith.</h2>
+          <h2 className="mt-5 text-4xl font-bold tracking-tight md:text-5xl">Welcome back, {userName}.</h2>
           <p className="mt-3 max-w-2xl text-base text-blue-100 md:text-lg">
             Explore, govern, and learn - your enterprise&apos;s AI in one place.
           </p>
@@ -231,9 +253,7 @@ const Index = () => {
             const cardInner = (
               <div
                 className={`group relative h-full overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-5 transition-all duration-200 ${
-                  tile.disabled
-                    ? 'opacity-65'
-                    : 'hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-sm'
+                  'hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-sm'
                 }`}
               >
                 <div className={`absolute inset-y-0 left-0 w-1 rounded-l-2xl ${accent.stripBg}`} />
@@ -243,9 +263,7 @@ const Index = () => {
                   </div>
                   <div
                     className={`flex h-9 w-9 items-center justify-center rounded-lg ${accent.iconBg} text-black transition-transform duration-200 ${
-                      tile.disabled
-                        ? ''
-                        : 'group-hover:-translate-y-0.5 group-hover:animate-icon-tilt'
+                      'group-hover:-translate-y-0.5 group-hover:animate-icon-tilt'
                     }`}
                   >
                     <Icon className="h-4 w-4" />
@@ -261,34 +279,37 @@ const Index = () => {
                   </p>
 
                   <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-4">
-                    {tile.disabled ? (
-                      <span className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">
-                        Coming soon
-                      </span>
-                    ) : (
-                      <span className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
-                        {tile.value}
-                      </span>
-                    )}
-                    {!tile.disabled && (
-                      <ArrowRight
-                        className="h-4 w-4 text-slate-500 transition-transform duration-200 group-hover:translate-x-0.5"
-                      />
-                    )}
+                    <span className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
+                      {tile.value}
+                    </span>
+                    <ArrowRight
+                      className="h-4 w-4 text-slate-500 transition-transform duration-200 group-hover:translate-x-0.5"
+                    />
                   </div>
                 </div>
               </div>
             );
 
-            if (tile.disabled) {
+            if (tile.overview) {
               return (
                 <div
                   key={tile.title}
-                  aria-disabled="true"
-                  title="Coming soon"
-                  className="block rounded-2xl cursor-not-allowed"
+                  className="group block cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-2xl"
                   style={animationDelay}
+                  onClick={() => setOverviewTile(tile)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setOverviewTile(tile); }}
                 >
+                  {/* Original navigation — commented out; overview modal shown instead:
+                  <Link
+                    to={tile.href}
+                    className="group block focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-2xl"
+                    style={animationDelay}
+                  >
+                    {cardInner}
+                  </Link>
+                  */}
                   {cardInner}
                 </div>
               );
@@ -362,6 +383,54 @@ const Index = () => {
           </CommandGroup>
         </CommandList>
       </CommandDialog>
+
+      {/* Overview modal — shown when a non-navigation tile is clicked */}
+      {overviewTile && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+          onClick={() => setOverviewTile(null)}
+        >
+          <div
+            className="relative w-full max-w-md rounded-2xl bg-white p-6 shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setOverviewTile(null)}
+              className="absolute right-4 top-4 rounded-full p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors"
+            >
+              <X className="h-4 w-4" />
+            </button>
+
+            <div className="mb-4 flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100">
+                <overviewTile.icon className="h-5 w-5 text-blue-700" />
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">
+                  {overviewTile.category}
+                </p>
+                <h2 className="text-lg font-bold text-slate-900">{overviewTile.title}</h2>
+              </div>
+            </div>
+
+            <p className="text-sm text-slate-600 leading-relaxed">
+              {overviewTile.overview ?? ''}
+            </p>
+
+            <div className="mt-5 flex items-center justify-between">
+              <span className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">
+                {overviewTile.value}
+              </span>
+              <button
+                onClick={() => setOverviewTile(null)}
+                className="rounded-full bg-slate-900 px-4 py-2 text-xs font-semibold text-white hover:bg-slate-700 transition-colors"
+              >
+                Got it
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
