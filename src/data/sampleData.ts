@@ -1,3 +1,5 @@
+import coactionVideo from '../assets/Coaction\'s New Policy on Acceptable Use of AI Tools (1).mp4';
+
 export interface Agent {
   id: string;
   name: string;
@@ -384,60 +386,71 @@ export interface Video {
   thumbnail: string;
   category: string;
   level: 'beginner' | 'intermediate' | 'advanced';
+  videoPath?: string;
 }
 
 export const sampleVideos: Video[] = [
   {
     id: '1',
+    title: 'CO/ACTION Acceptable Use of AI Tools Policy',
+    description: 'Comprehensive overview of CO/ACTION\'s policies and guidelines for responsible AI tool usage across the organization',
+    duration: '18:45',
+    thumbnail: 'https://images.unsplash.com/photo-1560707303-4e980ce876ad?w=400&h=225&fit=crop',
+    category: 'Governance',
+    level: 'beginner',
+    videoPath: coactionVideo,
+  },
+  {
+    id: '2',
     title: 'Getting Started with Insurance AI Agents',
     description: 'Learn the fundamentals of writing effective queries for insurance-specific AI agents',
     duration: '5:32',
-    thumbnail: '/placeholder.svg',
+    thumbnail: 'https://images.unsplash.com/photo-1677442d019cecf31b4b487b69d1a3ad3a9cdb0b?w=400&h=225&fit=crop',
     category: 'Fundamentals',
     level: 'beginner',
   },
   {
-    id: '2',
+    id: '3',
     title: 'Crafting Claims Queries That Work',
     description: 'Best practices for structuring queries when processing insurance claims',
     duration: '8:15',
-    thumbnail: '/placeholder.svg',
+    thumbnail: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=225&fit=crop',
     category: 'Claims',
     level: 'beginner',
   },
   {
-    id: '3',
+    id: '4',
     title: 'Advanced Underwriting Prompts',
     description: 'Deep dive into complex underwriting scenarios and query optimization',
     duration: '12:45',
-    thumbnail: '/placeholder.svg',
+    thumbnail: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=225&fit=crop',
     category: 'Underwriting',
     level: 'advanced',
   },
   {
-    id: '4',
+    id: '5',
     title: 'Policy Document Automation Tips',
     description: 'How to use AI agents to streamline policy document generation',
     duration: '6:20',
-    thumbnail: '/placeholder.svg',
+    thumbnail: 'https://images.unsplash.com/photo-1516321318423-f06f70d504f0?w=400&h=225&fit=crop',
     category: 'Policy Admin',
     level: 'intermediate',
   },
   {
-    id: '5',
+    id: '6',
     title: 'Customer Service Query Templates',
     description: 'Ready-to-use templates for common customer service scenarios',
     duration: '4:55',
-    thumbnail: '/placeholder.svg',
+    thumbnail: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=225&fit=crop',
     category: 'Customer Service',
     level: 'beginner',
   },
   {
-    id: '6',
+    id: '7',
     title: 'Fraud Detection Best Practices',
     description: 'Learn to identify red flags and structure fraud detection queries',
     duration: '10:30',
-    thumbnail: '/placeholder.svg',
+    thumbnail: 'https://images.unsplash.com/photo-1563986768609-2f477e38148e?w=400&h=225&fit=crop',
     category: 'Claims',
     level: 'advanced',
   },
@@ -450,6 +463,7 @@ export interface ExternalCourse {
   url: string;
   provider: string;
   level: 'beginner' | 'intermediate' | 'advanced';
+  thumbnail: string;
 }
 
 export const externalCourses: ExternalCourse[] = [
@@ -460,6 +474,7 @@ export const externalCourses: ExternalCourse[] = [
     url: 'https://learn.microsoft.com/en-us/training/modules/agents-copilot-chat/introduction',
     provider: 'Microsoft Learn',
     level: 'beginner',
+    thumbnail: 'https://images.unsplash.com/photo-1633356713697-f11b7e4b9df1?w=400&h=225&fit=crop',
   },
   {
     id: 'ext-2',
@@ -468,6 +483,7 @@ export const externalCourses: ExternalCourse[] = [
     url: 'https://learn.microsoft.com/en-us/training/paths/craft-effective-prompts-copilot-microsoft-365/',
     provider: 'Microsoft Learn',
     level: 'intermediate',
+    thumbnail: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=225&fit=crop',
   },
   {
     id: 'ext-3',
@@ -476,6 +492,7 @@ export const externalCourses: ExternalCourse[] = [
     url: 'https://learn.microsoft.com/en-us/viva/learning/academy-copilot',
     provider: 'Microsoft Learn',
     level: 'advanced',
+    thumbnail: 'https://images.unsplash.com/photo-1677442d019cecf31b4b487b69d1a3ad3a9cdb0b?w=400&h=225&fit=crop',
   },
 ];
 

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Header from '@/components/Header';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTheme } from 'next-themes';
 import {
   GraduationCap,
   FolderKanban,
@@ -16,6 +16,12 @@ import {
   ArrowRight,
   Wrench,
   X,
+  Moon,
+  Sun,
+  Bell,
+  LogIn,
+  LogOut,
+  Search as SearchIcon,
 } from 'lucide-react';
 import {
   CommandDialog,
@@ -26,6 +32,8 @@ import {
   CommandList,
   CommandSeparator,
 } from '@/components/ui/command';
+import coactionLogo from '../assets/coaction-logo-darkmode-transparent.png';
+import { logOktaEvent } from '@/lib/oktaDebug';
 
 const tiles = [
   {
@@ -37,7 +45,7 @@ const tiles = [
     value: '42 active',
   },
   {
-    title: 'Projects',
+    title: 'AI Workflows',
     description: 'Active AI initiatives, owners, status, and delivery progress.',
     icon: FolderKanban,
     href: '/project-catalogue',
@@ -141,12 +149,49 @@ const tileAccentStyles = [
 
 const Index = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, loading: authLoading, isAuthenticated, logout, loginWithOkta } = useAuth();
+  const { theme, setTheme } = useTheme();
   const [commandOpen, setCommandOpen] = useState(false);
   const [tourStep, setTourStep] = useState(0);
   const [overviewTile, setOverviewTile] = useState<(typeof tiles)[0] | null>(null);
 
   const userName = user?.name || 'there';
+
+  const initials = user?.name
+    ? user.name
+        .split(' ')
+        .map((n) => n[0])
+        .join('')
+        .toUpperCase()
+    : 'U';
+
+  const handleLogout = async () => {
+    logOktaEvent('okta:signout-clicked', { source: 'Index' });
+    try {
+      await logout();
+      logOktaEvent('okta:signout-complete', { source: 'Index' });
+    } catch (error) {
+      logOktaEvent('okta:signout-error', {
+        source: 'Index',
+        message: error instanceof Error ? error.message : 'Unknown error',
+      });
+    }
+  };
+
+  const handleLogin = async () => {
+    try {
+      await loginWithOkta();
+    } catch (error) {
+      logOktaEvent('okta:signin-error', {
+        source: 'Index',
+        message: error instanceof Error ? error.message : 'Unknown error',
+      });
+    }
+  };
+
+  const toggleTheme = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark');
+  };
 
   const quickActions = useMemo(
     () =>
@@ -182,51 +227,135 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <Header />
+      {/* Combined Header + Hero Section */}
+      <header className="sticky top-0 z-50 bg-blue-950 text-white">
+        <div className="w-full px-4 md:px-8 py-4">
+          <div className="flex w-full items-center justify-between mb-6">
+            <Link to="/" className="flex items-start">
+              <div className="p-1.5">
+                <img
+                  src={coactionLogo}
+                  alt="CO/ACTION AI Hub"
+                  className="h-20 w-80"
+                />
+              </div>
+            </Link>
 
-      <main className="w-full px-4 md:px-8 py-10">
-        {/* Hero Section */}
-        <div
-          className={`mb-8 rounded-3xl bg-blue-950 p-8 md:p-10 text-white transition-all ${
-            heroTourActive ? 'ring-4 ring-blue-300/70' : ''
-          }`}
-        >
-          <p className="inline-flex items-center rounded-full bg-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-blue-50">
-            This week
-          </p>
-          <h2 className="mt-5 text-4xl font-bold tracking-tight md:text-5xl">Welcome back, {userName}.</h2>
-          <p className="mt-3 max-w-2xl text-base text-blue-100 md:text-lg">
-            Explore, govern, and learn - your enterprise&apos;s AI in one place.
-          </p>
-          <div className="mt-7 flex flex-wrap items-center gap-3">
-            <button
-              onClick={() => setCommandOpen(true)}
-              className="rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-slate-900 transition-colors hover:bg-slate-100"
-            >
-              Open Command Bar
-            </button>
-            <button
-              onClick={() => setTourStep(1)}
-              className="rounded-full border border-white/40 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-white/10"
-            >
-              Take a tour
-            </button>
-          </div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={toggleTheme}
+                className="p-2 text-blue-100 hover:bg-white/10 hover:text-white transition-colors rounded-lg"
+              >
+                {theme === 'dark' ? (
+                  <Sun className="w-5 h-5" />
+                ) : (
+                  <Moon className="w-5 h-5" />
+                )}
+              </button>
+              <button className="relative p-2 text-blue-100 hover:bg-white/10 hover:text-white transition-colors rounded-lg">
+                <Bell className="w-5 h-5" />
+                <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                  3
+                </span>
+              </button>
 
-          {heroTourActive && (
-            <div className="mt-4 rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-sm text-blue-50">
-              Step 1 of 3: This is your home summary area. Use the command bar for quick navigation.
-              <div className="mt-2">
-                <button
-                  onClick={() => setTourStep(2)}
-                  className="rounded-md bg-white px-3 py-1.5 text-xs font-semibold text-slate-900 hover:bg-slate-100"
-                >
-                  Next
-                </button>
+              <div className="flex items-center gap-2 ml-2">
+                {isAuthenticated && !authLoading && (
+                  <div className="text-right text-xs">
+                    <div className="font-semibold">{user?.name || 'User'}</div>
+                    <div className="text-blue-300 text-xs">{user?.email}</div>
+                  </div>
+                )}
+                {isAuthenticated && (
+                  <>
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-blue-950 font-semibold text-sm">
+                      {initials}
+                    </div>
+                    <button
+                      onClick={handleLogout}
+                      className="p-2 text-blue-100 hover:bg-white/10 hover:text-white transition-colors rounded-lg"
+                      title="Logout"
+                    >
+                      <LogOut className="w-4 h-4" />
+                    </button>
+                  </>
+                )}
+                {!isAuthenticated && !authLoading && (
+                  <button
+                    onClick={handleLogin}
+                    className="inline-flex items-center gap-2 rounded-lg border border-white/30 px-3 py-2 text-sm font-medium text-white hover:bg-white/10"
+                    title="Sign in with Okta"
+                  >
+                    <LogIn className="h-4 w-4" />
+                    Sign in
+                  </button>
+                )}
               </div>
             </div>
-          )}
+          </div>
+
+          {/* Hero Content */}
+          <div className="max-w-4xl mx-auto text-center">
+            {/* Welcome Greeting */}
+            <h2 className="text-4xl md:text-4xl font-bold tracking-tight mb-3">
+              {isAuthenticated ? `Welcome back, ${userName}.` : 'Welcome to CO/ACTION AI Hub.'}
+            </h2>
+
+            {/* Subtitle */}
+            <p className="text-lg text-blue-100 mb-8 max-w-2xl mx-auto">
+              Explore, govern, and learn - your enterprise&apos;s AI in one place.
+            </p>
+
+            {/* Search Bar */}
+            <div className="mb-6 flex gap-2">
+              <div className="relative flex-1 max-w-2xl mx-auto">
+                <SearchIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 pointer-events-none" />
+                <input
+                  type="text"
+                  onClick={() => setCommandOpen(true)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      setCommandOpen(true);
+                    }
+                  }}
+                  placeholder="Search pages, policies, agents..."
+                  className="w-full rounded-lg border border-slate-300 bg-white py-3 pl-11 pr-4 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-200 transition-all"
+                />
+              </div>
+            </div>
+
+            {/* Action Chips */}
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <button
+                onClick={() => setCommandOpen(true)}
+                className="rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-blue-950 transition-colors hover:bg-slate-100"
+              >
+                Open Command Bar
+              </button>
+              <button
+                onClick={() => setTourStep(1)}
+                className="rounded-full border border-white/40 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-white/10"
+              >
+                Take a tour
+              </button>
+            </div>
+          </div>
         </div>
+      </header>
+
+      <main className="w-full px-4 md:px-8 py-10">
+        {/* Tour Step 1 Message */}
+        {tourStep === 1 && (
+          <div className="mb-6 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-900">
+            Step 1 of 3: This is your home. Use the search bar or Command Bar for quick navigation.
+            <button
+              onClick={() => setTourStep(2)}
+              className="ml-3 rounded-md border border-blue-200 bg-white px-3 py-1.5 text-xs font-semibold text-blue-900 hover:bg-blue-100"
+            >
+              Next
+            </button>
+          </div>
+        )}
 
         {/* Quick access cards */}
         <div className={`mb-4 transition-all ${quickAccessTourActive ? 'rounded-lg ring-4 ring-blue-200/70 p-2 -m-2' : ''}`}>

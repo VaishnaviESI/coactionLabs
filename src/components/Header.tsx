@@ -1,22 +1,41 @@
 import { Link } from 'react-router-dom';
-import { Bell, Moon, Sun, LogOut } from 'lucide-react';
+import { Bell, Moon, Sun, LogIn, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTheme } from 'next-themes';
-import { useOktaAuth } from '@okta/okta-react';
 import { useAuth } from '@/contexts/AuthContext';
-import coactionLogo from '../assets/coaction-labs-ai-hub-logo.png';
+import coactionLogo from '../assets/coaction-logo-darkmode-transparent.png';
+import { logOktaEvent } from '@/lib/oktaDebug';
 
 const Header = () => {
   const { theme, setTheme } = useTheme();
-  const { oktaAuth } = useOktaAuth();
-  const { user, loading } = useAuth();
+  const { user, loading, isAuthenticated, logout, loginWithOkta } = useAuth();
 
   const toggleTheme = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark');
   };
 
   const handleLogout = async () => {
-    await oktaAuth.signOut();
+    logOktaEvent('okta:signout-clicked', { source: 'Header' });
+    try {
+      await logout();
+      logOktaEvent('okta:signout-complete', { source: 'Header' });
+    } catch (error) {
+      logOktaEvent('okta:signout-error', {
+        source: 'Header',
+        message: error instanceof Error ? error.message : 'Unknown error',
+      });
+    }
+  };
+
+  const handleLogin = async () => {
+    try {
+      await loginWithOkta();
+    } catch (error) {
+      logOktaEvent('okta:signin-error', {
+        source: 'Header',
+        message: error instanceof Error ? error.message : 'Unknown error',
+      });
+    }
   };
 
   const initials = user?.name
@@ -28,7 +47,7 @@ const Header = () => {
     : 'U';
 
   return (
-    <header className="sticky top-0 z-50 border-b border-blue-900 bg-gradient-to-r from-white via-blue-100 to-blue-950">
+    <header className="sticky top-0 z-50 border-b border-blue-900 bg-blue-950">
       <div className="w-full px-6 py-4">
         <div className="flex w-full items-center justify-between">
           <Link to="/" className="flex items-start gap-2">
@@ -46,7 +65,7 @@ const Header = () => {
               variant="ghost"
               size="icon"
               className="text-blue-100 hover:bg-white/10 hover:text-white"
-              onClick={toggleTheme}
+              onClick={() => toggleTheme()}
             >
               {theme === 'dark' ? (
                 <Sun className="w-5 h-5" />
@@ -66,24 +85,40 @@ const Header = () => {
             </Button>
 
             <div className="flex items-center gap-2 ml-2">
-              {!loading && (
+              {isAuthenticated && !loading && (
                 <div className="text-right text-xs">
-                  <div className="font-semibold text-blue-950">{user?.name || 'User'}</div>
-                  <div className="text-blue-700 text-xs">{user?.email}</div>
+                  <div className="font-semibold text-white">{user?.name || 'User'}</div>
+                  <div className="text-blue-200 text-xs">{user?.email}</div>
                 </div>
               )}
-              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-blue-950 font-semibold text-sm">
-                {initials}
-              </div>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="text-blue-100 hover:bg-white/10 hover:text-white ml-1"
-                onClick={handleLogout}
-                title="Logout"
-              >
-                <LogOut className="w-4 h-4" />
-              </Button>
+              {isAuthenticated && (
+                <>
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-blue-950 font-semibold text-sm">
+                    {initials}
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-blue-100 hover:bg-white/10 hover:text-white ml-1"
+                    onClick={handleLogout}
+                    title="Logout"
+                  >
+                    <LogOut className="w-4 h-4" />
+                  </Button>
+                </>
+              )}
+              {!isAuthenticated && !loading && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="border-white/30 bg-transparent text-white hover:bg-white/10 hover:text-white"
+                  onClick={handleLogin}
+                  title="Sign in with Okta"
+                >
+                  <LogIn className="mr-2 h-4 w-4" />
+                  Sign in
+                </Button>
+              )}
             </div>
           </div>
         </div>

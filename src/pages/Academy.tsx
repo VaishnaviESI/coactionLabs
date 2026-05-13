@@ -1,11 +1,15 @@
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
 import Header from '@/components/Header';
-import { ArrowLeft, Clock, Play, ExternalLink, GraduationCap } from 'lucide-react';
+import { ArrowLeft, Clock, Play, ExternalLink, GraduationCap, X } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { sampleVideos, externalCourses } from '@/data/sampleData';
 
 const Academy = () => {
+  const [selectedVideo, setSelectedVideo] = useState<typeof sampleVideos[0] | null>(null);
+  const coactionVideos = sampleVideos.filter((video) => video.id === '1');
+  
   const getLevelColor = (level: string) => {
     switch (level) {
       case 'beginner':
@@ -76,9 +80,23 @@ const Academy = () => {
                   rel="noopener noreferrer"
                   className="group rounded-xl border border-yellow-200/80 bg-stone-100/80 hover:border-yellow-300 hover:shadow-sm transition-all duration-300 overflow-hidden cursor-pointer"
                 >
-                  <div className="relative aspect-video bg-stone-200/60 flex items-center justify-center">
-                    <div className="w-14 h-14 rounded-full bg-amber-100/70 flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
-                      <ExternalLink className="w-6 h-6 text-black" />
+                  <div className="relative aspect-video bg-gradient-to-br from-cyan-50 to-blue-50 flex items-center justify-center overflow-hidden">
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <svg
+                        className="w-20 h-20 group-hover:scale-110 transition-transform duration-300"
+                        viewBox="0 0 100 100"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <rect x="10" y="10" width="30" height="30" fill="#F25022" />
+                        <rect x="50" y="10" width="30" height="30" fill="#7FBA00" />
+                        <rect x="10" y="50" width="30" height="30" fill="#00A4EF" />
+                        <rect x="50" y="50" width="30" height="30" fill="#FFB900" />
+                      </svg>
+                    </div>
+                    <div className="absolute inset-0 bg-black/30 flex items-center justify-center group-hover:bg-black/20 transition-colors">
+                      <div className="w-14 h-14 rounded-full bg-white/90 flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
+                        <ExternalLink className="w-6 h-6 text-black" />
+                      </div>
                     </div>
                     <div className="absolute top-2 right-2">
                       <Badge className={`${getProviderColor(course.provider)} text-xs`}>
@@ -117,15 +135,39 @@ const Academy = () => {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {sampleVideos.map((video) => (
+              {coactionVideos.map((video) => (
                 <div
                   key={video.id}
+                  onClick={() => setSelectedVideo(video)}
                   className="group rounded-xl border border-yellow-200/80 bg-stone-100/80 hover:border-yellow-300 hover:shadow-sm transition-all duration-300 overflow-hidden cursor-pointer"
                 >
-                  <div className="relative aspect-video bg-stone-200/60 flex items-center justify-center">
-                    <div className="w-14 h-14 rounded-full bg-amber-100/70 flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
-                      <Play className="w-6 h-6 text-black ml-1" />
-                    </div>
+                  <div className="relative aspect-video bg-stone-200/60 flex items-center justify-center overflow-hidden">
+                    {video.videoPath ? (
+                      <>
+                        <video
+                          src={video.videoPath}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                        <div className="absolute inset-0 bg-black/30 flex items-center justify-center group-hover:bg-black/20 transition-colors">
+                          <div className="w-14 h-14 rounded-full bg-white/90 flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
+                            <Play className="w-6 h-6 text-black ml-1" />
+                          </div>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <img
+                          src={video.thumbnail}
+                          alt={video.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                        <div className="absolute inset-0 bg-black/30 flex items-center justify-center group-hover:bg-black/20 transition-colors">
+                          <div className="w-14 h-14 rounded-full bg-white/90 flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
+                            <Play className="w-6 h-6 text-black ml-1" />
+                          </div>
+                        </div>
+                      </>
+                    )}
                     <div className="absolute bottom-2 right-2 px-2 py-1 rounded bg-foreground/80 text-background text-xs font-medium flex items-center gap-1">
                       <Clock className="w-3 h-3" />
                       {video.duration}
@@ -148,6 +190,55 @@ const Academy = () => {
           </CardContent>
         </Card>
       </main>
+
+      {/* Video Player Modal */}
+      {selectedVideo && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
+          onClick={() => setSelectedVideo(null)}
+        >
+          <div
+            className="w-full max-w-4xl rounded-xl bg-slate-900 overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="relative bg-black aspect-video flex items-center justify-center">
+              {selectedVideo.videoPath ? (
+                <video
+                  src={selectedVideo.videoPath}
+                  controls
+                  autoPlay
+                  className="w-full h-full"
+                />
+              ) : (
+                <div className="text-center text-slate-400">
+                  <Play className="w-16 h-16 mx-auto mb-4 opacity-50" />
+                  <p>Video player would display here</p>
+                </div>
+              )}
+              <button
+                onClick={() => setSelectedVideo(null)}
+                className="absolute top-4 right-4 bg-black/60 hover:bg-black/80 text-white p-2 rounded-full transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="p-6 bg-slate-900">
+              <h2 className="text-xl font-bold text-white mb-2">{selectedVideo.title}</h2>
+              <div className="flex items-center gap-3 mb-4">
+                <Badge className={`${getLevelColor(selectedVideo.level)}`}>
+                  {selectedVideo.level}
+                </Badge>
+                <span className="text-slate-400 text-sm flex items-center gap-1">
+                  <Clock className="w-4 h-4" />
+                  {selectedVideo.duration}
+                </span>
+                <span className="text-slate-400 text-sm">{selectedVideo.category}</span>
+              </div>
+              <p className="text-slate-300">{selectedVideo.description}</p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
