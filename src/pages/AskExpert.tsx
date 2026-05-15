@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
-import Header from '@/components/Header';
-import { ArrowLeft, Mail, Send, Ticket } from 'lucide-react';
+import EnterpriseHeader from '@/components/EnterpriseHeader';
+import { Mail, Send, Ticket, MessageCircleQuestion } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -10,19 +10,18 @@ import { Label } from '@/components/ui/label';
 const AskExpert = () => {
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      <EnterpriseHeader
+        portalName="Enterprise AI Portal"
+        pageTitle="Ask An Expert"
+        pageDescription="Get help and support from the AI team"
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Ask Expert' },
+        ]}
+        icon={<MessageCircleQuestion className="w-5 h-5 text-black" />}
+      />
       
       <main className="container mx-auto px-6 py-8">
-        <Link to="/">
-          <Button variant="ghost" size="sm" className="gap-2 mb-4">
-            <ArrowLeft className="w-4 h-4" />
-            Back to Dashboard
-          </Button>
-        </Link>
-        <div className="mb-6 text-center">
-          <h1 className="text-3xl font-bold text-foreground mb-2">Ask An Expert</h1>
-          <p className="text-muted-foreground">Get help and support from the AI team</p>
-        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Card>

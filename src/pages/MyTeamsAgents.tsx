@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import Header from '@/components/Header';
-import { ArrowLeft, Search, ThumbsUp, ThumbsDown, Star, Users } from 'lucide-react';
+import EnterpriseHeader from '@/components/EnterpriseHeader';
+import { Search, ThumbsUp, ThumbsDown, Star, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -86,20 +86,18 @@ const MyTeamsAgents = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      <EnterpriseHeader
+        portalName="Enterprise AI Portal"
+        pageTitle="My Team's Agents"
+        pageDescription="Agents shared by members of your team"
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Team Agents' },
+        ]}
+        icon={<Users className="w-5 h-5 text-black" />}
+      />
       
       <main className="container mx-auto px-6 py-8">
-        <Link to="/">
-          <Button variant="ghost" size="sm" className="gap-2 mb-4">
-            <ArrowLeft className="w-4 h-4" />
-            Back to Dashboard
-          </Button>
-        </Link>
-        
-        <div className="mb-10 text-center">
-          <h1 className="text-3xl font-bold text-foreground mb-2">My Team's Agents</h1>
-          <p className="text-muted-foreground">Agents shared by members of your team</p>
-        </div>
 
         <Card>
           <CardHeader>

@@ -60,7 +60,7 @@ const Header = () => {
             </div>
           </Link>
 
-          <div className="flex items-center gap-2">
+          {/* <div className="flex items-center gap-2">
             <Button
               variant="ghost"
               size="icon"
@@ -106,21 +106,9 @@ const Header = () => {
                     <LogOut className="w-4 h-4" />
                   </Button>
                 </>
-              )}
-              {!isAuthenticated && !loading && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="border-white/30 bg-transparent text-white hover:bg-white/10 hover:text-white"
-                  onClick={handleLogin}
-                  title="Sign in with Okta"
-                >
-                  <LogIn className="mr-2 h-4 w-4" />
-                  Sign in
-                </Button>
-              )}
+              )} 
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </header>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Header from '@/components/Header';
-import { ArrowLeft, Send, Lightbulb, Copy, Check, Loader2 } from 'lucide-react';
+import EnterpriseHeader from '@/components/EnterpriseHeader';
+import { Send, Lightbulb, Copy, Check, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
@@ -156,23 +156,18 @@ const IdeasWorkshop = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      <EnterpriseHeader
+        portalName="Enterprise AI Portal"
+        pageTitle="Ideas Workshop"
+        pageDescription="Refine your AI agent prompts with expert guidance"
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Ideas' },
+        ]}
+        icon={<Lightbulb className="w-5 h-5 text-black" />}
+      />
       
       <main className="container mx-auto px-6 py-8">
-        <Link to="/">
-          <Button variant="ghost" size="sm" className="gap-2 mb-4">
-            <ArrowLeft className="w-4 h-4" />
-            Back to Dashboard
-          </Button>
-        </Link>
-
-        <div className="mb-6 text-center">
-          <div className="flex items-center justify-center gap-3 mb-2">
-            <Lightbulb className="w-8 h-8 text-yellow-500" />
-            <h1 className="text-3xl font-bold text-foreground">Ideas Workshop</h1>
-          </div>
-          <p className="text-muted-foreground">Refine your AI agent prompts with expert guidance</p>
-        </div>
 
         <div className="max-w-4xl mx-auto">
           <Card className="min-h-[600px] flex flex-col">

@@ -5,9 +5,9 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
   LineChart, Line, AreaChart, Area
 } from 'recharts';
-import { ArrowLeft, CalendarIcon, ArrowUpDown } from 'lucide-react';
+import { CalendarIcon, ArrowUpDown, BarChart3 } from 'lucide-react';
 
-import Header from '@/components/Header';
+import EnterpriseHeader from '@/components/EnterpriseHeader';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { 
@@ -125,20 +125,18 @@ const Analytics = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      <EnterpriseHeader
+        portalName="Enterprise AI Portal"
+        pageTitle="AI Analytics"
+        pageDescription="View your AI usage analysis"
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Analytics' },
+        ]}
+        icon={<BarChart3 className="w-5 h-5 text-black" />}
+      />
       
       <main className="container mx-auto px-6 py-8">
-        <Link to="/">
-          <Button variant="ghost" size="sm" className="gap-2 mb-4">
-            <ArrowLeft className="w-4 h-4" />
-            Back to Dashboard
-          </Button>
-        </Link>
-        
-        <div className="mb-6 text-center">
-          <h1 className="text-3xl font-bold text-foreground mb-2">AI Analytics</h1>
-          <p className="text-muted-foreground">View your AI usage analysis</p>
-        </div>
 
         {/* Filters Section */}
         <Card className="mb-6">

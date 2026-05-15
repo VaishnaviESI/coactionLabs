@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
-import Header from '@/components/Header';
-import { ArrowLeft, Clock, Play, ExternalLink, GraduationCap, X } from 'lucide-react';
+import EnterpriseHeader from '@/components/EnterpriseHeader';
+import { Clock, Play, ExternalLink, GraduationCap, X } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { sampleVideos, externalCourses } from '@/data/sampleData';
+import claudeLogo from '../assets/claude.png';
 
 const Academy = () => {
   const [selectedVideo, setSelectedVideo] = useState<typeof sampleVideos[0] | null>(null);
@@ -31,43 +32,67 @@ const Academy = () => {
         return 'bg-purple-100 text-purple-700 border-purple-200';
       case 'Microsoft Learn':
         return 'bg-cyan-100 text-cyan-700 border-cyan-200';
+      case 'Anthropic':
+        return 'bg-amber-100 text-amber-700 border-amber-200';
       default:
         return 'bg-muted text-muted-foreground';
     }
   };
 
+  const renderProviderLogo = (provider: string) => {
+    switch (provider) {
+      case 'Microsoft Learn':
+        return (
+          <svg
+            className="w-20 h-20 group-hover:scale-110 transition-transform duration-300"
+            viewBox="0 0 100 100"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect x="10" y="10" width="30" height="30" fill="#F25022" />
+            <rect x="50" y="10" width="30" height="30" fill="#7FBA00" />
+            <rect x="10" y="50" width="30" height="30" fill="#00A4EF" />
+            <rect x="50" y="50" width="30" height="30" fill="#FFB900" />
+          </svg>
+        );
+      default:
+        return (
+          <svg
+            className="w-20 h-20 group-hover:scale-110 transition-transform duration-300"
+            viewBox="0 0 100 100"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect x="10" y="10" width="80" height="80" fill="#E5E7EB" rx="8" />
+            <text x="50" y="60" textAnchor="middle" fontSize="24" fill="#6B7280" fontWeight="bold">
+              ?
+            </text>
+          </svg>
+        );
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-50">
-      <Header />
+      <EnterpriseHeader
+        portalName="Enterprise AI Portal"
+        pageTitle="AI Academy"
+        pageDescription="Learn to write effective queries for insurance AI agents"
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Academy' },
+        ]}
+        icon={<GraduationCap className="w-5 h-5 text-black" />}
+      />
 
       <main className="container mx-auto px-6 py-8">
-        <Link
-          to="/"
-          className="group inline-flex items-center mb-4 py-1 text-sm font-medium text-slate-600 hover:text-amber-700 transition-colors w-fit"
-        >
-          <ArrowLeft className="w-4 h-4 shrink-0 transition-transform duration-300 group-hover:-translate-x-0.5" />
-          <span className="whitespace-nowrap ml-2 transition-all duration-300 group-hover:opacity-0 group-hover:-translate-x-2 pointer-events-none">
-            Back to Dashboard
-          </span>
-        </Link>
-        <div className="mb-8 text-center">
-          <div className="inline-flex items-center gap-3 mb-3">
-            <div className="w-11 h-11 rounded-xl bg-amber-100/70 flex items-center justify-center">
-              <GraduationCap className="w-5 h-5 text-black" />
-            </div>
-            <h1 className="text-3xl font-bold text-foreground">AI Academy</h1>
-          </div>
-          <p className="text-muted-foreground">Learn to write effective queries for insurance AI agents</p>
-        </div>
 
-        {/* External Courses Section */}
+        {/* Available Courses Section */}
         <Card className="mb-8 border-yellow-200/70 bg-stone-50/65 backdrop-blur-sm">
           <CardHeader>
             <CardTitle className="text-lg flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-amber-100/70 flex items-center justify-center">
                 <GraduationCap className="w-5 h-5 text-black" />
               </div>
-              External Courses
+              Available Courses
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -81,17 +106,16 @@ const Academy = () => {
                   className="group rounded-xl border border-yellow-200/80 bg-stone-100/80 hover:border-yellow-300 hover:shadow-sm transition-all duration-300 overflow-hidden cursor-pointer"
                 >
                   <div className="relative aspect-video bg-gradient-to-br from-cyan-50 to-blue-50 flex items-center justify-center overflow-hidden">
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <svg
-                        className="w-20 h-20 group-hover:scale-110 transition-transform duration-300"
-                        viewBox="0 0 100 100"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <rect x="10" y="10" width="30" height="30" fill="#F25022" />
-                        <rect x="50" y="10" width="30" height="30" fill="#7FBA00" />
-                        <rect x="10" y="50" width="30" height="30" fill="#00A4EF" />
-                        <rect x="50" y="50" width="30" height="30" fill="#FFB900" />
-                      </svg>
+                    <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+                      {course.provider === 'Anthropic' ? (
+                        <img
+                          src={claudeLogo}
+                          alt="Claude"
+                          className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300"
+                        />
+                      ) : (
+                        renderProviderLogo(course.provider)
+                      )}
                     </div>
                     <div className="absolute inset-0 bg-black/30 flex items-center justify-center group-hover:bg-black/20 transition-colors">
                       <div className="w-14 h-14 rounded-full bg-white/90 flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">

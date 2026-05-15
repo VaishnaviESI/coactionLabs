@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import Header from '@/components/Header';
-import { ArrowLeft, Calendar, BarChart2, Share2, Users, Lock, ShieldCheck, Pencil, Plus, Send, Clock } from 'lucide-react';
+import EnterpriseHeader from '@/components/EnterpriseHeader';
+import { Calendar, BarChart2, Share2, Users, Lock, ShieldCheck, Pencil, Plus, Send, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -95,29 +95,18 @@ const MyAgents = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      <EnterpriseHeader
+        portalName="Enterprise AI Portal"
+        pageTitle="My Agents"
+        pageDescription="Manage and share your personal AI agents"
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Agents' },
+        ]}
+        icon={<ShieldCheck className="w-5 h-5 text-black" />}
+      />
       
       <main className="container mx-auto px-6 py-8">
-        <Link to="/">
-          <Button variant="ghost" size="sm" className="gap-2 mb-4">
-            <ArrowLeft className="w-4 h-4" />
-            Back to Dashboard
-          </Button>
-        </Link>
-        {/* <div className="mb-6">
-          <div className="text-center mb-4">
-            <h1 className="text-3xl font-bold text-foreground mb-2">My Agents</h1>
-            <p className="text-muted-foreground">Manage and share your personal AI agents</p>
-          </div>
-          <div className="flex justify-end">
-            <Link to="/create-agent">
-              <Button className="gap-2">
-                <Plus className="w-4 h-4" />
-                Create Agent
-              </Button>
-            </Link>
-          </div>
-        </div> */}
 
           {/* Agents Overview */}
 <Card className="mb-6">

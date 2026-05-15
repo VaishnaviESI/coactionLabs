@@ -494,6 +494,33 @@ export const externalCourses: ExternalCourse[] = [
     level: 'advanced',
     thumbnail: 'https://images.unsplash.com/photo-1677442d019cecf31b4b487b69d1a3ad3a9cdb0b?w=400&h=225&fit=crop',
   },
+  {
+    id: 'ext-4',
+    title: 'Anthropic Academy',
+    description: 'Free courses on getting the most out of Claude — learn best practices, advanced prompting, and how to effectively use Claude in your workflows.',
+    url: 'https://anthropic.skilljar.com',
+    provider: 'Anthropic',
+    level: 'beginner',
+    thumbnail: 'https://images.unsplash.com/photo-1633356713697-f11b7e4b9df1?w=400&h=225&fit=crop',
+  },
+  {
+    id: 'ext-5',
+    title: 'Anthropic Help Center',
+    description: 'Comprehensive support documentation and guides for using Claude, including FAQs, troubleshooting, and account management.',
+    url: 'https://support.claude.com',
+    provider: 'Anthropic',
+    level: 'beginner',
+    thumbnail: 'https://images.unsplash.com/photo-1633356713697-f11b7e4b9df1?w=400&h=225&fit=crop',
+  },
+  {
+    id: 'ext-6',
+    title: 'Prompt Engineering Guide',
+    description: 'Learn prompt engineering techniques and best practices for Claude — understand how to write effective prompts for optimal AI output.',
+    url: 'https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/overview',
+    provider: 'Anthropic',
+    level: 'intermediate',
+    thumbnail: 'https://images.unsplash.com/photo-1633356713697-f11b7e4b9df1?w=400&h=225&fit=crop',
+  },
 ];
 
 export const aiTeamMembers = [

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Header from '@/components/Header';
-import { ArrowLeft, ShieldCheck, Clock, ClipboardCheck, FileText, Shield } from 'lucide-react';
+import EnterpriseHeader from '@/components/EnterpriseHeader';
+import { ShieldCheck, Clock, ClipboardCheck, FileText, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -352,15 +352,18 @@ const CertificationQueue = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      <EnterpriseHeader
+        portalName="Enterprise AI Portal"
+        pageTitle="Certification Queue"
+        pageDescription="Review and certify AI agents for enterprise use"
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Certification' },
+        ]}
+        icon={<ClipboardCheck className="w-5 h-5 text-black" />}
+      />
       
       <main className="container mx-auto px-6 py-8">
-        <Link to="/">
-          <Button variant="ghost" size="sm" className="gap-2 mb-4">
-            <ArrowLeft className="w-4 h-4" />
-            Back to Dashboard
-          </Button>
-        </Link>
         
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-foreground mb-2">Certification Queue</h1>

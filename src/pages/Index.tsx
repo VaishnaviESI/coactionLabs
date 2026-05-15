@@ -42,7 +42,7 @@ const tiles = [
     icon: Shield,
     href: '/policies-governance',
     category: 'Governance',
-    value: '42 active',
+    value: '2 documents',
   },
   {
     title: 'AI Workflows',
@@ -66,78 +66,78 @@ const tiles = [
     icon: Wrench,
     href: '/toolbox',
     category: 'Create',
-    value: '4 tools',
+    value: '3 tools',
   },
-  {
-    title: 'Agents',
-    description: 'Run and manage approved automations across your teams.',
-    icon: Bot,
-    href: '/my-agents',
-    category: 'Automation',
-    value: 'Coming soon',
-    overview:
-      'Run, monitor, and manage approved AI automations across your teams. Browse agents assigned to you, trigger runs on demand, review execution history, and configure schedules — all from a single control panel.',
-  },
-  {
-    title: 'Marketplace',
-    description: 'Discover and adopt certified AI agents across the organization.',
-    icon: Store,
-    href: '/marketplace',
-    category: 'Discover',
-    value: 'Coming soon',
-    overview:
-      'Browse a curated library of certified AI agents vetted for enterprise use. Find automations built by internal teams or verified partners, review trust scores and usage stats, and deploy approved agents to your team in a single click.',
-  },
-  {
-    title: 'Analytics',
-    description: 'Usage, adoption, and performance metrics across your agents.',
-    icon: BarChart3,
-    href: '/analytics',
-    category: 'Insights',
-    value: 'Coming soon',
-    overview:
-      'Monitor AI adoption, usage patterns, and performance metrics across all agents and teams. Identify underperforming automations, track return on investment, and surface data-driven insights to continuously optimize your AI portfolio.',
-  },
-  {
-    title: 'Ask an Expert',
-    description: 'Get help from internal AI experts and champions.',
-    icon: MessageCircleQuestion,
-    href: '/ask-expert',
-    category: 'Support',
-    value: 'Coming soon',
-    overview:
-      'Connect directly with internal AI champions and certified experts. Submit questions, book consultations, or browse answers to common challenges from colleagues who have already solved them. Fast-track your team\'s AI adoption with peer expertise.',
-  },
-  {
-    title: "My Team's Agents",
-    description: 'Browse the agents in use across your team.',
-    icon: Users,
-    href: '/team-agents',
-    category: 'Team',
-    value: 'Coming soon',
-    overview:
-      'Get a clear view of every AI agent your team has deployed — their status, usage frequency, last-run details, and any pending reviews. Manage approvals, retire outdated automations, and keep your team\'s AI portfolio healthy and current.',
-  },
-  {
-    title: 'Certification Queue',
-    description: 'Review agents pending certification and approval.',
-    icon: BadgeCheck,
-    href: '/certification-queue',
-    category: 'Review',
-    value: 'Coming soon',
-    overview:
-      'Review and certify AI agents submitted for enterprise-wide use. Assess submissions against governance standards, run compliance checks, and grant or revoke approval status. Maintain the quality bar that keeps the organization\'s AI ecosystem trustworthy.',
-  },
-  {
-    title: 'Ideas Workshop',
-    description: 'Submit and explore ideas for new AI agents.',
-    icon: Lightbulb,
-    href: '/ideas-workshop',
-    category: 'Innovate',
-    value: 'Coming soon',
-    overview:
-      'Submit ideas for new AI agents, upvote proposals from colleagues, and track which concepts are moving into development. A collaborative innovation space that connects problem owners with builders to shape the future of AI at your organization.',
-  },
+  // {
+  //   title: 'Agents',
+  //   description: 'Run and manage approved automations across your teams.',
+  //   icon: Bot,
+  //   href: '/my-agents',
+  //   category: 'Automation',
+  //   value: 'Coming soon',
+  //   overview:
+  //     'Run, monitor, and manage approved AI automations across your teams. Browse agents assigned to you, trigger runs on demand, review execution history, and configure schedules — all from a single control panel.',
+  // },
+  // {
+  //   title: 'Marketplace',
+  //   description: 'Discover and adopt certified AI agents across the organization.',
+  //   icon: Store,
+  //   href: '/marketplace',
+  //   category: 'Discover',
+  //   value: 'Coming soon',
+  //   overview:
+  //     'Browse a curated library of certified AI agents vetted for enterprise use. Find automations built by internal teams or verified partners, review trust scores and usage stats, and deploy approved agents to your team in a single click.',
+  // },
+  // {
+  //   title: 'Analytics',
+  //   description: 'Usage, adoption, and performance metrics across your agents.',
+  //   icon: BarChart3,
+  //   href: '/analytics',
+  //   category: 'Insights',
+  //   value: 'Coming soon',
+  //   overview:
+  //     'Monitor AI adoption, usage patterns, and performance metrics across all agents and teams. Identify underperforming automations, track return on investment, and surface data-driven insights to continuously optimize your AI portfolio.',
+  // },
+  // {
+  //   title: 'Ask an Expert',
+  //   description: 'Get help from internal AI experts and champions.',
+  //   icon: MessageCircleQuestion,
+  //   href: '/ask-expert',
+  //   category: 'Support',
+  //   value: 'Coming soon',
+  //   overview:
+  //     'Connect directly with internal AI champions and certified experts. Submit questions, book consultations, or browse answers to common challenges from colleagues who have already solved them. Fast-track your team\'s AI adoption with peer expertise.',
+  // },
+  // {
+  //   title: "My Team's Agents",
+  //   description: 'Browse the agents in use across your team.',
+  //   icon: Users,
+  //   href: '/team-agents',
+  //   category: 'Team',
+  //   value: 'Coming soon',
+  //   overview:
+  //     'Get a clear view of every AI agent your team has deployed — their status, usage frequency, last-run details, and any pending reviews. Manage approvals, retire outdated automations, and keep your team\'s AI portfolio healthy and current.',
+  // },
+  // {
+  //   title: 'Certification Queue',
+  //   description: 'Review agents pending certification and approval.',
+  //   icon: BadgeCheck,
+  //   href: '/certification-queue',
+  //   category: 'Review',
+  //   value: 'Coming soon',
+  //   overview:
+  //     'Review and certify AI agents submitted for enterprise-wide use. Assess submissions against governance standards, run compliance checks, and grant or revoke approval status. Maintain the quality bar that keeps the organization\'s AI ecosystem trustworthy.',
+  // },
+  // {
+  //   title: 'Ideas Workshop',
+  //   description: 'Submit and explore ideas for new AI agents.',
+  //   icon: Lightbulb,
+  //   href: '/ideas-workshop',
+  //   category: 'Innovate',
+  //   value: 'Coming soon',
+  //   overview:
+  //     'Submit ideas for new AI agents, upvote proposals from colleagues, and track which concepts are moving into development. A collaborative innovation space that connects problem owners with builders to shape the future of AI at your organization.',
+  // },
 ];
 
 const tileAccentStyles = [
@@ -152,6 +152,7 @@ const Index = () => {
   const { user, loading: authLoading, isAuthenticated, logout, loginWithOkta } = useAuth();
   const { theme, setTheme } = useTheme();
   const [commandOpen, setCommandOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const [tourStep, setTourStep] = useState(0);
   const [overviewTile, setOverviewTile] = useState<(typeof tiles)[0] | null>(null);
 
@@ -204,6 +205,16 @@ const Index = () => {
     [],
   );
 
+  const filteredTiles = useMemo(
+    () =>
+      tiles.filter((tile) =>
+        tile.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        tile.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        tile.category.toLowerCase().includes(searchQuery.toLowerCase())
+      ),
+    [searchQuery],
+  );
+
   useEffect(() => {
     const down = (event: KeyboardEvent) => {
       if (event.key.toLowerCase() === 'k' && (event.metaKey || event.ctrlKey)) {
@@ -228,9 +239,9 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Combined Header + Hero Section */}
-      <header className="sticky top-0 z-50 bg-blue-950 text-white">
+      <header className="sticky top-0 z-50 bg-[#0A1628] text-white">
         <div className="w-full px-4 md:px-8 py-4">
-          <div className="flex w-full items-center justify-between mb-6">
+          <div className="flex w-80 items-center justify-between mb-6">
             <Link to="/" className="flex items-start">
               <div className="p-1.5">
                 <img
@@ -241,7 +252,7 @@ const Index = () => {
               </div>
             </Link>
 
-            <div className="flex items-center gap-2">
+            {/* <div className="flex items-center gap-2">
               <button
                 onClick={toggleTheme}
                 className="p-2 text-blue-100 hover:bg-white/10 hover:text-white transition-colors rounded-lg"
@@ -280,25 +291,16 @@ const Index = () => {
                     </button>
                   </>
                 )}
-                {!isAuthenticated && !authLoading && (
-                  <button
-                    onClick={handleLogin}
-                    className="inline-flex items-center gap-2 rounded-lg border border-white/30 px-3 py-2 text-sm font-medium text-white hover:bg-white/10"
-                    title="Sign in with Okta"
-                  >
-                    <LogIn className="h-4 w-4" />
-                    Sign in
-                  </button>
-                )}
+                 
               </div>
-            </div>
+            </div> */}
           </div>
 
           {/* Hero Content */}
           <div className="max-w-4xl mx-auto text-center">
             {/* Welcome Greeting */}
             <h2 className="text-4xl md:text-4xl font-bold tracking-tight mb-3">
-              {isAuthenticated ? `Welcome back, ${userName}.` : 'Welcome to CO/ACTION AI Hub.'}
+              {isAuthenticated ? `Welcome back, ${userName}.` : 'Welcome to CO/ACTION LABS.'}
             </h2>
 
             {/* Subtitle */}
@@ -312,12 +314,8 @@ const Index = () => {
                 <SearchIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 pointer-events-none" />
                 <input
                   type="text"
-                  onClick={() => setCommandOpen(true)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      setCommandOpen(true);
-                    }
-                  }}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search pages, policies, agents..."
                   className="w-full rounded-lg border border-slate-300 bg-white py-3 pl-11 pr-4 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-200 transition-all"
                 />
@@ -325,7 +323,7 @@ const Index = () => {
             </div>
 
             {/* Action Chips */}
-            <div className="flex flex-wrap items-center justify-center gap-3">
+            {/* <div className="flex flex-wrap items-center justify-center gap-3">
               <button
                 onClick={() => setCommandOpen(true)}
                 className="rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-blue-950 transition-colors hover:bg-slate-100"
@@ -338,7 +336,7 @@ const Index = () => {
               >
                 Take a tour
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       </header>
@@ -374,7 +372,7 @@ const Index = () => {
         </div>
 
         <div className={`grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 ${tileTourActive ? 'rounded-lg ring-4 ring-blue-200/70 p-2' : ''}`}>
-          {tiles.map((tile, index) => {
+          {filteredTiles.map((tile, index) => {
             const Icon = tile.icon;
             const animationDelay = { animationDelay: `${index * 50}ms` };
             const accent = tileAccentStyles[index % tileAccentStyles.length];
@@ -487,17 +485,24 @@ const Index = () => {
             >
               Home
             </CommandItem>
-            {quickActions.map((action) => (
-              <CommandItem
-                key={action.href}
-                onSelect={() => {
-                  navigate(action.href);
-                  setCommandOpen(false);
-                }}
-              >
-                {action.label}
-              </CommandItem>
-            ))}
+            {quickActions.map((action) => {
+              const tile = tiles.find(t => t.href === action.href);
+              return (
+                <CommandItem
+                  key={action.href}
+                  onSelect={() => {
+                    if (tile && tile.value === 'Coming soon') {
+                      setOverviewTile(tile);
+                    } else {
+                      navigate(action.href);
+                    }
+                    setCommandOpen(false);
+                  }}
+                >
+                  {action.label}
+                </CommandItem>
+              );
+            })}
           </CommandGroup>
           <CommandSeparator />
           <CommandGroup heading="Actions">

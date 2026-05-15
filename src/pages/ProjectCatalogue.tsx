@@ -1,8 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import Header from '@/components/Header';
+import EnterpriseHeader from '@/components/EnterpriseHeader';
 import {
-  ArrowLeft,
   Search,
   FolderKanban,
   Users,
@@ -23,6 +22,7 @@ import {
 } from '@/components/ui/select';
 
 type ProjectStatus = 'Discovery' | 'In Progress' | 'Piloting' | 'Live' | 'Retired';
+type SummaryFilter = 'all' | 'build' | 'buy' | 'live' | 'in-flight';
 
 interface CatalogueProject {
   id: string;
@@ -131,7 +131,7 @@ const sampleProjects: CatalogueProject[] = [
     team: 'Commercial Underwriting',
     status: 'In Progress',
     lastUpdated: '2026-05-12',
-    impact: 'Buy + Extend • June go-live',
+    impact: 'Buy + Rent • June go-live',
     tags: ['Buy + Extend', 'UAT'],
   },
   {
@@ -241,6 +241,7 @@ const ProjectCatalogue = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [selectedStatus, setSelectedStatus] = useState<string>('All');
+  const [selectedSummary, setSelectedSummary] = useState<SummaryFilter>('all');
 
   const filtered = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
@@ -253,9 +254,23 @@ const ProjectCatalogue = () => {
         p.tags.some((t) => t.toLowerCase().includes(q));
       const matchesCategory = selectedCategory === 'All' || p.category === selectedCategory;
       const matchesStatus = selectedStatus === 'All' || p.status === selectedStatus;
-      return matchesQuery && matchesCategory && matchesStatus;
+      const matchesSummary = (() => {
+        switch (selectedSummary) {
+          case 'build':
+            return p.impact.includes('Build');
+          case 'buy':
+            return p.impact.toLowerCase().includes('buy');
+          case 'live':
+            return p.status === 'Live';
+          case 'in-flight':
+            return p.status === 'In Progress' || p.status === 'Discovery';
+          default:
+            return true;
+        }
+      })();
+      return matchesQuery && matchesCategory && matchesStatus && matchesSummary;
     });
-  }, [searchQuery, selectedCategory, selectedStatus]);
+  }, [searchQuery, selectedCategory, selectedStatus, selectedSummary]);
 
   const grouped = useMemo(
     () =>
@@ -271,81 +286,61 @@ const ProjectCatalogue = () => {
   const totalBuild      = sampleProjects.filter((p) => p.impact.includes('Build')).length;
   const totalBuy        = sampleProjects.filter((p) => p.impact.toLowerCase().includes('buy')).length;
 
+  const summaryCards: Array<{
+    key: SummaryFilter;
+    label: string;
+    value: number;
+    icon: typeof Layers;
+  }> = [
+    { key: 'all', label: 'Total initiatives', value: sampleProjects.length, icon: Layers },
+    { key: 'build', label: 'Build', value: totalBuild, icon: Zap },
+    { key: 'buy', label: 'Buy / Rent', value: totalBuy, icon: ShoppingCart },
+    { key: 'live', label: 'In Production', value: totalLive, icon: Sparkles },
+    { key: 'in-flight', label: 'In Delivery', value: totalInProgress + totalDiscovery, icon: CalendarDays },
+  ];
+
   return (
     <div className="min-h-screen bg-slate-50">
-      <Header />
+      <EnterpriseHeader
+        portalName="Enterprise AI Portal"
+        pageTitle="AI Initiatives"
+        pageDescription="A single source of truth for every AI initiative; owners, status, and delivery progress."
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Workflows' },
+        ]}
+        icon={<FolderKanban className="w-5 h-5 text-black" />}
+      />
 
       <main className="container mx-auto px-6 py-8">
-        <Link
-          to="/"
-          className="group inline-flex items-center mb-4 py-1 text-sm font-medium text-slate-600 hover:text-emerald-700 transition-colors w-fit"
-        >
-          <ArrowLeft className="w-4 h-4 shrink-0 transition-transform duration-300 group-hover:-translate-x-0.5" />
-          <span className="whitespace-nowrap ml-2 transition-all duration-300 group-hover:opacity-0 group-hover:-translate-x-2 pointer-events-none">
-            Back to Dashboard
-          </span>
-        </Link>
-
-        {/* Page header */}
-        <div className="mb-6 pb-12 text-center">
-          <div className="flex items-center justify-center gap-3 mb-2">
-            <div className="w-11 h-11 rounded-xl bg-emerald-100 flex items-center justify-center">
-              <FolderKanban className="w-5 h-5 text-black" />
-            </div>
-            <h1 className="text-3xl font-bold text-foreground">AI Workflows</h1>
-          </div>
-          <p className="text-slate-600 text-md">
-            A single source of truth for every AI initiative — owners, status, and delivery progress.
-          </p>
-        </div>
 
         {/* Summary strip */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-8">
-          <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 flex items-center gap-3 shadow-sm">
-            <div className="w-9 h-9 rounded-lg bg-green-100 flex items-center justify-center shrink-0">
-              <Layers className="w-4 h-4 text-black" />
-            </div>
-            <div>
-              <p className="text-xl font-bold text-slate-900">{sampleProjects.length}</p>
-              <p className="text-xs text-slate-500">Total initiatives</p>
-            </div>
-          </div>
-          <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 flex items-center gap-3 shadow-sm">
-            <div className="w-9 h-9 rounded-lg bg-green-100 flex items-center justify-center shrink-0">
-              <Zap className="w-4 h-4 text-black" />
-            </div>
-            <div>
-              <p className="text-xl font-bold text-slate-900">{totalBuild}</p>
-              <p className="text-xs text-slate-500">Build</p>
-            </div>
-          </div>
-          <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 flex items-center gap-3 shadow-sm">
-            <div className="w-9 h-9 rounded-lg bg-green-100 flex items-center justify-center shrink-0">
-              <ShoppingCart className="w-4 h-4 text-black" />
-            </div>
-            <div>
-              <p className="text-xl font-bold text-slate-900">{totalBuy}</p>
-              <p className="text-xs text-slate-500">Buy / Extend</p>
-            </div>
-          </div>
-          <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 flex items-center gap-3 shadow-sm">
-            <div className="w-9 h-9 rounded-lg bg-green-100 flex items-center justify-center shrink-0">
-              <Sparkles className="w-4 h-4 text-black" />
-            </div>
-            <div>
-              <p className="text-xl font-bold text-slate-900">{totalLive}</p>
-              <p className="text-xs text-slate-500">Live in prod</p>
-            </div>
-          </div>
-          <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 flex items-center gap-3 shadow-sm">
-            <div className="w-9 h-9 rounded-lg bg-green-100 flex items-center justify-center shrink-0">
-              <CalendarDays className="w-4 h-4 text-black" />
-            </div>
-            <div>
-              <p className="text-xl font-bold text-slate-900">{totalInProgress + totalDiscovery}</p>
-              <p className="text-xs text-slate-500">In flight</p>
-            </div>
-          </div>
+          {summaryCards.map((card) => {
+            const Icon = card.icon;
+            const isActive = selectedSummary === card.key;
+
+            return (
+              <button
+                key={card.key}
+                type="button"
+                onClick={() => setSelectedSummary(card.key)}
+                className={`rounded-xl border px-4 py-3 flex items-center gap-3 shadow-sm text-left transition-all duration-200 ${
+                  isActive
+                    ? 'border-emerald-300 bg-emerald-50 shadow-md'
+                    : 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-md'
+                }`}
+              >
+                <div className="w-9 h-9 rounded-lg bg-green-100 flex items-center justify-center shrink-0">
+                  <Icon className="w-4 h-4 text-black" />
+                </div>
+                <div>
+                  <p className="text-xl font-bold text-slate-900">{card.value}</p>
+                  <p className="text-xs text-slate-500">{card.label}</p>
+                </div>
+              </button>
+            );
+          })}
         </div>
 
         {/* Filters */}
