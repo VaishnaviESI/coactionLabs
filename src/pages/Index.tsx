@@ -35,7 +35,17 @@ import {
 import coactionLogo from '../assets/coaction-logo-darkmode-transparent.png';
 import { logOktaEvent } from '@/lib/oktaDebug';
 
-const tiles = [
+type Tile = {
+  title: string;
+  description: string;
+  icon: typeof Shield;
+  href: string;
+  category: string;
+  value: string;
+  overview?: string;
+};
+
+const tiles: Tile[] = [
   {
     title: 'Policies and Governance',
     description: 'Governance, standards, and enterprise AI policy controls.',
@@ -45,7 +55,7 @@ const tiles = [
     value: '2 documents',
   },
   {
-    title: 'AI Workflows',
+    title: 'AI Initiatives Catalogue',
     description: 'Active AI initiatives, owners, status, and delivery progress.',
     icon: FolderKanban,
     href: '/project-catalogue',
@@ -61,7 +71,7 @@ const tiles = [
     value: '18 courses',
   },
   {
-    title: 'AI Toolbox',
+    title: 'AI Systems Registry',
     description: 'Create and manage your own AI apps and tools.',
     icon: Wrench,
     href: '/toolbox',
@@ -239,7 +249,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Combined Header + Hero Section */}
-      <header className="sticky top-0 z-50 bg-[#0A1628] text-white">
+      <header className="sticky top-0 z-50 bg-[#0A1628] text-white shadow-[0_10px_18px_-14px_rgba(15,23,42,0.7)]">
         <div className="w-full px-4 md:px-8 py-4">
           <div className="flex w-80 items-center justify-between mb-6">
             <Link to="/" className="flex items-start">
@@ -379,8 +389,8 @@ const Index = () => {
 
             const cardInner = (
               <div
-                className={`group relative h-full overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-5 transition-all duration-200 ${
-                  'hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-sm'
+                className={`group relative h-full overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-5 transition-all duration-200 shadow-sm ${
+                  'hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md'
                 }`}
               >
                 <div className={`absolute inset-y-0 left-0 w-1 rounded-l-2xl ${accent.stripBg}`} />

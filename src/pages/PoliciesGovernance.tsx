@@ -163,6 +163,7 @@ const PoliciesGovernance = () => {
     <div className="min-h-screen bg-slate-50">
       <EnterpriseHeader
         portalName="Enterprise AI Portal"
+        color="bg-blue-100"
         pageTitle="AI Policies & Governance"
         pageDescription="Comprehensive library of policies and governance documents for AI agents."
         breadcrumbs={[
@@ -194,8 +195,8 @@ const PoliciesGovernance = () => {
               onClick={() => { setActiveTab('policies'); setSearch(''); }}
               className={`px-6 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${
                 activeTab === 'policies'
-                  ? 'bg-indigo-600 text-white shadow-sm'
-                  : 'text-slate-600 hover:text-indigo-700 hover:bg-indigo-50'
+                  ? 'bg-blue-700 text-white shadow-sm'
+                  : 'text-slate-600 hover:text-blue-700 hover:bg-blue-50'
               }`}
             >
               Policies
@@ -204,8 +205,8 @@ const PoliciesGovernance = () => {
               onClick={() => { setActiveTab('governance'); setSearch(''); }}
               className={`px-6 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${
                 activeTab === 'governance'
-                  ? 'bg-indigo-600 text-white shadow-sm'
-                  : 'text-slate-600 hover:text-indigo-700 hover:bg-indigo-50'
+                  ? 'bg-blue-700 text-white shadow-sm'
+                  : 'text-slate-600 hover:text-blue-700 hover:bg-blue-50'
               }`}
             >
               Governance
@@ -217,7 +218,7 @@ const PoliciesGovernance = () => {
             <button
               onClick={() => setSelectedPolicy(policies[0].items[0])}
               title="View the full document for AI Acceptable Use Policy"
-              className="inline-flex items-center gap-2.5 rounded-xl border border-indigo-200 bg-indigo-50 px-5 py-3 text-sm font-medium text-indigo-700 shadow-sm hover:bg-indigo-100 hover:border-indigo-300 transition-all duration-200"
+              className="inline-flex items-center gap-2.5 rounded-xl border border-blue-200 bg-blue-50 px-5 py-3 text-sm font-medium text-blue-700 shadow-sm hover:bg-blue-100 hover:border-blue-300 transition-all duration-200"
             >
               <BookOpen className="w-4 h-4" />
               AI Acceptable Use Policy
@@ -234,7 +235,7 @@ const PoliciesGovernance = () => {
                 })
               }
               title="View the governance document"
-              className="inline-flex items-center gap-2.5 rounded-xl border border-indigo-200 bg-indigo-50 px-5 py-3 text-sm font-medium text-indigo-700 shadow-sm hover:bg-indigo-100 hover:border-indigo-300 transition-all duration-200"
+              className="inline-flex items-center gap-2.5 rounded-xl border border-blue-200 bg-blue-50 px-5 py-3 text-sm font-medium text-blue-700 shadow-sm hover:bg-blue-100 hover:border-blue-300 transition-all duration-200"
             >
               <BookOpen className="w-4 h-4" />
               AI Governance Framework

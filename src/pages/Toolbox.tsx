@@ -38,6 +38,10 @@ const toolboxItems = [
 ];
 
 const Toolbox = () => {
+  const aiTechReviewTemplateUrl = new URL(
+    '../assets/CoAction AI Tech Review Template - Questionnaire - v0.9.xlsx',
+    import.meta.url,
+  ).toString();
   const getStatusColor = (govStatus: string) => {
     switch (govStatus) {
       case 'approved':
@@ -53,7 +57,8 @@ const Toolbox = () => {
     <div className="min-h-screen bg-slate-50">
       <EnterpriseHeader
         portalName="Enterprise AI Portal"
-        pageTitle="AI Toolbox"
+        color="bg-violet-100"
+        pageTitle="AI Systems Registry"
         pageDescription="Build and deploy lightweight AI-powered apps and tools without managing complex infrastructure. Create custom workflows, prompt templates, and utilities that your team can start using immediately."
         breadcrumbs={[
           { label: 'Home', href: '/' },
@@ -62,64 +67,92 @@ const Toolbox = () => {
         icon={<Wrench className="w-5 h-5 text-black" />}
       />
 
-      <main className="container mx-auto px-6 py-8">
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {toolboxItems.map((item) => {
-            const Icon = item.icon;
-
-            return (
-              <Card
-                key={item.id}
-                className="flex flex-col transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 cursor-pointer"
-              >
-                <CardHeader>
-                  <div className="flex items-start justify-between mb-3">
-                    <div className={`h-10 w-10 rounded-lg flex items-center justify-center ${item.color}`}>
-                      <Icon className="w-5 h-5" />
-                    </div>
-                    <Badge
-                      variant="outline"
-                      className={getStatusColor(item.govStatus)}
-                    >
-                      {item.govStatus}
-                    </Badge>
-                  </div>
-                  <CardTitle className="text-lg">{item.name}</CardTitle>
-                  <p className="text-sm text-slate-500 mt-1">{item.tag}</p>
-                </CardHeader>
-                <CardContent className="flex-1 flex flex-col">
-                  <p className="text-sm text-slate-600 mb-4 flex-1">
-                    {item.description}
-                  </p>
-
-                  <div className="space-y-3 border-t border-slate-100 pt-4">
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="text-slate-500">Audience</span>
-                      <span className="font-semibold text-slate-700">{item.audience}</span>
-                    </div>
-
-                    <button className="w-full mt-3 rounded-lg bg-slate-900 text-white text-sm font-semibold py-2 hover:bg-slate-800 transition-colors flex items-center justify-center gap-2">
-                      Open Tool
-                      <ArrowRight className="w-3 h-3" />
-                    </button>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
+      <main className="container mx-auto px-4 py-8 max-w-7xl">
+        {/* Title + KPIs */}
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8">
+          <div>
+            <h1 className="text-3xl font-bold text-slate-900 font-['Georgia']">AI Toolbox</h1>
+            <p className="text-sm text-slate-500">Showing {toolboxItems.length} tools</p>
+          </div>
+          <div className="flex flex-nowrap gap-3 overflow-x-auto">
+            {[
+              { label: 'Total Tools', value: toolboxItems.length, color: 'bg-white text-slate-900 border-2 border-violet-100' },
+              { label: 'Approved', value: toolboxItems.filter((i) => i.govStatus === 'approved').length, color: 'bg-violet-600 text-white' },
+              { label: 'Not Approved', value: toolboxItems.filter((i) => i.govStatus === 'not approved').length, color: 'bg-slate-500 text-white' },
+            ].map((card) => (
+              <div key={card.label} className={`rounded-lg px-6 py-4 text-left min-w-[180px] ${card.color}`}>
+                <div className={`text-[10px] font-bold tracking-widest uppercase ${card.color.includes('bg-white') ? 'text-slate-500' : 'text-white/80'}`}>
+                  {card.label}
+                </div>
+                <div className={`text-3xl font-bold text-center ${card.color.includes('bg-white') ? 'text-slate-900' : 'text-white'}`}>
+                  {card.value}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
-        <div className="mt-16 rounded-2xl bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-100 p-8 text-center">
-          <h2 className="text-2xl font-bold text-slate-900 mb-3">Register Your Approved Tool</h2>
-          <p className="text-slate-600 mb-6 max-w-xl mx-auto">
-            Have an approved AI tool ready to deploy? Register it with our governance framework and make it available to your organization.
+        {/* Table */}
+        <div className="rounded-lg border border-slate-200 overflow-hidden mb-8">
+          <table className="min-w-full border-collapse text-sm">
+            <thead className="bg-slate-900 text-white">
+              <tr>
+                <th className="px-4 py-3 text-left text-xs font-bold tracking-wider uppercase">Tool</th>
+                <th className="px-4 py-3 text-left text-xs font-bold tracking-wider uppercase">Description</th>
+                <th className="px-4 py-3 text-left text-xs font-bold tracking-wider uppercase">Audience</th>
+                <th className="px-4 py-3 text-left text-xs font-bold tracking-wider uppercase">Status</th>
+                <th className="px-4 py-3 text-left text-xs font-bold tracking-wider uppercase">Tag</th>
+              </tr>
+            </thead>
+            <tbody>
+              {toolboxItems.map((item, idx) => (
+                <tr key={item.id} className={`${idx % 2 === 1 ? 'bg-slate-50' : 'bg-white'} border-b border-slate-200`}>
+                  <td className="px-4 py-3">
+                    <div className="text-slate-900 font-semibold">{item.name}</div>
+                  </td>
+                  <td className="px-4 py-3 text-sm text-slate-700">{item.description}</td>
+                  <td className="px-4 py-3 text-sm text-slate-700">{item.audience}</td>
+                  <td className="px-4 py-3">
+                    <span className={`rounded-md px-2.5 py-1 text-[10px] font-bold tracking-wider uppercase text-white ${
+                      item.govStatus === 'approved' ? 'bg-violet-600' : 'bg-slate-500'
+                    }`}>{item.govStatus}</span>
+                  </td>
+                  <td className="px-4 py-3">
+                    <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600">{item.tag}</span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Legend */}
+        <div className="flex flex-col md:flex-row gap-12 mb-2">
+          <div>
+            <h4 className="text-sm font-bold text-slate-900 mb-3">Status Key</h4>
+            <div className="flex flex-col gap-2">
+              {['approved', 'not approved'].map((s) => (
+                <div key={s} className="flex items-center gap-2">
+                  <span className={`inline-block w-3 h-3 rounded-sm border-2 ${s === 'approved' ? 'border-violet-600' : 'border-slate-400'}`} />
+                  <span className="text-xs text-slate-700">{s}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="mt-6 rounded-lg border border-slate-200 bg-white p-4">
+          <p className="text-sm text-slate-700">
+            Please contact Kip Porterfield or Ashok Narayana with a completed Excel attached to put your project through the AI Governance process.
           </p>
-          <button className="rounded-full bg-emerald-600 text-white px-6 py-3 font-semibold hover:bg-emerald-700 transition-colors inline-flex items-center gap-2">
-            Register Tool
-            <ArrowRight className="w-4 h-4" />
-          </button>
+          <a
+            href={aiTechReviewTemplateUrl}
+            download
+            className="mt-3 inline-flex items-center rounded-full bg-[#1E3A5F] px-4 py-2 text-xs font-semibold text-white hover:bg-[#162B47] transition-colors"
+          >
+            Download CoAction AI Tech Review Template - Questionnaire - v0.9.xlsx
+          </a>
         </div>
+        <div className="text-xs text-slate-400 italic mt-2">Status reflects current governance approval.</div>
       </main>
     </div>
   );

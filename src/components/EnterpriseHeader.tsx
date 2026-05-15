@@ -11,6 +11,7 @@ interface Breadcrumb {
 interface EnterpriseHeaderProps {
   portalName: string;
   pageTitle: string;
+  color?: string;
   pageDescription: string;
   breadcrumbs: Breadcrumb[];
   icon?: ReactNode;
@@ -19,6 +20,7 @@ interface EnterpriseHeaderProps {
 const EnterpriseHeader: React.FC<EnterpriseHeaderProps> = ({
   portalName,
   pageTitle,
+  color,
   pageDescription,
   breadcrumbs,
   icon,
@@ -58,7 +60,7 @@ const EnterpriseHeader: React.FC<EnterpriseHeaderProps> = ({
           {/* Page Title with Icon */}
           <div className="flex items-center gap-3 mb-1">
             {icon && (
-              <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-indigo-100">
+              <div className={`flex items-center justify-center w-10 h-10 rounded-lg ${color || 'bg-indigo-100'}`}>
                 {icon}
               </div>
             )}

@@ -74,6 +74,7 @@ const Academy = () => {
     <div className="min-h-screen bg-slate-50">
       <EnterpriseHeader
         portalName="Enterprise AI Portal"
+        color="bg-yellow-100"
         pageTitle="AI Academy"
         pageDescription="Learn to write effective queries for insurance AI agents"
         breadcrumbs={[

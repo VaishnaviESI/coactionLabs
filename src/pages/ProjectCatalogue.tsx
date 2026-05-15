@@ -303,6 +303,7 @@ const ProjectCatalogue = () => {
     <div className="min-h-screen bg-slate-50">
       <EnterpriseHeader
         portalName="Enterprise AI Portal"
+        color="bg-emerald-100"
         pageTitle="AI Initiatives"
         pageDescription="A single source of truth for every AI initiative; owners, status, and delivery progress."
         breadcrumbs={[
@@ -312,171 +313,170 @@ const ProjectCatalogue = () => {
         icon={<FolderKanban className="w-5 h-5 text-black" />}
       />
 
-      <main className="container mx-auto px-6 py-8">
-
-        {/* Summary strip */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-8">
-          {summaryCards.map((card) => {
-            const Icon = card.icon;
-            const isActive = selectedSummary === card.key;
-
-            return (
-              <button
-                key={card.key}
-                type="button"
-                onClick={() => setSelectedSummary(card.key)}
-                className={`rounded-xl border px-4 py-3 flex items-center gap-3 shadow-sm text-left transition-all duration-200 ${
-                  isActive
-                    ? 'border-emerald-300 bg-emerald-50 shadow-md'
-                    : 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-md'
-                }`}
-              >
-                <div className="w-9 h-9 rounded-lg bg-green-100 flex items-center justify-center shrink-0">
-                  <Icon className="w-4 h-4 text-black" />
-                </div>
-                <div>
-                  <p className="text-xl font-bold text-slate-900">{card.value}</p>
-                  <p className="text-xs text-slate-500">{card.label}</p>
-                </div>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Filters */}
-        <div className="mb-8 rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
-          <div className="flex flex-col md:flex-row gap-3">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
-              <Input
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search projects, owners, or tags…"
-                className="h-10 rounded-xl border-slate-200 pl-9 focus-visible:ring-1 focus-visible:ring-emerald-300"
-              />
-            </div>
-            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-              <SelectTrigger className="h-10 rounded-xl border-slate-200 md:w-56">
-                <SelectValue placeholder="All categories" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="All">All categories</SelectItem>
-                {categoryOrder.map((c) => (
-                  <SelectItem key={c} value={c}>{c}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-              <SelectTrigger className="h-10 rounded-xl border-slate-200 md:w-44">
-                <SelectValue placeholder="All statuses" />
-              </SelectTrigger>
-              <SelectContent>
-                {statuses.map((s) => (
-                  <SelectItem key={s} value={s}>{s}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+      <main className="container mx-auto px-6 py-8 max-w-9xl">
+        {/* Title + KPIs */}
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8">
+          <div>
+            <h1 className="text-3xl font-bold text-slate-900 font-['Georgia']">AI Initiatives</h1>
+            <p className="text-sm text-slate-500">Showing {filtered.length} of {sampleProjects.length} initiatives</p>
           </div>
-        </div>
+          <div className="flex flex-nowrap gap-3">
+            {summaryCards.map((card) => {
+              const isActive = selectedSummary === card.key;
+              const isTotal = card.key === 'all';
+              const total = sampleProjects.length || 1;
+              const percent = `${((card.value / total) * 100).toFixed(1)}%`;
+              const colorClass = (() => {
+                switch (card.key) {
+                  case 'build':
+                    return 'bg-blue-700 text-white';
+                  case 'buy':
+                    return 'bg-emerald-600 text-white';
+                  case 'live':
+                    return 'bg-slate-500 text-white';
+                  case 'in-flight':
+                    return 'bg-blue-700 text-white';
+                  default:
+                    return 'bg-white text-slate-900 border-2 border-emerald-100';
+                }
+              })();
 
-        {/* Category header row */}
-        <div className="mb-8 flex flex-wrap gap-4 items-center text-sm">
-          {categoryOrder.map((cat, idx) => {
-            const meta = categoryMeta[cat];
-            return (
-              <div key={cat} className="flex items-center gap-2">
-                <span className={`w-2.5 h-2.5 rounded-full ${meta.dotBg}`} />
-                <span className="font-medium text-slate-700">{cat}</span>
-                {idx < categoryOrder.length - 1 && (
-                  <span className="text-slate-300 ml-2">|</span>
-                )}
-              </div>
-            );
-          })}
-        </div>
-
-        {/* All project tiles */}
-        {filtered.length === 0 ? (
-          <div className="rounded-2xl border border-slate-200 bg-white p-12 text-center text-sm text-slate-400">
-            No projects match those filters.
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filtered.map((project) => {
-              const meta = categoryMeta[project.category];
               return (
-                <div
-                  key={project.id}
-                  className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 hover:border-slate-300 hover:shadow-md transition-all duration-200"
+                <button
+                  key={card.key}
+                  type="button"
+                  onClick={() => setSelectedSummary(card.key)}
+                  className={`rounded-lg px-6 py-4 text-left transition-all min-w-[180px] ${colorClass} ${
+                    isActive ? 'ring-2 ring-offset-2 ring-slate-900' : ''
+                  }`}
                 >
-                  {/* Left category strip */}
-                  <div className={`absolute inset-y-0 left-0 w-1 ${meta.strip}`} />
-
-                  {/* Title + status */}
-                  <div className="flex items-start justify-between gap-2 mb-2">
-                    <h3 className="text-base font-semibold text-slate-900 leading-snug">
-                      {project.name}
-                    </h3>
-                    <Badge
-                      variant="outline"
-                      className={`shrink-0 text-xs ${statusColor(project.status)}`}
-                    >
-                      {project.status}
-                    </Badge>
+                  <div className={`text-[10px] font-bold tracking-widest uppercase ${isTotal ? 'text-slate-500' : 'text-white/80'}`}>
+                    {isTotal ? 'Total Initiatives' : card.label}
                   </div>
-
-                  {/* Owner + Pod */}
-                  <div className="flex items-center justify-between gap-2 mb-3 rounded-lg bg-slate-50 border border-slate-100 px-3 py-2">
-                    <div className="flex items-center gap-2 min-w-0">
-                      <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold ${getAvatarColor(project.owner)}`}>
-                        {getInitials(project.owner)}
-                      </div>
-                      <div className="min-w-0">
-                        <p className="text-xs font-semibold text-slate-800 truncate">{project.owner}</p>
-                        <p className="text-xs text-slate-400">Owner</p>
-                      </div>
-                    </div>
-                    <div className="shrink-0 text-right">
-                      <p className="text-xs font-semibold text-slate-700 truncate max-w-[110px]">{project.team}</p>
-                      <p className="text-xs text-slate-400">Pod</p>
-                    </div>
+                  <div className={`text-3xl font-bold text-center ${isTotal ? 'text-slate-900' : 'text-white'}`}>
+                    {card.value}
                   </div>
-
-                  {/* Description */}
-                  <p className="text-sm text-slate-500 leading-relaxed mb-4">
-                    {project.description}
-                  </p>
-
-                  {/* Timeline */}
-                  <div className="flex items-center gap-1.5 text-xs text-slate-500 mb-4">
-                    <CalendarDays className="w-3.5 h-3.5 shrink-0 text-slate-400" />
-                    <span>{project.impact}</span>
-                  </div>
-
-                  {/* Tags */}
-                  <div className="flex flex-wrap gap-1.5 pt-3 border-t border-slate-100">
-                    {project.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-600"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
+                  {!isTotal && (
+                    <div className="text-xs text-white/80 text-center">{percent}</div>
+                  )}
+                </button>
               );
             })}
           </div>
-        )}
+        </div>
+
+        {/* Filter pills row */}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+          <div className="flex flex-wrap gap-2">
+            {['All', ...categoryOrder].map((cat) => (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => setSelectedCategory(cat)}
+                className={`rounded-full border px-4 py-1.5 text-sm font-medium transition-colors ${
+                  selectedCategory === cat
+                    ? 'bg-slate-900 text-white border-slate-900'
+                    : 'border-slate-300 text-slate-700 bg-white hover:bg-slate-50'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+          <div className="relative w-full md:w-72">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+            <input
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search initiatives..."
+              className="w-full h-9 rounded-full border border-slate-300 pl-9 pr-3 bg-white text-sm focus:ring-2 focus:ring-slate-900 outline-none"
+            />
+          </div>
+        </div>
+
+        {/* Table */}
+        <div className="rounded-lg border border-slate-200 overflow-hidden mb-8">
+          <table className="min-w-full border-collapse text-sm">
+            <thead className="bg-slate-900 text-white">
+              <tr>
+                <th className="px-4 py-3 text-left text-xs font-bold tracking-wider uppercase">Domain</th>
+                <th className="px-4 py-3 text-left text-xs font-bold tracking-wider uppercase">Initiative</th>
+                <th className="px-4 py-3 text-left text-xs font-bold tracking-wider uppercase">Timeline</th>
+                <th className="px-4 py-3 text-left text-xs font-bold tracking-wider uppercase">Status</th>
+                <th className="px-4 py-3 text-left text-xs font-bold tracking-wider uppercase">Tags</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="px-4 py-8 text-center text-slate-400">No projects match those filters.</td>
+                </tr>
+              ) : (
+                filtered.map((project, idx) => (
+                  <tr key={project.id} className={`${idx % 2 === 1 ? 'bg-slate-50' : 'bg-white'} border-b border-slate-200`}>
+                    <td className="px-4 py-3">
+                      <span className="text-blue-700 underline-offset-2 hover:underline font-medium">{project.category}</span>
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="text-slate-900 font-semibold">{project.name}</div>
+                      <div className="text-xs text-slate-500">{project.description}</div>
+                    </td>
+                    <td className="px-4 py-3 text-sm text-slate-700">{project.impact}</td>
+                    <td className="px-4 py-3">
+                      <span className={`rounded-md px-2.5 py-1 text-[10px] font-bold tracking-wider uppercase text-white ${
+                        project.status === 'Live' ? 'bg-emerald-600' :
+                        project.status === 'In Progress' ? 'bg-blue-700' :
+                        project.status === 'Piloting' ? 'bg-amber-500' :
+                        project.status === 'Discovery' ? 'bg-violet-600' :
+                        'bg-slate-400'
+                      }`}>{project.status}</span>
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="flex flex-wrap gap-1">
+                        {project.tags.map((tag) => (
+                          <span key={tag} className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600">{tag}</span>
+                        ))}
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
 
         {/* Legend */}
-        <div className="mt-10 flex flex-wrap items-center gap-4 text-xs text-slate-500">
-          <span className="font-semibold uppercase tracking-wide text-slate-400">Status:</span>
-          {(['Live', 'In Progress', 'Discovery', 'Piloting', 'Retired'] as ProjectStatus[]).map((s) => (
-            <span key={s} className={`rounded-full border px-2.5 py-0.5 font-medium ${statusColor(s)}`}>{s}</span>
-          ))}
+        <div className="flex flex-col md:flex-row gap-12 mb-2">
+          <div>
+            <h4 className="text-sm font-bold text-slate-900 mb-3">Status Key</h4>
+            <div className="flex flex-col gap-2">
+              {(['Live', 'In Progress', 'Piloting', 'Discovery', 'Retired'] as ProjectStatus[]).map((s) => (
+                <div key={s} className="flex items-center gap-2">
+                  <span className={`inline-block w-3 h-3 rounded-sm border-2 ${
+                    s === 'Live' ? 'border-emerald-600' :
+                    s === 'In Progress' ? 'border-blue-700' :
+                    s === 'Piloting' ? 'border-amber-500' :
+                    s === 'Discovery' ? 'border-violet-600' :
+                    'border-slate-400'
+                  }`} />
+                  <span className="text-xs text-slate-700">{s}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div>
+            <h4 className="text-sm font-bold text-slate-900 mb-3">Category Key</h4>
+            <div className="flex flex-col gap-2">
+              {categoryOrder.map((cat) => (
+                <div key={cat} className="flex items-center gap-2">
+                  <span className={`inline-block w-3 h-3 rounded-full ${categoryMeta[cat].dotBg}`} />
+                  <span className="text-xs text-slate-700">{cat}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
+        <div className="text-xs text-slate-400 italic">Status reflects current delivery state. Last updated 2026-05-12.</div>
       </main>
     </div>
   );
