@@ -60,7 +60,7 @@ const tiles: Tile[] = [
     icon: FolderKanban,
     href: '/project-catalogue',
     category: 'Projects',
-    value: '128 shipping',
+    value: '11 total initiatives',
   },
   {
     title: 'Academy',
@@ -68,7 +68,7 @@ const tiles: Tile[] = [
     icon: GraduationCap,
     href: '/academy',
     category: 'Learning',
-    value: '18 courses',
+    value: '6 courses',
   },
   {
     title: 'AI Systems Registry',
