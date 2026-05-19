@@ -1,39 +1,60 @@
-import { Link } from 'react-router-dom';
+import SortableTable from '@/components/SortableTable';
 import EnterpriseHeader from '@/components/EnterpriseHeader';
-import { Code2, FileText, Brain, ArrowRight, Wrench } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { Wrench } from 'lucide-react';
 
-const toolboxItems = [
+type GovernanceStatus = 'approved' | 'in progress';
+
+interface ToolboxItem {
+  id: number;
+  order: number;
+  name: string;
+  description: string;
+  tag: string;
+  url: string;
+  govStatus: GovernanceStatus;
+  audience: string;
+}
+
+const toolboxItems: ToolboxItem[] = [
   {
     id: 1,
+    order: 1,
     name: 'Microsoft Copilot Chat Authenticated',
-    description: 'Access Microsoft Copilot Chat with secure authentication for enhanced AI-powered conversations.',
-    tag: 'developer',
+    description: 'AI assistant for employee productivity',
+    tag: 'Employee',
+    url: '',
     govStatus: 'approved',
-    audience: 'All Teams',
-    icon: Brain,
-    color: 'bg-blue-100 text-blue-700',
+    audience: 'All Employees',
   },
   {
     id: 2,
+    order: 2,
     name: 'GitHub Copilot',
     description: 'AI-powered code completion and generation integrated with your development workflow.',
-    tag: 'developer',
+    tag: 'Engineer',
+    url: '',
     govStatus: 'approved',
-    audience: 'Development Team',
-    icon: Code2,
-    color: 'bg-emerald-100 text-emerald-700',
+    audience: 'Engineering',
   },
   {
     id: 3,
+    order: 3,
     name: 'Rivvit',
-    description: 'Collaborative AI tool for team communication and knowledge sharing.',
-    tag: 'assetmanagement',
+    description: 'Insights into investment management and reporting',
+    tag: 'Asset Management',
+    url: '',
     govStatus: 'approved',
-    audience: 'All Teams',
-    icon: FileText,
-    color: 'bg-purple-100 text-purple-700',
+    audience: 'CoAction Investment Management',
+  },
+  {
+    id: 4,
+    order: 4,
+    name: 'Claude',
+    description: 'AI assistant for employee productivity',
+    tag: 'Employee',
+    url: '',
+    govStatus: 'in progress',
+    audience: 'All Employees',
   },
 ];
 
@@ -42,16 +63,76 @@ const Toolbox = () => {
     '../assets/CoAction AI Tech Review Template - Questionnaire - v0.9.xlsx',
     import.meta.url,
   ).toString();
-  const getStatusColor = (govStatus: string) => {
-    switch (govStatus) {
-      case 'approved':
-        return 'bg-emerald-100 text-emerald-700 border-emerald-200';
-      case 'not approved':
-        return 'bg-amber-100 text-amber-700 border-amber-200';
-      default:
-        return 'bg-muted text-muted-foreground';
-    }
-  };
+  const tableColumns = [
+    {
+      key: 'name',
+      label: 'Tool',
+      getValue: (item: ToolboxItem) => item.name,
+      render: (item: ToolboxItem) => (
+        <div className="text-slate-900 font-semibold">{item.name}</div>
+      ),
+    },
+    {
+      key: 'description',
+      label: 'Description',
+      getValue: (item: ToolboxItem) => item.description,
+      render: (item: ToolboxItem) => (
+        <div className="text-sm text-slate-700">{item.description}</div>
+      ),
+    },
+    {
+      key: 'tag',
+      label: 'Tag',
+      getValue: (item: ToolboxItem) => item.tag,
+      render: (item: ToolboxItem) => (
+        <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600">{item.tag}</span>
+      ),
+    },
+    {
+      key: 'url',
+      label: 'URL',
+      getValue: (item: ToolboxItem) => item.url || '-',
+      render: (item: ToolboxItem) => (
+        item.url ? (
+          <a
+            href={item.url}
+            target="_blank"
+            rel="noreferrer"
+            className="text-blue-700 underline-offset-2 hover:underline"
+          >
+            {item.url}
+          </a>
+        ) : (
+          <span className="text-slate-400">-</span>
+        )
+      ),
+    },
+    {
+      key: 'audience',
+      label: 'Audience',
+      getValue: (item: ToolboxItem) => item.audience,
+      render: (item: ToolboxItem) => (
+        <div className="text-sm text-slate-700">{item.audience}</div>
+      ),
+    },
+    {
+      key: 'status',
+      label: 'Status',
+      getValue: (item: ToolboxItem) => item.govStatus,
+      cellClassName: 'whitespace-nowrap',
+      render: (item: ToolboxItem) => (
+        <span
+          className={`inline-flex items-center rounded-md border px-2.5 py-1 text-[10px] font-bold tracking-wider uppercase whitespace-nowrap ${
+            item.govStatus === 'approved'
+              ? 'bg-violet-100 text-violet-700 border-violet-200'
+              : 'bg-amber-100 text-amber-700 border-amber-200'
+          }`}
+        >
+          {item.govStatus}
+        </span>
+      ),
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -59,7 +140,7 @@ const Toolbox = () => {
         portalName="Enterprise AI Portal"
         color="bg-violet-100"
         pageTitle="AI Systems Registry"
-        pageDescription="Build and deploy lightweight AI-powered apps and tools without managing complex infrastructure. Create custom workflows, prompt templates, and utilities that your team can start using immediately."
+        pageDescription="Here is the list of AI systems/tools/technologies and their life cycle status"
         breadcrumbs={[
           { label: 'Home', href: '/' },
           { label: 'Toolbox' },
@@ -67,7 +148,7 @@ const Toolbox = () => {
         icon={<Wrench className="w-5 h-5 text-black" />}
       />
 
-      <main className="container mx-auto px-4 py-8 max-w-7xl">
+      <main className="container mx-auto px-4 py-8 max-w-9xl">
         {/* Title + KPIs */}
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8">
           <div>
@@ -77,14 +158,14 @@ const Toolbox = () => {
           <div className="flex flex-nowrap gap-3 overflow-x-auto">
             {[
               { label: 'Total Tools', value: toolboxItems.length, color: 'bg-white text-slate-900 border-2 border-violet-100' },
-              { label: 'Approved', value: toolboxItems.filter((i) => i.govStatus === 'approved').length, color: 'bg-violet-600 text-white' },
-              { label: 'Not Approved', value: toolboxItems.filter((i) => i.govStatus === 'not approved').length, color: 'bg-slate-500 text-white' },
+              { label: 'Approved', value: toolboxItems.filter((i) => i.govStatus === 'approved').length, color: 'bg-violet-100 text-violet-700 border border-violet-200' },
+              { label: 'In Progress', value: toolboxItems.filter((i) => i.govStatus === 'in progress').length, color: 'bg-amber-100 text-black border border-amber-200' },
             ].map((card) => (
-              <div key={card.label} className={`rounded-lg px-6 py-4 text-left min-w-[180px] ${card.color}`}>
-                <div className={`text-[10px] font-bold tracking-widest uppercase ${card.color.includes('bg-white') ? 'text-slate-500' : 'text-white/80'}`}>
+              <div key={card.label} className={`rounded-lg px-6 py-4 text-left min-w-[180px] ${card.color} ${card.label === 'In Progress' ? 'text-black' : ''}`}>
+                <div className={`text-[10px] font-bold tracking-widest uppercase ${card.color.includes('bg-white') || card.color.includes('bg-violet-100') || card.color.includes('bg-slate-100') ? 'text-slate-500' : card.label === 'In Progress' ? 'text-black' : 'text-white/80'}`}>
                   {card.label}
                 </div>
-                <div className={`text-3xl font-bold text-center ${card.color.includes('bg-white') ? 'text-slate-900' : 'text-white'}`}>
+                <div className={`text-3xl font-bold text-center ${card.color.includes('bg-white') || card.color.includes('bg-violet-100') || card.color.includes('bg-slate-100') ? 'text-slate-900' : card.label === 'In Progress' ? 'text-black' : 'text-white'}`}>
                   {card.value}
                 </div>
               </div>
@@ -93,37 +174,14 @@ const Toolbox = () => {
         </div>
 
         {/* Table */}
-        <div className="rounded-lg border border-slate-200 overflow-hidden mb-8">
-          <table className="min-w-full border-collapse text-sm">
-            <thead className="bg-slate-900 text-white">
-              <tr>
-                <th className="px-4 py-3 text-left text-xs font-bold tracking-wider uppercase">Tool</th>
-                <th className="px-4 py-3 text-left text-xs font-bold tracking-wider uppercase">Description</th>
-                <th className="px-4 py-3 text-left text-xs font-bold tracking-wider uppercase">Audience</th>
-                <th className="px-4 py-3 text-left text-xs font-bold tracking-wider uppercase">Status</th>
-                <th className="px-4 py-3 text-left text-xs font-bold tracking-wider uppercase">Tag</th>
-              </tr>
-            </thead>
-            <tbody>
-              {toolboxItems.map((item, idx) => (
-                <tr key={item.id} className={`${idx % 2 === 1 ? 'bg-slate-50' : 'bg-white'} border-b border-slate-200`}>
-                  <td className="px-4 py-3">
-                    <div className="text-slate-900 font-semibold">{item.name}</div>
-                  </td>
-                  <td className="px-4 py-3 text-sm text-slate-700">{item.description}</td>
-                  <td className="px-4 py-3 text-sm text-slate-700">{item.audience}</td>
-                  <td className="px-4 py-3">
-                    <span className={`rounded-md px-2.5 py-1 text-[10px] font-bold tracking-wider uppercase text-white ${
-                      item.govStatus === 'approved' ? 'bg-violet-600' : 'bg-slate-500'
-                    }`}>{item.govStatus}</span>
-                  </td>
-                  <td className="px-4 py-3">
-                    <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600">{item.tag}</span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="rounded-lg border border-slate-200 overflow-x-scroll overflow-y-hidden mb-8 [-webkit-overflow-scrolling:touch]">
+          <SortableTable
+            data={toolboxItems}
+            columns={tableColumns}
+            rowKey={(item) => String(item.id)}
+            rowClassName={(_, idx) => `${idx % 2 === 1 ? 'bg-slate-50' : 'bg-white'} border-b border-slate-200`}
+            tableClassName="min-w-[1200px]"
+          />
         </div>
 
         {/* Legend */}
@@ -131,9 +189,9 @@ const Toolbox = () => {
           <div>
             <h4 className="text-sm font-bold text-slate-900 mb-3">Status Key</h4>
             <div className="flex flex-col gap-2">
-              {['approved', 'not approved'].map((s) => (
+              {['approved', 'in progress'].map((s) => (
                 <div key={s} className="flex items-center gap-2">
-                  <span className={`inline-block w-3 h-3 rounded-sm border-2 ${s === 'approved' ? 'border-violet-600' : 'border-slate-400'}`} />
+                  <span className={`inline-block w-3 h-3 rounded-sm border-2 ${s === 'approved' ? 'border-violet-600' : 'border-amber-600'}`} />
                   <span className="text-xs text-slate-700">{s}</span>
                 </div>
               ))}

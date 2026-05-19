@@ -5,7 +5,8 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
   LineChart, Line, AreaChart, Area
 } from 'recharts';
-import { CalendarIcon, ArrowUpDown, BarChart3 } from 'lucide-react';
+import { CalendarIcon, BarChart3 } from 'lucide-react';
+import type { ColDef } from 'ag-grid-community';
 
 import EnterpriseHeader from '@/components/EnterpriseHeader';
 import { Button } from '@/components/ui/button';
@@ -16,9 +17,8 @@ import {
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { 
-  Table, TableBody, TableCell, TableHead, TableHeader, TableRow 
+  AgGridTable
 } from '@/components/ui/table';
-import { cn } from '@/lib/utils';
 import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from '@/components/ui/chart';
 
 import { 
@@ -39,9 +39,6 @@ const chartConfig = {
   totalTokens: { label: "Total Tokens", color: "hsl(var(--primary))" },
 } satisfies ChartConfig;
 
-type SortField = 'agentName' | 'usageCount' | 'avgTokensPerRequest' | 'totalTokens';
-type SortDirection = 'asc' | 'desc';
-
 const Analytics = () => {
   // Filter states
   const [dateRange, setDateRange] = useState<{ from: Date; to: Date }>({
@@ -52,10 +49,6 @@ const Analytics = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedModel, setSelectedModel] = useState<string>('all');
   
-  // Table sort state
-  const [sortField, setSortField] = useState<SortField>('usageCount');
-  const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
-
   const agents = getUniqueAgents();
   const categories = getUniqueCategories();
   const models = getUniqueModels();
@@ -92,36 +85,45 @@ const Analytics = () => {
     ];
   }, [filteredData]);
 
-  // Sorted efficiency data for table
-  const sortedEfficiencyData = useMemo(() => {
-    return [...efficiencyMetrics].sort((a, b) => {
-      const aValue = a[sortField];
-      const bValue = b[sortField];
-      if (typeof aValue === 'string' && typeof bValue === 'string') {
-        return sortDirection === 'asc' 
-          ? aValue.localeCompare(bValue) 
-          : bValue.localeCompare(aValue);
-      }
-      return sortDirection === 'asc' 
-        ? (aValue as number) - (bValue as number) 
-        : (bValue as number) - (aValue as number);
-    });
-  }, [efficiencyMetrics, sortField, sortDirection]);
-
-  const handleSort = (field: SortField) => {
-    if (sortField === field) {
-      setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc');
-    } else {
-      setSortField(field);
-      setSortDirection('desc');
-    }
-  };
-
-  const getEfficiencyColor = (avgTokens: number) => {
-    if (avgTokens > 1000) return 'text-red-600 dark:text-red-400';
-    if (avgTokens >= 500) return 'text-yellow-600 dark:text-yellow-400';
-    return 'text-green-600 dark:text-green-400';
-  };
+  const efficiencyColumns = useMemo<ColDef<(typeof efficiencyMetrics)[number]>[]>(
+    () => [
+      {
+        headerName: 'Agent Name',
+        field: 'agentName',
+        pinned: 'left',
+        minWidth: 220,
+      },
+      {
+        headerName: 'Usage Count',
+        field: 'usageCount',
+        type: 'numericColumn',
+        minWidth: 150,
+        sort: 'desc',
+        valueFormatter: (params) => Number(params.value ?? 0).toLocaleString(),
+      },
+      {
+        headerName: 'Avg Tokens/Request',
+        field: 'avgTokensPerRequest',
+        type: 'numericColumn',
+        minWidth: 190,
+        valueFormatter: (params) => Number(params.value ?? 0).toLocaleString(),
+        cellStyle: (params) => {
+          const value = Number(params.value ?? 0);
+          if (value > 1000) return { color: '#dc2626', fontWeight: 600 };
+          if (value >= 500) return { color: '#ca8a04', fontWeight: 600 };
+          return { color: '#16a34a', fontWeight: 600 };
+        },
+      },
+      {
+        headerName: 'Total Tokens',
+        field: 'totalTokens',
+        type: 'numericColumn',
+        minWidth: 170,
+        valueFormatter: (params) => Number(params.value ?? 0).toLocaleString(),
+      },
+    ],
+    [efficiencyMetrics],
+  );
 
   return (
     <div className="min-h-screen bg-background">
@@ -388,64 +390,16 @@ const Analytics = () => {
             <CardTitle className="text-lg">Agent Efficiency Summary</CardTitle>
           </CardHeader>
           <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>
-                    <Button 
-                      variant="ghost" 
-                      onClick={() => handleSort('agentName')}
-                      className="flex items-center gap-1 -ml-4"
-                    >
-                      Agent Name
-                      <ArrowUpDown className="h-4 w-4" />
-                    </Button>
-                  </TableHead>
-                  <TableHead className="text-right">
-                    <Button 
-                      variant="ghost" 
-                      onClick={() => handleSort('usageCount')}
-                      className="flex items-center gap-1 ml-auto"
-                    >
-                      Usage Count
-                      <ArrowUpDown className="h-4 w-4" />
-                    </Button>
-                  </TableHead>
-                  <TableHead className="text-right">
-                    <Button 
-                      variant="ghost" 
-                      onClick={() => handleSort('avgTokensPerRequest')}
-                      className="flex items-center gap-1 ml-auto"
-                    >
-                      Avg Tokens/Request
-                      <ArrowUpDown className="h-4 w-4" />
-                    </Button>
-                  </TableHead>
-                  <TableHead className="text-right">
-                    <Button 
-                      variant="ghost" 
-                      onClick={() => handleSort('totalTokens')}
-                      className="flex items-center gap-1 ml-auto"
-                    >
-                      Total Tokens
-                      <ArrowUpDown className="h-4 w-4" />
-                    </Button>
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {sortedEfficiencyData.map((agent) => (
-                  <TableRow key={agent.agentName}>
-                    <TableCell className="font-medium">{agent.agentName}</TableCell>
-                    <TableCell className="text-right">{agent.usageCount.toLocaleString()}</TableCell>
-                    <TableCell className={cn("text-right font-medium", getEfficiencyColor(agent.avgTokensPerRequest))}>
-                      {agent.avgTokensPerRequest.toLocaleString()}
-                    </TableCell>
-                    <TableCell className="text-right">{agent.totalTokens.toLocaleString()}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+            <AgGridTable
+              rowData={efficiencyMetrics}
+              columnDefs={efficiencyColumns}
+              className="h-[420px]"
+              defaultColDef={{
+                sortable: true,
+                filter: true,
+                floatingFilter: true,
+              }}
+            />
           </CardContent>
         </Card>
       </main>

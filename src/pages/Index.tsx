@@ -310,12 +310,12 @@ const Index = () => {
           <div className="max-w-4xl mx-auto text-center">
             {/* Welcome Greeting */}
             <h2 className="text-4xl md:text-4xl font-bold tracking-tight mb-3">
-              {isAuthenticated ? `Welcome back, ${userName}.` : 'Welcome to CO/ACTION LABS.'}
+              {isAuthenticated ? `Welcome back, ${userName}.` : 'Welcome to CO/ACTION LABS'}
             </h2>
 
             {/* Subtitle */}
             <p className="text-lg text-blue-100 mb-8 max-w-2xl mx-auto">
-              Explore, govern, and learn - your enterprise&apos;s AI in one place.
+              Explore, learn, and govern - your enterprise&apos;s AI in one place
             </p>
 
             {/* Search Bar */}

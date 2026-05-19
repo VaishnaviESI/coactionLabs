@@ -1,247 +1,228 @@
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import SortableTable from '@/components/SortableTable';
 import EnterpriseHeader from '@/components/EnterpriseHeader';
 import {
   Search,
   FolderKanban,
-  Users,
   CalendarDays,
-  Sparkles,
   Zap,
-  ShoppingCart,
   Layers,
 } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 
-type ProjectStatus = 'Discovery' | 'In Progress' | 'Piloting' | 'Live' | 'Retired';
-type SummaryFilter = 'all' | 'build' | 'buy' | 'live' | 'in-flight';
+type ProjectStatus = 'Discovery' | 'In Progress' | 'In Production';
+type SummaryFilter = 'all' | 'build-buy' | 'delivery-production';
 
 interface CatalogueProject {
   id: string;
+  order: number;
   name: string;
   description: string;
   category: string;
+  buildVsBuyRent: string;
   owner: string;
   team: string;
   status: ProjectStatus;
   lastUpdated: string;
   impact: string;
+  vendorUrl: string;
   tags: string[];
 }
 
 const sampleProjects: CatalogueProject[] = [
   {
     id: 'proj-001',
-    name: 'Standard Gen-AI Architecture',
-    description: 'Reference architecture for GenAI across CoAction.',
-    category: 'Foundations',
-    owner: 'Enterprise Architecture',
-    team: 'Platform Engineering',
-    status: 'Live',
-    lastUpdated: '2026-05-12',
-    impact: 'Build • Mid-May go-live',
-    tags: ['Build', 'Reference Architecture'],
+    order: 1,
+    name: 'GP Talos',
+    description: 'Enterprise knowledge and insights discovery tool built on NSAI platform',
+    category: 'Enterprise Intelligence',
+    buildVsBuyRent: 'Buy',
+    owner: "CEO's Office",
+    team: 'Growth Protocol',
+    status: 'In Progress',
+    lastUpdated: '',
+    impact: 'Q2 2026',
+    vendorUrl: 'https://growthprotocol.ai',
+    tags: ['Enterprise Intelligence'],
   },
   {
     id: 'proj-002',
-    name: 'GP Talos (AWS Build)',
-    description: 'Data platform build in AWS for PII and PHI controls.',
-    category: 'Foundations',
-    owner: 'Data Platform',
-    team: 'Infrastructure',
+    order: 2,
+    name: 'K2View',
+    description: 'Anonymize sensitive data at scale while preserving structure, relationships, and context. This is required to support NSAI initiatives such as GP Talos.',
+    category: 'Security & Privacy',
+    buildVsBuyRent: 'Buy',
+    owner: 'Chief Data Officer',
+    team: 'Data Engineering',
     status: 'In Progress',
-    lastUpdated: '2026-05-12',
-    impact: 'Build • Q2',
-    tags: ['Build', 'PII / PHI'],
+    lastUpdated: '',
+    impact: 'Q3 2026',
+    vendorUrl: 'https://www.k2view.com/',
+    tags: ['Data Platform', 'Semantic Model'],
   },
   {
     id: 'proj-003',
-    name: 'Data Platform + Semantic Layer',
-    description: 'Data masking and unstructured data plus semantic layer enablement.',
-    category: 'Foundations',
-    owner: 'Data Platform',
+    order: 3,
+    name: 'AtScale Semantic Platform',
+    description: 'Power AI agents, BI tools, and analytical applications with governed business logic, consistent metrics, and cost-controlled performance.',
+    category: 'Semantic Models',
+    buildVsBuyRent: 'Buy',
+    owner: 'Chief Data Officer',
     team: 'Data Engineering',
     status: 'In Progress',
-    lastUpdated: '2026-05-12',
-    impact: 'Build • End of Q2',
-    tags: ['Build', 'Semantic Layer'],
+    lastUpdated: '',
+    impact: 'Q3 2026',
+    vendorUrl: 'https://www.atscale.com/',
+    tags: ['Semantic Layer'],
   },
   {
     id: 'proj-004',
+    order: 4,
     name: 'AI Governance Framework',
     description: 'AI governance framework and tooling evaluation.',
-    category: 'Foundations',
-    owner: 'Governance Office',
-    team: 'Risk & Compliance',
+    category: 'Governance',
+    buildVsBuyRent: 'TBD',
+    owner: 'Josh Grajewski',
+    team: 'Legal, Risk & Compliance',
     status: 'Discovery',
-    lastUpdated: '2026-05-12',
-    impact: 'Hybrid • Q2',
-    tags: ['Hybrid', 'Governance'],
+    lastUpdated: '',
+    impact: 'Q3 2026',
+    vendorUrl: 'TBD',
+    tags: ['AI Governance'],
   },
   {
     id: 'proj-005',
-    name: 'Binding Authority Chatbot',
-    description: 'AI chatbot for Binding Authority workflows.',
-    category: 'Enterprise Capabilities',
-    owner: 'Binding Authority',
-    team: 'Operations Enablement',
-    status: 'Discovery',
-    lastUpdated: '2026-05-12',
-    impact: 'Build • June',
-    tags: ['Build', 'Requirements'],
+    order: 5,
+    name: 'Project Vega: AI Assisted Chatbot for Binding Authority',
+    description: 'An AI assisted chatbot to support Binding Authority underwriters and broker partners',
+    category: 'Underwriting Assistant',
+    buildVsBuyRent: 'Build',
+    owner: 'Alexia Selland',
+    team: 'Binding Authority IT',
+    status: 'In Progress',
+    lastUpdated: '',
+    impact: 'Q2 2026',
+    vendorUrl: 'CoAction Agentic Platform',
+    tags: ['Chatbot', 'Underwriter Assistant', 'Appetite Assistant', 'Customer Service'],
   },
   {
     id: 'proj-006',
-    name: 'Forms Library (GenAI)',
-    description: 'AI-driven forms ingestion and insights.',
-    category: 'Enterprise Capabilities',
-    owner: 'Forms Management',
-    team: 'Enterprise Ops',
-    status: 'Discovery',
-    lastUpdated: '2026-05-12',
-    impact: 'Hybrid • July',
-    tags: ['Hybrid', 'Discovery'],
+    order: 6,
+    name: 'AI Assisted Forms Library for Product Development',
+    description: 'AI-driven forms ingestion and insights for Product Development and Underwriting',
+    category: 'Product Development',
+    buildVsBuyRent: 'Build',
+    owner: 'Sebastian Alia',
+    team: 'Product Development',
+    status: 'In Progress',
+    lastUpdated: '',
+    impact: 'Q3 2026',
+    vendorUrl: 'CoAction Agentic Platform',
+    tags: ['AI Assisted Forms Library', 'Coverage Insights'],
   },
   {
     id: 'proj-007',
-    name: 'Savings Acceleration',
-    description: 'AI-driven productivity and capacity optimization.',
-    category: 'Enterprise Capabilities',
-    owner: 'Transformation Office',
-    team: 'Enterprise Operations',
+    order: 7,
+    name: 'Project CoSave',
+    description: 'AI-driven productivity and capacity harvesting.',
+    category: 'Enterprise Efficiency',
+    buildVsBuyRent: 'Buy',
+    owner: 'Kari Hilder, Bert Spunberg',
+    team: 'SmartIMS',
     status: 'Discovery',
-    lastUpdated: '2026-05-12',
-    impact: 'Build • TBD',
-    tags: ['Build', 'Discovery'],
+    lastUpdated: '',
+    impact: 'Q3 2026',
+    vendorUrl: 'https://smartims.com/industries/insurance/xymphony/',
+    tags: ['Xymphony'],
   },
   {
     id: 'proj-008',
-    name: 'UW Workbench (Convr)',
-    description: 'Submission ingestion and decision support workflows for underwriting.',
-    category: 'AI-Enabled Workflows',
-    owner: 'Underwriting',
-    team: 'Commercial Underwriting',
+    order: 8,
+    name: 'Project Cortex',
+    description: 'AI Assisted Underwriting Workbench for CoAction Underwriters',
+    category: 'Underwriting Workbench',
+    buildVsBuyRent: 'Buy',
+    owner: 'Tim Ryan',
+    team: 'Underwriting',
     status: 'In Progress',
-    lastUpdated: '2026-05-12',
-    impact: 'Buy + Rent • June go-live',
-    tags: ['Buy + Extend', 'UAT'],
+    lastUpdated: '',
+    impact: 'Q3 2026',
+    vendorUrl: 'https://convr.com/workbench/',
+    tags: ['Underwriter Workbench'],
   },
   {
     id: 'proj-009',
+    order: 9,
     name: 'Loss Control (OI + Pigeon AI)',
     description: 'AI-enabled inspections and risk insights.',
-    category: 'AI-Enabled Workflows',
-    owner: 'Loss Control',
-    team: 'Field Risk Engineering',
-    status: 'Live',
-    lastUpdated: '2026-05-12',
-    impact: 'Buy • Active',
-    tags: ['Buy', 'Live'],
+    category: 'Operational Efficiency',
+    buildVsBuyRent: 'Buy',
+    owner: 'Peggy House',
+    team: 'UW Operations & Risk Engineering',
+    status: 'In Production',
+    lastUpdated: '',
+    impact: 'Active',
+    vendorUrl: 'https://www.oipinsurtech.com/',
+    tags: [],
   },
   {
     id: 'proj-010',
-    name: 'Subjectivities (Pigeon AI)',
+    order: 10,
+    name: 'AI Assisted Subjectivity Management',
     description: 'Subjectivity extraction and monitoring in underwriting workflows.',
-    category: 'AI-Enabled Workflows',
-    owner: 'Underwriting',
-    team: 'Policy Operations',
-    status: 'Live',
-    lastUpdated: '2026-05-12',
-    impact: 'Buy • Ongoing',
-    tags: ['Buy', 'Active'],
+    category: 'Operational Efficiency',
+    buildVsBuyRent: 'Buy',
+    owner: 'Peggy House',
+    team: 'UW Operations & Risk Engineering',
+    status: 'In Production',
+    lastUpdated: '',
+    impact: 'Active',
+    vendorUrl: 'https://pigeonsubjectivities.com/',
+    tags: [],
   },
   {
     id: 'proj-011',
-    name: 'UW / Claims / Actuarial Workflows',
-    description: 'Top 3 AI-enabled workflows prioritized across key functions.',
+    order: 11,
+    name: 'GP NSAI for Claims',
+    description: 'Claims Workflows & Decision Insights',
     category: 'Decision Intelligence',
-    owner: 'Analytics Leadership',
-    team: 'UW / Claims / Actuarial',
-    status: 'In Progress',
-    lastUpdated: '2026-05-12',
-    impact: 'Hybrid • Pending sign-off',
-    tags: ['Hybrid', 'Review'],
+    buildVsBuyRent: 'Buy',
+    owner: 'Jolene Casatelli',
+    team: 'Growth Protocol',
+    status: 'Discovery',
+    lastUpdated: '',
+    impact: 'TBD',
+    vendorUrl: 'https://growthprotocol.ai',
+    tags: ['NSAI'],
+  },
+  {
+    id: 'proj-012',
+    order: 12,
+    name: 'GP NSAI for Underwriting',
+    description: 'Underwriting Workflows & Decision Insights',
+    category: 'Decision Intelligence',
+    buildVsBuyRent: 'Buy',
+    owner: 'Jon Levy',
+    team: 'Growth Protocol',
+    status: 'Discovery',
+    lastUpdated: '',
+    impact: 'TBD',
+    vendorUrl: 'https://growthprotocol.ai',
+    tags: ['NSAI'],
   },
 ];
 
-const categoryOrder = [
-  'Foundations',
-  'Enterprise Capabilities',
-  'AI-Enabled Workflows',
-  'Decision Intelligence',
-];
+const categoryOrder = Array.from(new Set(sampleProjects.map((project) => project.category)));
 
-const categoryMeta: Record<string, { strip: string; headerBg: string; headerText: string; dotBg: string; iconBg: string }> = {
-  'Foundations': {
-    strip: 'bg-blue-400',
-    headerBg: 'bg-blue-50 border-blue-200',
-    headerText: 'text-blue-900',
-    dotBg: 'bg-blue-400',
-    iconBg: 'bg-blue-100',
-  },
-  'Enterprise Capabilities': {
-    strip: 'bg-amber-400',
-    headerBg: 'bg-amber-50 border-amber-200',
-    headerText: 'text-amber-900',
-    dotBg: 'bg-amber-400',
-    iconBg: 'bg-amber-100',
-  },
-  'AI-Enabled Workflows': {
-    strip: 'bg-emerald-400',
-    headerBg: 'bg-emerald-50 border-emerald-200',
-    headerText: 'text-emerald-900',
-    dotBg: 'bg-emerald-400',
-    iconBg: 'bg-emerald-100',
-  },
-  'Decision Intelligence': {
-    strip: 'bg-violet-400',
-    headerBg: 'bg-violet-50 border-violet-200',
-    headerText: 'text-violet-900',
-    dotBg: 'bg-violet-400',
-    iconBg: 'bg-violet-100',
-  },
-};
-
-const statuses: Array<'All' | ProjectStatus> = ['All', 'Discovery', 'In Progress', 'Piloting', 'Live', 'Retired'];
-
-const avatarColors = [
-  'bg-blue-100 text-blue-700',
-  'bg-emerald-100 text-emerald-700',
-  'bg-violet-100 text-violet-700',
-  'bg-amber-100 text-amber-700',
-  'bg-rose-100 text-rose-700',
-  'bg-cyan-100 text-cyan-700',
-];
-
-const getInitials = (name: string) =>
-  name.split(' ').slice(0, 2).map((w) => w[0]).join('').toUpperCase();
-
-const getAvatarColor = (name: string) =>
-  avatarColors[name.charCodeAt(0) % avatarColors.length];
-
-const statusColor = (status: ProjectStatus): string => {
-  switch (status) {
-    case 'Live':        return 'bg-emerald-100 text-emerald-700 border-emerald-200';
-    case 'Piloting':    return 'bg-blue-100 text-blue-700 border-blue-200';
-    case 'In Progress': return 'bg-amber-100 text-amber-700 border-amber-200';
-    case 'Discovery':   return 'bg-violet-100 text-violet-700 border-violet-200';
-    case 'Retired':     return 'bg-slate-100 text-slate-500 border-slate-200';
-  }
-};
 
 const ProjectCatalogue = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [selectedStatus, setSelectedStatus] = useState<string>('All');
   const [selectedSummary, setSelectedSummary] = useState<SummaryFilter>('all');
+
+  const isBuildBuy = (project: CatalogueProject) => /build|buy/i.test(project.buildVsBuyRent);
+  const isDeliveryProduction = (project: CatalogueProject) =>
+    project.status === 'In Progress' || project.status === 'In Production';
 
   const filtered = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
@@ -251,40 +232,134 @@ const ProjectCatalogue = () => {
         p.name.toLowerCase().includes(q) ||
         p.description.toLowerCase().includes(q) ||
         p.owner.toLowerCase().includes(q) ||
+        p.team.toLowerCase().includes(q) ||
+        p.category.toLowerCase().includes(q) ||
+        p.buildVsBuyRent.toLowerCase().includes(q) ||
+        p.vendorUrl.toLowerCase().includes(q) ||
         p.tags.some((t) => t.toLowerCase().includes(q));
       const matchesCategory = selectedCategory === 'All' || p.category === selectedCategory;
       const matchesStatus = selectedStatus === 'All' || p.status === selectedStatus;
       const matchesSummary = (() => {
         switch (selectedSummary) {
-          case 'build':
-            return p.impact.includes('Build');
-          case 'buy':
-            return p.impact.toLowerCase().includes('buy');
-          case 'live':
-            return p.status === 'Live';
-          case 'in-flight':
-            return p.status === 'In Progress' || p.status === 'Discovery';
+          case 'build-buy':
+            return isBuildBuy(p);
+          case 'delivery-production':
+            return isDeliveryProduction(p);
           default:
             return true;
         }
       })();
       return matchesQuery && matchesCategory && matchesStatus && matchesSummary;
     });
-  }, [searchQuery, selectedCategory, selectedStatus, selectedSummary]);
+  }, [searchQuery, selectedCategory, selectedStatus, selectedSummary, isBuildBuy, isDeliveryProduction]);
 
-  const grouped = useMemo(
-    () =>
-      categoryOrder
-        .map((cat) => ({ category: cat, projects: filtered.filter((p) => p.category === cat) }))
-        .filter((g) => g.projects.length > 0),
-    [filtered],
-  );
+  const totalBuildBuy = sampleProjects.filter(isBuildBuy).length;
+  const totalDeliveryProduction = sampleProjects.filter(isDeliveryProduction).length;
 
-  const totalLive       = sampleProjects.filter((p) => p.status === 'Live').length;
-  const totalInProgress = sampleProjects.filter((p) => p.status === 'In Progress').length;
-  const totalDiscovery  = sampleProjects.filter((p) => p.status === 'Discovery').length;
-  const totalBuild      = sampleProjects.filter((p) => p.impact.includes('Build')).length;
-  const totalBuy        = sampleProjects.filter((p) => p.impact.toLowerCase().includes('buy')).length;
+  const tableColumns = [
+    {
+      key: 'category',
+      label: 'Category',
+      getValue: (project: CatalogueProject) => project.category,
+      render: (project: CatalogueProject) => (
+        <span className="text-blue-700 underline-offset-2 hover:underline font-medium">{project.category}</span>
+      ),
+    },
+    {
+      key: 'name',
+      label: 'Initiative',
+      getValue: (project: CatalogueProject) => project.name,
+      render: (project: CatalogueProject) => (
+        <>
+          <div className="text-slate-900 font-semibold">{project.name}</div>
+          <div className="text-xs text-slate-500">{project.description}</div>
+        </>
+      ),
+    },
+    {
+      key: 'buildVsBuyRent',
+      label: 'Build vs Buy/Rent',
+      getValue: (project: CatalogueProject) => project.buildVsBuyRent,
+      render: (project: CatalogueProject) => <div className="text-sm text-slate-700">{project.buildVsBuyRent}</div>,
+    },
+    {
+      key: 'owner',
+      label: 'Owner',
+      getValue: (project: CatalogueProject) => project.owner,
+      render: (project: CatalogueProject) => <div className="text-sm text-slate-700">{project.owner}</div>,
+    },
+    {
+      key: 'team',
+      label: 'Team',
+      getValue: (project: CatalogueProject) => project.team,
+      render: (project: CatalogueProject) => <div className="text-sm text-slate-700">{project.team}</div>,
+    },
+    {
+      key: 'status',
+      label: 'Status',
+      getValue: (project: CatalogueProject) => project.status,
+      cellClassName: 'whitespace-nowrap',
+      render: (project: CatalogueProject) => (
+        <span
+          className={`inline-flex items-center rounded-md border px-2.5 py-1 text-[10px] font-bold tracking-wider uppercase whitespace-nowrap ${
+            project.status === 'In Production' ? 'bg-emerald-100 text-emerald-700 border-emerald-200' :
+            project.status === 'In Progress' ? 'bg-blue-100 text-blue-700 border-blue-200' :
+            project.status === 'Discovery' ? 'bg-violet-100 text-violet-700 border-violet-200' :
+            'bg-slate-100 text-slate-500 border-slate-200'
+          }`}
+        >
+          {project.status}
+        </span>
+      ),
+    },
+    {
+      key: 'lastUpdated',
+      label: 'Last Updated',
+      getValue: (project: CatalogueProject) => project.lastUpdated || 'TBD',
+      render: (project: CatalogueProject) => <div className="text-sm text-slate-700">{project.lastUpdated || 'TBD'}</div>,
+    },
+    {
+      key: 'impact',
+      label: 'Impact',
+      getValue: (project: CatalogueProject) => project.impact,
+      render: (project: CatalogueProject) => <div className="text-sm text-slate-700">{project.impact}</div>,
+    },
+    {
+      key: 'vendorUrl',
+      label: 'Vendor URL',
+      getValue: (project: CatalogueProject) => project.vendorUrl,
+      render: (project: CatalogueProject) => (
+        /^https?:\/\//i.test(project.vendorUrl) ? (
+          <a
+            href={project.vendorUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="text-blue-700 underline-offset-2 hover:underline"
+          >
+            Click to open
+          </a>
+        ) : (
+          <span className="text-slate-700">{project.vendorUrl}</span>
+        )
+      ),
+    },
+    {
+      key: 'tags',
+      label: 'Tags',
+      getValue: (project: CatalogueProject) => project.tags.join(', '),
+      render: (project: CatalogueProject) => (
+        project.tags.length > 0 ? (
+          <div className="flex flex-wrap gap-1">
+            {project.tags.map((tag) => (
+              <span key={tag} className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600">{tag}</span>
+            ))}
+          </div>
+        ) : (
+          <span className="text-slate-400">-</span>
+        )
+      ),
+    },
+  ];
 
   const summaryCards: Array<{
     key: SummaryFilter;
@@ -293,10 +368,8 @@ const ProjectCatalogue = () => {
     icon: typeof Layers;
   }> = [
     { key: 'all', label: 'Total initiatives', value: sampleProjects.length, icon: Layers },
-    { key: 'build', label: 'Build', value: totalBuild, icon: Zap },
-    { key: 'buy', label: 'Buy / Rent', value: totalBuy, icon: ShoppingCart },
-    { key: 'live', label: 'In Production', value: totalLive, icon: Sparkles },
-    { key: 'in-flight', label: 'In Delivery', value: totalInProgress + totalDiscovery, icon: CalendarDays },
+    { key: 'build-buy', label: 'Build + Buy', value: totalBuildBuy, icon: Zap },
+    { key: 'delivery-production', label: 'In Delivery + In Production', value: totalDeliveryProduction, icon: CalendarDays },
   ];
 
   return (
@@ -328,16 +401,12 @@ const ProjectCatalogue = () => {
               const percent = `${((card.value / total) * 100).toFixed(1)}%`;
               const colorClass = (() => {
                 switch (card.key) {
-                  case 'build':
-                    return 'bg-blue-700 text-white';
-                  case 'buy':
-                    return 'bg-emerald-600 text-white';
-                  case 'live':
-                    return 'bg-slate-500 text-white';
-                  case 'in-flight':
-                    return 'bg-blue-700 text-white';
+                  case 'build-buy':
+                    return 'bg-emerald-100 text-emerald-700 border border-emerald-200';
+                  case 'delivery-production':
+                    return 'bg-blue-100 text-blue-700 border border-blue-200';
                   default:
-                    return 'bg-white text-slate-900 border-2 border-emerald-100';
+                    return 'bg-white text-slate-900 border border-slate-200';
                 }
               })();
 
@@ -350,14 +419,14 @@ const ProjectCatalogue = () => {
                     isActive ? 'ring-2 ring-offset-2 ring-slate-900' : ''
                   }`}
                 >
-                  <div className={`text-[10px] font-bold tracking-widest uppercase ${isTotal ? 'text-slate-500' : 'text-white/80'}`}>
+                  <div className={`text-[10px] font-bold tracking-widest uppercase ${isTotal ? 'text-slate-500' : 'text-slate-600'}`}>
                     {isTotal ? 'Total Initiatives' : card.label}
                   </div>
-                  <div className={`text-3xl font-bold text-center ${isTotal ? 'text-slate-900' : 'text-white'}`}>
+                  <div className={`text-3xl font-bold text-center ${isTotal ? 'text-slate-900' : 'text-slate-900'}`}>
                     {card.value}
                   </div>
                   {!isTotal && (
-                    <div className="text-xs text-white/80 text-center">{percent}</div>
+                    <div className="text-xs text-slate-500 text-center">{percent}</div>
                   )}
                 </button>
               );
@@ -395,54 +464,15 @@ const ProjectCatalogue = () => {
         </div>
 
         {/* Table */}
-        <div className="rounded-lg border border-slate-200 overflow-hidden mb-8">
-          <table className="min-w-full border-collapse text-sm">
-            <thead className="bg-slate-900 text-white">
-              <tr>
-                <th className="px-4 py-3 text-left text-xs font-bold tracking-wider uppercase">Domain</th>
-                <th className="px-4 py-3 text-left text-xs font-bold tracking-wider uppercase">Initiative</th>
-                <th className="px-4 py-3 text-left text-xs font-bold tracking-wider uppercase">Timeline</th>
-                <th className="px-4 py-3 text-left text-xs font-bold tracking-wider uppercase">Status</th>
-                <th className="px-4 py-3 text-left text-xs font-bold tracking-wider uppercase">Tags</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.length === 0 ? (
-                <tr>
-                  <td colSpan={5} className="px-4 py-8 text-center text-slate-400">No projects match those filters.</td>
-                </tr>
-              ) : (
-                filtered.map((project, idx) => (
-                  <tr key={project.id} className={`${idx % 2 === 1 ? 'bg-slate-50' : 'bg-white'} border-b border-slate-200`}>
-                    <td className="px-4 py-3">
-                      <span className="text-blue-700 underline-offset-2 hover:underline font-medium">{project.category}</span>
-                    </td>
-                    <td className="px-4 py-3">
-                      <div className="text-slate-900 font-semibold">{project.name}</div>
-                      <div className="text-xs text-slate-500">{project.description}</div>
-                    </td>
-                    <td className="px-4 py-3 text-sm text-slate-700">{project.impact}</td>
-                    <td className="px-4 py-3">
-                      <span className={`rounded-md px-2.5 py-1 text-[10px] font-bold tracking-wider uppercase text-white ${
-                        project.status === 'Live' ? 'bg-emerald-600' :
-                        project.status === 'In Progress' ? 'bg-blue-700' :
-                        project.status === 'Piloting' ? 'bg-amber-500' :
-                        project.status === 'Discovery' ? 'bg-violet-600' :
-                        'bg-slate-400'
-                      }`}>{project.status}</span>
-                    </td>
-                    <td className="px-4 py-3">
-                      <div className="flex flex-wrap gap-1">
-                        {project.tags.map((tag) => (
-                          <span key={tag} className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600">{tag}</span>
-                        ))}
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+        <div className="rounded-lg border border-slate-200 overflow-x-auto overflow-y-hidden mb-8">
+          <SortableTable
+            data={filtered}
+            columns={tableColumns}
+            rowKey={(project) => project.id}
+            rowClassName={(_, idx) => `${idx % 2 === 1 ? 'bg-slate-50' : 'bg-white'} border-b border-slate-200`}
+            emptyMessage="No projects match those filters."
+            tableClassName="min-w-[1800px]"
+          />
         </div>
 
         {/* Legend */}
@@ -450,33 +480,20 @@ const ProjectCatalogue = () => {
           <div>
             <h4 className="text-sm font-bold text-slate-900 mb-3">Status Key</h4>
             <div className="flex flex-col gap-2">
-              {(['Live', 'In Progress', 'Piloting', 'Discovery', 'Retired'] as ProjectStatus[]).map((s) => (
+              {(['In Production', 'In Progress', 'Discovery'] as ProjectStatus[]).map((s) => (
                 <div key={s} className="flex items-center gap-2">
                   <span className={`inline-block w-3 h-3 rounded-sm border-2 ${
-                    s === 'Live' ? 'border-emerald-600' :
+                    s === 'In Production' ? 'border-emerald-600' :
                     s === 'In Progress' ? 'border-blue-700' :
-                    s === 'Piloting' ? 'border-amber-500' :
-                    s === 'Discovery' ? 'border-violet-600' :
-                    'border-slate-400'
+                    'border-violet-600'
                   }`} />
                   <span className="text-xs text-slate-700">{s}</span>
                 </div>
               ))}
             </div>
           </div>
-          <div>
-            <h4 className="text-sm font-bold text-slate-900 mb-3">Category Key</h4>
-            <div className="flex flex-col gap-2">
-              {categoryOrder.map((cat) => (
-                <div key={cat} className="flex items-center gap-2">
-                  <span className={`inline-block w-3 h-3 rounded-full ${categoryMeta[cat].dotBg}`} />
-                  <span className="text-xs text-slate-700">{cat}</span>
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
-        <div className="text-xs text-slate-400 italic">Status reflects current delivery state. Last updated 2026-05-12.</div>
+        <div className="text-xs text-slate-400 italic">Status reflects current delivery state.</div>
       </main>
     </div>
   );

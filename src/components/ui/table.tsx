@@ -1,6 +1,51 @@
 import * as React from "react";
+import { AgGridReact } from "ag-grid-react";
+import type { ColDef, GridReadyEvent } from "ag-grid-community";
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-quartz.css";
 
 import { cn } from "@/lib/utils";
+
+interface AgGridTableProps<T extends object> {
+  rowData: T[];
+  columnDefs: ColDef<T>[];
+  className?: string;
+  gridClassName?: string;
+  defaultColDef?: ColDef<T>;
+  onGridReady?: (event: GridReadyEvent<T>) => void;
+}
+
+const AgGridTable = <T extends object>({
+  rowData,
+  columnDefs,
+  className,
+  gridClassName,
+  defaultColDef,
+  onGridReady,
+}: AgGridTableProps<T>) => {
+  return (
+    <div className={cn("ag-theme-quartz w-full h-[420px]", className)}>
+      <AgGridReact<T>
+        rowData={rowData}
+        columnDefs={columnDefs}
+        defaultColDef={{
+          sortable: true,
+          filter: true,
+          resizable: true,
+          flex: 1,
+          minWidth: 140,
+          ...defaultColDef,
+        }}
+        className={gridClassName}
+        animateRows
+        alwaysShowHorizontalScroll
+        alwaysShowVerticalScroll
+        suppressCellFocus
+        onGridReady={onGridReady}
+      />
+    </div>
+  );
+};
 
 const Table = React.forwardRef<HTMLTableElement, React.HTMLAttributes<HTMLTableElement>>(
   ({ className, ...props }, ref) => (
@@ -69,4 +114,4 @@ const TableCaption = React.forwardRef<HTMLTableCaptionElement, React.HTMLAttribu
 );
 TableCaption.displayName = "TableCaption";
 
-export { Table, TableHeader, TableBody, TableFooter, TableHead, TableRow, TableCell, TableCaption };
+export { AgGridTable, Table, TableHeader, TableBody, TableFooter, TableHead, TableRow, TableCell, TableCaption };
