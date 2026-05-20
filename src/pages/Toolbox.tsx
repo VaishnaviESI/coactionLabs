@@ -9,8 +9,6 @@ interface ToolboxItem {
   order: number;
   name: string;
   description: string;
-  tag: string;
-  url: string;
   govStatus: GovernanceStatus;
   audience: string;
 }
@@ -21,8 +19,6 @@ const toolboxItems: ToolboxItem[] = [
     order: 1,
     name: 'Microsoft Copilot Chat Authenticated',
     description: 'AI assistant for employee productivity',
-    tag: 'Employee',
-    url: '',
     govStatus: 'approved',
     audience: 'All Employees',
   },
@@ -31,8 +27,6 @@ const toolboxItems: ToolboxItem[] = [
     order: 2,
     name: 'GitHub Copilot',
     description: 'AI-powered code completion and generation integrated with your development workflow.',
-    tag: 'Engineer',
-    url: '',
     govStatus: 'approved',
     audience: 'Engineering',
   },
@@ -41,8 +35,6 @@ const toolboxItems: ToolboxItem[] = [
     order: 3,
     name: 'Rivvit',
     description: 'Insights into investment management and reporting',
-    tag: 'Asset Management',
-    url: '',
     govStatus: 'approved',
     audience: 'CoAction Investment Management',
   },
@@ -51,8 +43,6 @@ const toolboxItems: ToolboxItem[] = [
     order: 4,
     name: 'Claude',
     description: 'AI assistant for employee productivity',
-    tag: 'Employee',
-    url: '',
     govStatus: 'in progress',
     audience: 'All Employees',
   },
@@ -64,6 +54,15 @@ const Toolbox = () => {
     import.meta.url,
   ).toString();
   const tableColumns = [
+    {
+      key: 'order',
+      label: '#',
+      getValue: (item: ToolboxItem) => item.order,
+      cellClassName: 'whitespace-nowrap',
+      render: (item: ToolboxItem) => (
+        <div className="text-sm font-semibold text-slate-700">{item.order}</div>
+      ),
+    },
     {
       key: 'name',
       label: 'Tool',
@@ -78,33 +77,6 @@ const Toolbox = () => {
       getValue: (item: ToolboxItem) => item.description,
       render: (item: ToolboxItem) => (
         <div className="text-sm text-slate-700">{item.description}</div>
-      ),
-    },
-    {
-      key: 'tag',
-      label: 'Tag',
-      getValue: (item: ToolboxItem) => item.tag,
-      render: (item: ToolboxItem) => (
-        <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600">{item.tag}</span>
-      ),
-    },
-    {
-      key: 'url',
-      label: 'URL',
-      getValue: (item: ToolboxItem) => item.url || '-',
-      render: (item: ToolboxItem) => (
-        item.url ? (
-          <a
-            href={item.url}
-            target="_blank"
-            rel="noreferrer"
-            className="text-blue-700 underline-offset-2 hover:underline"
-          >
-            {item.url}
-          </a>
-        ) : (
-          <span className="text-slate-400">-</span>
-        )
       ),
     },
     {
@@ -180,7 +152,7 @@ const Toolbox = () => {
             columns={tableColumns}
             rowKey={(item) => String(item.id)}
             rowClassName={(_, idx) => `${idx % 2 === 1 ? 'bg-slate-50' : 'bg-white'} border-b border-slate-200`}
-            tableClassName="min-w-[1200px]"
+            tableClassName="min-w-full"
           />
         </div>
 

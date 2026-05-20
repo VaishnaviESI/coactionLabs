@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 
 type ProjectStatus = 'Discovery' | 'In Progress' | 'In Production';
-type SummaryFilter = 'all' | 'build-buy' | 'delivery-production';
+type SummaryFilter = 'all' | 'build-buy' | 'delivery-production-discovery';
 
 interface CatalogueProject {
   id: string;
@@ -22,7 +22,6 @@ interface CatalogueProject {
   owner: string;
   team: string;
   status: ProjectStatus;
-  lastUpdated: string;
   impact: string;
   vendorUrl: string;
   tags: string[];
@@ -39,7 +38,6 @@ const sampleProjects: CatalogueProject[] = [
     owner: "CEO's Office",
     team: 'Growth Protocol',
     status: 'In Progress',
-    lastUpdated: '',
     impact: 'Q2 2026',
     vendorUrl: 'https://growthprotocol.ai',
     tags: ['Enterprise Intelligence'],
@@ -54,7 +52,6 @@ const sampleProjects: CatalogueProject[] = [
     owner: 'Priyanka Kapoor',
     team: 'Data Engineering',
     status: 'In Progress',
-    lastUpdated: '',
     impact: 'Q3 2026',
     vendorUrl: 'https://www.k2view.com/',
     tags: ['Data Platform', 'Semantic Model'],
@@ -69,7 +66,6 @@ const sampleProjects: CatalogueProject[] = [
     owner: 'Priyanka Kapoor',
     team: 'Data Engineering',
     status: 'In Progress',
-    lastUpdated: '',
     impact: 'Q3 2026',
     vendorUrl: 'https://www.atscale.com/',
     tags: ['Semantic Layer'],
@@ -84,7 +80,6 @@ const sampleProjects: CatalogueProject[] = [
     owner: 'Alexia Selland',
     team: 'Binding Authority IT',
     status: 'In Progress',
-    lastUpdated: '',
     impact: 'Q2 2026',
     vendorUrl: 'CoAction Agentic Platform',
     tags: ['Chatbot', 'Underwriter Assistant', 'Appetite Assistant', 'Customer Service'],
@@ -92,14 +87,13 @@ const sampleProjects: CatalogueProject[] = [
   {
     id: 'proj-006',
     order: 5,
-    name: 'AI Assisted Forms Library for Product Development',
+    name: 'Project Vega: AI Assisted Forms Library for Product Development',
     description: 'AI-driven forms ingestion and insights for Product Development and Underwriting',
     category: 'Product Development',
     buildVsBuyRent: 'Build',
     owner: 'Sebastian Alia',
     team: 'Product Development',
     status: 'In Progress',
-    lastUpdated: '',
     impact: 'Q3 2026',
     vendorUrl: 'CoAction Agentic Platform',
     tags: ['AI Assisted Forms Library', 'Coverage Insights'],
@@ -114,7 +108,6 @@ const sampleProjects: CatalogueProject[] = [
     owner: 'Kari Hilder, Bert Spunberg',
     team: 'SmartIMS',
     status: 'Discovery',
-    lastUpdated: '',
     impact: 'Q3 2026',
     vendorUrl: 'https://smartims.com/industries/insurance/xymphony/',
     tags: ['Xymphony'],
@@ -129,7 +122,6 @@ const sampleProjects: CatalogueProject[] = [
     owner: 'Tim Ryan',
     team: 'Underwriting',
     status: 'In Progress',
-    lastUpdated: '',
     impact: 'Q3 2026',
     vendorUrl: 'https://convr.com/workbench/',
     tags: ['Underwriter Workbench'],
@@ -144,7 +136,6 @@ const sampleProjects: CatalogueProject[] = [
     owner: 'Peggy House',
     team: 'UW Operations & Risk Engineering',
     status: 'In Production',
-    lastUpdated: '',
     impact: 'Active',
     vendorUrl: 'https://www.oipinsurtech.com/',
     tags: [],
@@ -159,7 +150,6 @@ const sampleProjects: CatalogueProject[] = [
     owner: 'Peggy House',
     team: 'UW Operations & Risk Engineering',
     status: 'In Production',
-    lastUpdated: '',
     impact: 'Active',
     vendorUrl: 'https://pigeonsubjectivities.com/',
     tags: [],
@@ -174,7 +164,6 @@ const sampleProjects: CatalogueProject[] = [
     owner: 'Jolene Casatelli',
     team: 'Growth Protocol',
     status: 'Discovery',
-    lastUpdated: '',
     impact: 'TBD',
     vendorUrl: 'https://growthprotocol.ai',
     tags: ['NSAI'],
@@ -189,7 +178,6 @@ const sampleProjects: CatalogueProject[] = [
     owner: 'Jon Levy',
     team: 'Growth Protocol',
     status: 'Discovery',
-    lastUpdated: '',
     impact: 'TBD',
     vendorUrl: 'https://growthprotocol.ai',
     tags: ['NSAI'],
@@ -206,8 +194,8 @@ const ProjectCatalogue = () => {
   const [selectedSummary, setSelectedSummary] = useState<SummaryFilter>('all');
 
   const isBuildBuy = (project: CatalogueProject) => /build|buy/i.test(project.buildVsBuyRent);
-  const isDeliveryProduction = (project: CatalogueProject) =>
-    project.status === 'In Progress' || project.status === 'In Production';
+  const isDeliveryProductionDiscovery = (project: CatalogueProject) =>
+    project.status === 'In Progress' || project.status === 'In Production' || project.status === 'Discovery';
 
   const filtered = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
@@ -228,24 +216,32 @@ const ProjectCatalogue = () => {
         switch (selectedSummary) {
           case 'build-buy':
             return isBuildBuy(p);
-          case 'delivery-production':
-            return isDeliveryProduction(p);
+          case 'delivery-production-discovery':
+            return isDeliveryProductionDiscovery(p);
           default:
             return true;
         }
       })();
       return matchesQuery && matchesCategory && matchesStatus && matchesSummary;
     });
-  }, [searchQuery, selectedCategory, selectedStatus, selectedSummary, isBuildBuy, isDeliveryProduction]);
+  }, [searchQuery, selectedCategory, selectedStatus, selectedSummary, isBuildBuy, isDeliveryProductionDiscovery]);
 
   const totalBuildBuy = sampleProjects.filter(isBuildBuy).length;
-  const totalDeliveryProduction = sampleProjects.filter(isDeliveryProduction).length;
+  const totalDeliveryProductionDiscovery = sampleProjects.filter(isDeliveryProductionDiscovery).length;
   const totalBuild = sampleProjects.filter((project) => /build/i.test(project.buildVsBuyRent)).length;
   const totalBuy = sampleProjects.filter((project) => /buy/i.test(project.buildVsBuyRent)).length;
   const totalInProgress = sampleProjects.filter((project) => project.status === 'In Progress').length;
   const totalInProduction = sampleProjects.filter((project) => project.status === 'In Production').length;
+  const totalDiscovery = sampleProjects.filter((project) => project.status === 'Discovery').length;
 
   const tableColumns = [
+    {
+      key: 'order',
+      label: '#',
+      getValue: (project: CatalogueProject) => project.order,
+      cellClassName: 'whitespace-nowrap',
+      render: (project: CatalogueProject) => <div className="text-sm font-semibold text-slate-700">{project.order}</div>,
+    },
     {
       key: 'name',
       label: 'Initiative',
@@ -302,12 +298,6 @@ const ProjectCatalogue = () => {
       ),
     },
     {
-      key: 'lastUpdated',
-      label: 'Last Updated',
-      getValue: (project: CatalogueProject) => project.lastUpdated || 'TBD',
-      render: (project: CatalogueProject) => <div className="text-sm text-slate-700">{project.lastUpdated || 'TBD'}</div>,
-    },
-    {
       key: 'impact',
       label: 'Impact',
       getValue: (project: CatalogueProject) => project.impact,
@@ -358,7 +348,7 @@ const ProjectCatalogue = () => {
   }> = [
     { key: 'all', label: 'Total initiatives', value: sampleProjects.length, icon: Layers },
     { key: 'build-buy', label: 'Build + Buy', value: totalBuildBuy, icon: Zap },
-    { key: 'delivery-production', label: 'In Delivery + In Production', value: totalDeliveryProduction, icon: CalendarDays },
+    { key: 'delivery-production-discovery', label: 'Delivery + Production + Discovery', value: totalDeliveryProductionDiscovery, icon: CalendarDays },
   ];
 
   return (
@@ -390,7 +380,7 @@ const ProjectCatalogue = () => {
                 switch (card.key) {
                   case 'build-buy':
                     return 'bg-emerald-100 text-emerald-700 border border-emerald-200';
-                  case 'delivery-production':
+                  case 'delivery-production-discovery':
                     return 'bg-blue-100 text-blue-700 border border-blue-200';
                   default:
                     return 'bg-white text-slate-900 border border-slate-200';
@@ -410,20 +400,12 @@ const ProjectCatalogue = () => {
                     {isTotal ? 'Total Initiatives' : card.label}
                   </div>
                   <div className={`text-3xl font-bold text-center ${isTotal ? 'text-slate-900' : 'text-slate-900'}`}>
-                    {card.value}
+                    {card.key === 'build-buy'
+                      ? `${totalBuy} + ${totalBuild}`
+                      : card.key === 'delivery-production-discovery'
+                        ? `${totalInProgress} + ${totalInProduction} + ${totalDiscovery}`
+                        : card.value}
                   </div>
-                  {!isTotal && card.key === 'build-buy' && (
-                    <div className="text-xs text-slate-600 text-center mt-1">
-                      <div>{totalBuild} vs {totalBuy}</div>
-                      <div>build vs buy</div>
-                    </div>
-                  )}
-                  {!isTotal && card.key === 'delivery-production' && (
-                    <div className="text-xs text-slate-600 text-center mt-1">
-                      <div>{totalInProgress} vs {totalInProduction}</div>
-                      <div>in progress vs in production</div>
-                    </div>
-                  )}
                 </button>
               );
             })}
