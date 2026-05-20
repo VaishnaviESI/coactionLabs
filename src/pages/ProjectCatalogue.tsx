@@ -51,7 +51,7 @@ const sampleProjects: CatalogueProject[] = [
     description: 'Anonymize sensitive data at scale while preserving structure, relationships, and context. This is required to support NSAI initiatives such as GP Talos.',
     category: 'Security & Privacy',
     buildVsBuyRent: 'Buy',
-    owner: 'Chief Data Officer',
+    owner: 'Priyanka Kapoor',
     team: 'Data Engineering',
     status: 'In Progress',
     lastUpdated: '',
@@ -66,7 +66,7 @@ const sampleProjects: CatalogueProject[] = [
     description: 'Power AI agents, BI tools, and analytical applications with governed business logic, consistent metrics, and cost-controlled performance.',
     category: 'Semantic Models',
     buildVsBuyRent: 'Buy',
-    owner: 'Chief Data Officer',
+    owner: 'Priyanka Kapoor',
     team: 'Data Engineering',
     status: 'In Progress',
     lastUpdated: '',
@@ -75,23 +75,8 @@ const sampleProjects: CatalogueProject[] = [
     tags: ['Semantic Layer'],
   },
   {
-    id: 'proj-004',
-    order: 4,
-    name: 'AI Governance Framework',
-    description: 'AI governance framework and tooling evaluation.',
-    category: 'Governance',
-    buildVsBuyRent: 'TBD',
-    owner: 'Josh Grajewski',
-    team: 'Legal, Risk & Compliance',
-    status: 'Discovery',
-    lastUpdated: '',
-    impact: 'Q3 2026',
-    vendorUrl: 'TBD',
-    tags: ['AI Governance'],
-  },
-  {
     id: 'proj-005',
-    order: 5,
+    order: 4,
     name: 'Project Vega: AI Assisted Chatbot for Binding Authority',
     description: 'An AI assisted chatbot to support Binding Authority underwriters and broker partners',
     category: 'Underwriting Assistant',
@@ -106,7 +91,7 @@ const sampleProjects: CatalogueProject[] = [
   },
   {
     id: 'proj-006',
-    order: 6,
+    order: 5,
     name: 'AI Assisted Forms Library for Product Development',
     description: 'AI-driven forms ingestion and insights for Product Development and Underwriting',
     category: 'Product Development',
@@ -121,7 +106,7 @@ const sampleProjects: CatalogueProject[] = [
   },
   {
     id: 'proj-007',
-    order: 7,
+    order: 6,
     name: 'Project CoSave',
     description: 'AI-driven productivity and capacity harvesting.',
     category: 'Enterprise Efficiency',
@@ -136,7 +121,7 @@ const sampleProjects: CatalogueProject[] = [
   },
   {
     id: 'proj-008',
-    order: 8,
+    order: 7,
     name: 'Project Cortex',
     description: 'AI Assisted Underwriting Workbench for CoAction Underwriters',
     category: 'Underwriting Workbench',
@@ -151,7 +136,7 @@ const sampleProjects: CatalogueProject[] = [
   },
   {
     id: 'proj-009',
-    order: 9,
+    order: 8,
     name: 'Loss Control (OI + Pigeon AI)',
     description: 'AI-enabled inspections and risk insights.',
     category: 'Operational Efficiency',
@@ -166,7 +151,7 @@ const sampleProjects: CatalogueProject[] = [
   },
   {
     id: 'proj-010',
-    order: 10,
+    order: 9,
     name: 'AI Assisted Subjectivity Management',
     description: 'Subjectivity extraction and monitoring in underwriting workflows.',
     category: 'Operational Efficiency',
@@ -181,7 +166,7 @@ const sampleProjects: CatalogueProject[] = [
   },
   {
     id: 'proj-011',
-    order: 11,
+    order: 10,
     name: 'GP NSAI for Claims',
     description: 'Claims Workflows & Decision Insights',
     category: 'Decision Intelligence',
@@ -196,7 +181,7 @@ const sampleProjects: CatalogueProject[] = [
   },
   {
     id: 'proj-012',
-    order: 12,
+    order: 11,
     name: 'GP NSAI for Underwriting',
     description: 'Underwriting Workflows & Decision Insights',
     category: 'Decision Intelligence',
@@ -255,16 +240,12 @@ const ProjectCatalogue = () => {
 
   const totalBuildBuy = sampleProjects.filter(isBuildBuy).length;
   const totalDeliveryProduction = sampleProjects.filter(isDeliveryProduction).length;
+  const totalBuild = sampleProjects.filter((project) => /build/i.test(project.buildVsBuyRent)).length;
+  const totalBuy = sampleProjects.filter((project) => /buy/i.test(project.buildVsBuyRent)).length;
+  const totalInProgress = sampleProjects.filter((project) => project.status === 'In Progress').length;
+  const totalInProduction = sampleProjects.filter((project) => project.status === 'In Production').length;
 
   const tableColumns = [
-    {
-      key: 'category',
-      label: 'Category',
-      getValue: (project: CatalogueProject) => project.category,
-      render: (project: CatalogueProject) => (
-        <span className="text-blue-700 underline-offset-2 hover:underline font-medium">{project.category}</span>
-      ),
-    },
     {
       key: 'name',
       label: 'Initiative',
@@ -274,6 +255,14 @@ const ProjectCatalogue = () => {
           <div className="text-slate-900 font-semibold">{project.name}</div>
           <div className="text-xs text-slate-500">{project.description}</div>
         </>
+      ),
+    },
+    {
+      key: 'category',
+      label: 'Category',
+      getValue: (project: CatalogueProject) => project.category,
+      render: (project: CatalogueProject) => (
+        <span className="text-blue-700 underline-offset-2 hover:underline font-medium">{project.category}</span>
       ),
     },
     {
@@ -302,9 +291,9 @@ const ProjectCatalogue = () => {
       render: (project: CatalogueProject) => (
         <span
           className={`inline-flex items-center rounded-md border px-2.5 py-1 text-[10px] font-bold tracking-wider uppercase whitespace-nowrap ${
-            project.status === 'In Production' ? 'bg-emerald-100 text-emerald-700 border-emerald-200' :
-            project.status === 'In Progress' ? 'bg-blue-100 text-blue-700 border-blue-200' :
-            project.status === 'Discovery' ? 'bg-violet-100 text-violet-700 border-violet-200' :
+            project.status === 'Discovery' ? 'bg-slate-100 text-slate-700 border-slate-200' :
+            project.status === 'In Production' ? 'bg-blue-100 text-blue-700 border-blue-200' :
+            project.status === 'In Progress' ? 'bg-emerald-100 text-emerald-700 border-emerald-200' :
             'bg-slate-100 text-slate-500 border-slate-200'
           }`}
         >
@@ -397,8 +386,6 @@ const ProjectCatalogue = () => {
             {summaryCards.map((card) => {
               const isActive = selectedSummary === card.key;
               const isTotal = card.key === 'all';
-              const total = sampleProjects.length || 1;
-              const percent = `${((card.value / total) * 100).toFixed(1)}%`;
               const colorClass = (() => {
                 switch (card.key) {
                   case 'build-buy':
@@ -419,14 +406,23 @@ const ProjectCatalogue = () => {
                     isActive ? 'ring-2 ring-offset-2 ring-slate-900' : ''
                   }`}
                 >
-                  <div className={`text-[10px] font-bold tracking-widest uppercase ${isTotal ? 'text-slate-500' : 'text-slate-600'}`}>
+                  <div className={`text-[10px] font-bold tracking-widest uppercase mb-2 ${isTotal ? 'text-slate-500' : 'text-slate-600'}`}>
                     {isTotal ? 'Total Initiatives' : card.label}
                   </div>
                   <div className={`text-3xl font-bold text-center ${isTotal ? 'text-slate-900' : 'text-slate-900'}`}>
                     {card.value}
                   </div>
-                  {!isTotal && (
-                    <div className="text-xs text-slate-500 text-center">{percent}</div>
+                  {!isTotal && card.key === 'build-buy' && (
+                    <div className="text-xs text-slate-600 text-center mt-1">
+                      <div>{totalBuild} vs {totalBuy}</div>
+                      <div>build vs buy</div>
+                    </div>
+                  )}
+                  {!isTotal && card.key === 'delivery-production' && (
+                    <div className="text-xs text-slate-600 text-center mt-1">
+                      <div>{totalInProgress} vs {totalInProduction}</div>
+                      <div>in progress vs in production</div>
+                    </div>
                   )}
                 </button>
               );

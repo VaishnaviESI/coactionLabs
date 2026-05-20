@@ -124,8 +124,8 @@ const Toolbox = () => {
         <span
           className={`inline-flex items-center rounded-md border px-2.5 py-1 text-[10px] font-bold tracking-wider uppercase whitespace-nowrap ${
             item.govStatus === 'approved'
-              ? 'bg-violet-100 text-violet-700 border-violet-200'
-              : 'bg-amber-100 text-amber-700 border-amber-200'
+              ? 'bg-blue-100 text-blue-700 border-blue-200'
+              : 'bg-emerald-100 text-emerald-700 border-emerald-200'
           }`}
         >
           {item.govStatus}
@@ -158,14 +158,14 @@ const Toolbox = () => {
           <div className="flex flex-nowrap gap-3 overflow-x-auto">
             {[
               { label: 'Total Tools', value: toolboxItems.length, color: 'bg-white text-slate-900 border-2 border-violet-100' },
-              { label: 'Approved', value: toolboxItems.filter((i) => i.govStatus === 'approved').length, color: 'bg-violet-100 text-violet-700 border border-violet-200' },
-              { label: 'In Progress', value: toolboxItems.filter((i) => i.govStatus === 'in progress').length, color: 'bg-amber-100 text-black border border-amber-200' },
+              { label: 'Approved', value: toolboxItems.filter((i) => i.govStatus === 'approved').length, color: 'bg-blue-100 text-blue-700 border border-blue-200' },
+              { label: 'In Progress', value: toolboxItems.filter((i) => i.govStatus === 'in progress').length, color: 'bg-emerald-100 text-emerald-700 border border-emerald-200' },
             ].map((card) => (
               <div key={card.label} className={`rounded-lg px-6 py-4 text-left min-w-[180px] ${card.color} ${card.label === 'In Progress' ? 'text-black' : ''}`}>
-                <div className={`text-[10px] font-bold tracking-widest uppercase ${card.color.includes('bg-white') || card.color.includes('bg-violet-100') || card.color.includes('bg-slate-100') ? 'text-slate-500' : card.label === 'In Progress' ? 'text-black' : 'text-white/80'}`}>
+                <div className={`text-[10px] font-bold tracking-widest uppercase ${card.color.includes('bg-white') || card.color.includes('bg-violet-100') || card.color.includes('bg-slate-100') ? 'text-slate-500' : card.label === 'In Progress' ? 'text-black' : card.label === 'Approved' ? 'text-black' : 'text-white/80'}`}>
                   {card.label}
                 </div>
-                <div className={`text-3xl font-bold text-center ${card.color.includes('bg-white') || card.color.includes('bg-violet-100') || card.color.includes('bg-slate-100') ? 'text-slate-900' : card.label === 'In Progress' ? 'text-black' : 'text-white'}`}>
+                <div className={`text-3xl font-bold text-center ${card.color.includes('bg-white') || card.color.includes('bg-violet-100') || card.color.includes('bg-slate-100') ? 'text-slate-900' : card.label === 'In Progress' ? 'text-black' : card.label === 'Approved' ? 'text-black' : 'text-white'}`}>
                   {card.value}
                 </div>
               </div>
@@ -191,7 +191,7 @@ const Toolbox = () => {
             <div className="flex flex-col gap-2">
               {['approved', 'in progress'].map((s) => (
                 <div key={s} className="flex items-center gap-2">
-                  <span className={`inline-block w-3 h-3 rounded-sm border-2 ${s === 'approved' ? 'border-violet-600' : 'border-amber-600'}`} />
+                  <span className={`inline-block w-3 h-3 rounded-sm border-2 ${s === 'approved' ? 'border-blue-600' : 'border-emerald-600'}`} />
                   <span className="text-xs text-slate-700">{s}</span>
                 </div>
               ))}
@@ -200,7 +200,7 @@ const Toolbox = () => {
         </div>
         <div className="mt-6 rounded-lg border border-slate-200 bg-white p-4">
           <p className="text-sm text-slate-700">
-            Please contact Kip Porterfield or Ashok Narayana with a completed Excel attached to put your project through the AI Governance process.
+            Please contact Kip Porterfield or Ashok Narayana with a completed Excel attached to put your AI tool through the AI Governance process.
           </p>
           <a
             href={aiTechReviewTemplateUrl}

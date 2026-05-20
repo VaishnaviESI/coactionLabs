@@ -72,7 +72,7 @@ const tiles: Tile[] = [
   },
   {
     title: 'AI Systems Registry',
-    description: 'Create and manage your own AI apps and tools.',
+    description: 'List of AI systems, tools, and technologies along with   their life cycle status.',
     icon: Wrench,
     href: '/toolbox',
     category: 'Create',
