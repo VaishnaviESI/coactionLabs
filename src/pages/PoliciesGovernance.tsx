@@ -14,6 +14,15 @@ interface PolicyItem {
   pdfPage?: number;
 }
 
+const normalizeSearchText = (value: string) =>
+  value
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
 const policies = [
   {
     category: 'Definitions & Scope',
@@ -159,15 +168,22 @@ const PoliciesGovernance = () => {
   const activeData = activeTab === 'policies' ? policies : governanceItems;
 
   const filteredItems = useMemo(() => {
-    const q = search.trim().toLowerCase();
-    if (!q) return activeData;
+    const normalizedQuery = normalizeSearchText(search);
+    if (!normalizedQuery) return activeData;
+
+    const terms = normalizedQuery.split(' ').filter(Boolean);
+
     return activeData
       .map((category) => ({
         ...category,
         items: category.items.filter(
-          (item) =>
-            item.title.toLowerCase().includes(q) ||
-            item.description.toLowerCase().includes(q),
+          (item) => {
+            const searchableText = normalizeSearchText(
+              `${category.category} ${item.title} ${item.description} ${item.fullText}`,
+            );
+
+            return terms.every((term) => searchableText.includes(term));
+          },
         ),
       }))
       .filter((category) => category.items.length > 0);

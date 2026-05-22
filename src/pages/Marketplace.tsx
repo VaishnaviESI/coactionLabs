@@ -81,14 +81,13 @@ const Marketplace = () => {
     toggleFavorite(agentId);
   };
 
-  // First, filter and sort by usage to get the true ranking (only certified agents)
+  // First, filter and sort by usage to get ranking across all available marketplace agents.
   const rankedAgents = [...allAgents]
     .filter(agent => {
-      const isCertified = agent.status === 'certified';
       const matchesSearch = agent.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         agent.description.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesCategory = selectedCategory === 'All' || agent.category === selectedCategory;
-      return isCertified && matchesSearch && matchesCategory;
+      return matchesSearch && matchesCategory;
     })
     .sort((a, b) => b.usageCount - a.usageCount)
     .map((agent, index) => ({ ...agent, rank: index + 1 }));

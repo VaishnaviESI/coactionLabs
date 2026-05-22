@@ -37,9 +37,9 @@ const EnterpriseHeader: React.FC<EnterpriseHeaderProps> = ({
       </div>
       {/* Main Header Bar */}
       <div className="w-full bg-[#0A1628] flex items-center justify-start pl-[175px]">
-        <div className="rounded-md flex items-center h-24 w-58 justify-start my-1">
+        <Link to="/" className="rounded-md flex items-center h-24 w-58 justify-start my-1" aria-label="Go to home page">
           <img src={coactionLogo} alt="CO/ACTION Logo" className="h-20 w-58 " />
-        </div>
+        </Link>
       </div>
       {/* Page Hero Section with Logo on Top */}
       <section className="w-full bg-slate-100 border-b border-slate-200">
