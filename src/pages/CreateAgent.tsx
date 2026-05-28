@@ -66,7 +66,7 @@ const CreateAgent = () => {
     <div className="min-h-screen bg-background">
       <Header />
       
-      <main className="container mx-auto px-6 py-8">
+      <main className="w-full max-w-[1900px] mx-auto px-6 xl:px-12 py-8">
         <Link to="/">
           <Button variant="ghost" size="sm" className="gap-2 mb-4">
             <ArrowLeft className="w-4 h-4" />

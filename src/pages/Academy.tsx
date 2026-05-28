@@ -84,7 +84,7 @@ const Academy = () => {
         icon={<GraduationCap className="w-5 h-5 text-black" />}
       />
 
-      <main className="container mx-auto px-6 py-8">
+      <main className="w-full max-w-[1900px] mx-auto px-6 xl:px-12 py-8">
 
         {/* Available Courses Section */}
         <Card className="mb-8 border-yellow-200/70 bg-stone-50/65 backdrop-blur-sm">

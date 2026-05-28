@@ -351,7 +351,7 @@ const Index = () => {
         </div>
       </header>
 
-      <main className="w-full px-4 md:px-8 py-10">
+      <main className="w-full max-w-[1900px] mx-auto px-6 xl:px-12 py-10">
         {/* Tour Step 1 Message */}
         {tourStep === 1 && (
           <div className="mb-6 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-900">

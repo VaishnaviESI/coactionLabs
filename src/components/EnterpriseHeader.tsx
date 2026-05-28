@@ -28,22 +28,26 @@ const EnterpriseHeader: React.FC<EnterpriseHeaderProps> = ({
   return (
     <>
       {/* Top Utility Bar */}
-      <div className="w-full bg-blue-950 h-9 flex items-center justify-between pl-[175px] pr-8" style={{ minHeight: 32, maxHeight: 36 }}>
-        <div className="flex items-center gap-2">
-          <Shield className="w-4 h-4 text-white/80" />
-          <span className="text-xs font-medium text-white/80 tracking-wide opacity-80">Enterprise AI Portal</span>
+      <div className="w-full bg-blue-950" style={{ minHeight: 32, maxHeight: 36 }}>
+        <div className="w-full max-w-[1900px] mx-auto px-6 xl:px-12 h-9 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Shield className="w-4 h-4 text-white/80" />
+            <span className="text-xs font-medium text-white/80 tracking-wide opacity-80">Enterprise AI Portal</span>
+          </div>
+          <span className="text-xs text-white/60 font-light opacity-70 text-right">An Official Coaction Labs Resource</span>
         </div>
-        <span className="text-xs text-white/60 font-light opacity-70 text-right">An Official Coaction Labs Resource</span>
       </div>
       {/* Main Header Bar */}
-      <div className="w-full bg-[#0A1628] flex items-center justify-start pl-[175px]">
-        <Link to="/" className="rounded-md flex items-center h-24 w-58 justify-start my-1" aria-label="Go to home page">
-          <img src={coactionLogo} alt="CO/ACTION Logo" className="h-20 w-58 " />
-        </Link>
+      <div className="w-full bg-[#0A1628]">
+        <div className="w-full max-w-[1900px] mx-auto px-6 xl:px-12 flex items-center justify-start">
+          <Link to="/" className="rounded-md flex items-center h-24 w-58 justify-start my-1" aria-label="Go to home page">
+            <img src={coactionLogo} alt="CO/ACTION Logo" className="h-20 w-58 " />
+          </Link>
+        </div>
       </div>
       {/* Page Hero Section with Logo on Top */}
       <section className="w-full bg-slate-100 border-b border-slate-200">
-        <div className="w-full pl-[175px] pr-8 pt-6 pb-4 flex flex-col items-start">
+        <div className="w-full max-w-[1900px] mx-auto px-6 xl:px-12 pt-6 pb-4 flex flex-col items-start">
           {/* Breadcrumbs */}
           <nav className="mb-2 flex items-center text-xs text-slate-500 gap-1" aria-label="Breadcrumb">
             {breadcrumbs.map((bc, i) => (

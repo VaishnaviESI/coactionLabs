@@ -120,7 +120,7 @@ const Toolbox = () => {
         icon={<Wrench className="w-5 h-5 text-black" />}
       />
 
-      <main className="container mx-auto px-4 py-8 max-w-9xl">
+      <main className="w-full max-w-[1900px] mx-auto px-6 xl:px-12 py-8">
         {/* Title + KPIs */}
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8">
           <div>

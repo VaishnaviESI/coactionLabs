@@ -29,6 +29,20 @@ interface CatalogueProject {
 
 const sampleProjects: CatalogueProject[] = [
   {
+    id: 'proj-000',
+    order: 0,
+    name: 'CoAction Labs - AI Hub',
+    description: 'Enterprise AI portal for governance, initiatives, academy, and systems registry.',
+    category: 'Enterprise Platform',
+    buildVsBuyRent: 'Build',
+    owner: 'CoAction Labs',
+    team: 'CoAction Labs',
+    status: 'In Production',
+    impact: 'Q2 2026',
+    vendorUrl: 'https://labs.coactionspecialty.com/',
+    tags: ['AI Hub', 'Portal'],
+  },
+  {
     id: 'proj-001',
     order: 1,
     name: 'GP Talos',
@@ -244,8 +258,10 @@ const ProjectCatalogue = () => {
     },
     {
       key: 'name',
-      label: 'Initiative',
+      label: 'Initiatives',
       getValue: (project: CatalogueProject) => project.name,
+      headerClassName: 'sticky left-0 z-20 bg-slate-900 min-w-[300px]',
+      cellClassName: 'sticky left-0 z-10 bg-white min-w-[300px] border-r border-slate-200',
       render: (project: CatalogueProject) => (
         <>
           <div className="text-slate-900 font-semibold">{project.name}</div>
@@ -305,10 +321,13 @@ const ProjectCatalogue = () => {
     },
     {
       key: 'vendorUrl',
-      label: 'Vendor URL',
-      getValue: (project: CatalogueProject) => project.vendorUrl,
+      label: 'URL',
+      getValue: (project: CatalogueProject) =>
+        project.status === 'In Production' && /^https?:\/\//i.test(project.vendorUrl)
+          ? project.vendorUrl
+          : 'N/A',
       render: (project: CatalogueProject) => (
-        /^https?:\/\//i.test(project.vendorUrl) ? (
+        project.status === 'In Production' && /^https?:\/\//i.test(project.vendorUrl) ? (
           <a
             href={project.vendorUrl}
             target="_blank"
@@ -318,7 +337,7 @@ const ProjectCatalogue = () => {
             Click to open
           </a>
         ) : (
-          <span className="text-slate-700">{project.vendorUrl}</span>
+          <span className="text-slate-500">N/A</span>
         )
       ),
     },
@@ -365,7 +384,7 @@ const ProjectCatalogue = () => {
         icon={<FolderKanban className="w-5 h-5 text-black" />}
       />
 
-      <main className="container mx-auto px-6 py-8 max-w-9xl">
+      <main className="w-full max-w-[1900px] mx-auto px-6 xl:px-12 py-8">
         {/* Title + KPIs */}
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8">
           <div>
@@ -446,10 +465,11 @@ const ProjectCatalogue = () => {
           <SortableTable
             data={filtered}
             columns={tableColumns}
+            initialSortKey="order"
             rowKey={(project) => project.id}
             rowClassName={(_, idx) => `${idx % 2 === 1 ? 'bg-slate-50' : 'bg-white'} border-b border-slate-200`}
             emptyMessage="No projects match those filters."
-            tableClassName="min-w-[1800px]"
+            tableClassName="min-w-[2100px]"
           />
         </div>
 

@@ -21,7 +21,7 @@ const AskExpert = () => {
         icon={<MessageCircleQuestion className="w-5 h-5 text-black" />}
       />
       
-      <main className="container mx-auto px-6 py-8">
+      <main className="w-full max-w-[1900px] mx-auto px-6 xl:px-12 py-8">
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Card>

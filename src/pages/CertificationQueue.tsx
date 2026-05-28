@@ -363,7 +363,7 @@ const CertificationQueue = () => {
         icon={<ClipboardCheck className="w-5 h-5 text-black" />}
       />
       
-      <main className="container mx-auto px-6 py-8">
+      <main className="w-full max-w-[1900px] mx-auto px-6 xl:px-12 py-8">
         
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-foreground mb-2">Certification Queue</h1>
