@@ -21,6 +21,7 @@ import IdeasWorkshop from "./pages/IdeasWorkshop";
 import PoliciesGovernance from "./pages/PoliciesGovernance";
 import ProjectCatalogue from "./pages/ProjectCatalogue";
 import Toolbox from "./pages/Toolbox";
+import AgentsRegistry from "./pages/AgentsRegistry";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
 import { hydrateOktaDebugEvents, logOktaEvent } from "@/lib/oktaDebug";
@@ -58,6 +59,7 @@ const AppContent = () => {
             <Route path="/policies-governance" element={<PoliciesGovernance />} />
             <Route path="/project-catalogue" element={<ProjectCatalogue />} />
             <Route path="/toolbox" element={<Toolbox />} />
+            <Route path="/agents" element={<AgentsRegistry />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </TooltipProvider>

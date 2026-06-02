@@ -9,12 +9,12 @@ import {
   Layers,
 } from 'lucide-react';
 
-type ProjectStatus = 'Discovery' | 'In Progress' | 'In Production';
-type SummaryFilter = 'all' | 'build-buy' | 'delivery-production-discovery';
+type ProjectStatus = 'Discovery' | 'In Progress' | 'In Production' | '';
+type SummaryFilter = 'all' | 'build-subscribe' | 'delivery-production-discovery';
 
 interface CatalogueProject {
   id: string;
-  order: number;
+  order?: number;
   name: string;
   description: string;
   category: string;
@@ -22,12 +22,13 @@ interface CatalogueProject {
   owner: string;
   team: string;
   status: ProjectStatus;
-  impact: string;
+  timeline: string;
   vendorUrl: string;
   tags: string[];
+  subRows?: CatalogueProject[];
 }
 
-const sampleProjects: CatalogueProject[] = [
+export const sampleProjects: CatalogueProject[] = [
   {
     id: 'proj-000',
     order: 0,
@@ -35,10 +36,10 @@ const sampleProjects: CatalogueProject[] = [
     description: 'Enterprise AI portal for governance, initiatives, academy, and systems registry.',
     category: 'Enterprise Platform',
     buildVsBuyRent: 'Build',
-    owner: 'CoAction Labs',
-    team: 'CoAction Labs',
+    owner: 'Ramana Narayanan',
+    team: 'AI Engineering',
     status: 'In Production',
-    impact: 'Q2 2026',
+    timeline: 'Q2 2026',
     vendorUrl: 'https://labs.coactionspecialty.com/',
     tags: ['AI Hub', 'Portal'],
   },
@@ -48,11 +49,11 @@ const sampleProjects: CatalogueProject[] = [
     name: 'GP Talos',
     description: 'Enterprise knowledge and insights discovery tool built on NSAI platform',
     category: 'Enterprise Intelligence',
-    buildVsBuyRent: 'Buy',
+    buildVsBuyRent: 'Subscribe',
     owner: "CEO's Office",
     team: 'Growth Protocol',
     status: 'In Progress',
-    impact: 'Q2 2026',
+    timeline: 'Q2 2026',
     vendorUrl: 'https://growthprotocol.ai',
     tags: ['Enterprise Intelligence'],
   },
@@ -62,11 +63,11 @@ const sampleProjects: CatalogueProject[] = [
     name: 'K2View',
     description: 'Anonymize sensitive data at scale while preserving structure, relationships, and context. This is required to support NSAI initiatives such as GP Talos.',
     category: 'Security & Privacy',
-    buildVsBuyRent: 'Buy',
+    buildVsBuyRent: 'Subscribe',
     owner: 'Priyanka Kapoor',
     team: 'Data Engineering',
     status: 'In Progress',
-    impact: 'Q3 2026',
+    timeline: 'Q3 2026',
     vendorUrl: 'https://www.k2view.com/',
     tags: ['Data Platform', 'Semantic Model'],
   },
@@ -76,125 +77,346 @@ const sampleProjects: CatalogueProject[] = [
     name: 'AtScale Semantic Platform',
     description: 'Power AI agents, BI tools, and analytical applications with governed business logic, consistent metrics, and cost-controlled performance.',
     category: 'Semantic Models',
-    buildVsBuyRent: 'Buy',
+    buildVsBuyRent: 'Subscribe',
     owner: 'Priyanka Kapoor',
     team: 'Data Engineering',
     status: 'In Progress',
-    impact: 'Q3 2026',
+    timeline: 'Q3 2026',
     vendorUrl: 'https://www.atscale.com/',
     tags: ['Semantic Layer'],
   },
   {
-    id: 'proj-005',
+    id: 'proj-004',
     order: 4,
-    name: 'Project Vega: AI Assisted Chatbot for Binding Authority',
-    description: 'An AI assisted chatbot to support Binding Authority underwriters and broker partners',
-    category: 'Underwriting Assistant',
+    name: 'AI Governance Framework',
+    description: 'AI governance framework and tooling evaluation.',
+    category: 'Governance',
     buildVsBuyRent: 'Build',
-    owner: 'Alexia Selland',
-    team: 'Binding Authority IT',
+    owner: 'Joshua Grajewski',
+    team: 'Legal, Risk & Compliance',
+    status: 'Discovery',
+    timeline: 'Q3 2026',
+    vendorUrl: 'TBD',
+    tags: ['AI Governance'],
+  },
+  {
+    id: 'proj-005',
+    order: 5,
+    name: 'Project Vega - Agentic AI on CoAction platform',
+    description: 'AI-driven productivity and capacity harvesting.',
+    category: 'Enterprise Efficiency',
+    buildVsBuyRent: 'Build',
+    owner: 'Kari Hilder, Bertrand  Spunberg',
+    team: 'CoAction IT / SmartIMS IT',
     status: 'In Progress',
-    impact: 'Q2 2026',
+    timeline: 'Q3 2026',
     vendorUrl: 'CoAction Agentic Platform',
-    tags: ['Chatbot', 'Underwriter Assistant', 'Appetite Assistant', 'Customer Service'],
+    tags: ['Chatbot'],
+    subRows: [
+      {
+        id: 'proj-005a',
+        name: 'Project Vega: AI Assisted Chatbot for Binding Authority',
+        description: 'An AI assisted chatbot to support Binding Authority underwriters and broker partners',
+        category: 'Underwriting Assistant',
+        buildVsBuyRent: 'Build',
+        owner: 'Alexia Selland',
+        team: 'Binding Authority IT',
+        status: 'In Progress',
+        timeline: 'Q2 2026',
+        vendorUrl: 'CoAction Agentic Platform',
+        tags: ['Chatbot', 'Underwriter Assistant', 'Appetite Assistant', 'Customer Service'],
+      },
+      {
+        id: 'proj-005b',
+        name: 'AI Assisted Forms Library for Product Development',
+        description: 'AI-driven forms ingestion and insights for Product Development and Underwriting',
+        category: 'Product Development',
+        buildVsBuyRent: 'Build',
+        owner: 'Sebastian Alia',
+        team: 'Product Development',
+        status: 'In Progress',
+        timeline: 'Q3 2026',
+        vendorUrl: 'CoAction Agentic Platform',
+        tags: ['AI Assisted Forms Library', 'Coverage Insights'],
+      },
+    ],
   },
   {
     id: 'proj-006',
-    order: 5,
-    name: 'Project Vega: AI Assisted Forms Library for Product Development',
-    description: 'AI-driven forms ingestion and insights for Product Development and Underwriting',
-    category: 'Product Development',
-    buildVsBuyRent: 'Build',
-    owner: 'Sebastian Alia',
-    team: 'Product Development',
-    status: 'In Progress',
-    impact: 'Q3 2026',
-    vendorUrl: 'CoAction Agentic Platform',
-    tags: ['AI Assisted Forms Library', 'Coverage Insights'],
-  },
-  {
-    id: 'proj-007',
     order: 6,
     name: 'Project CoSave',
     description: 'AI-driven productivity and capacity harvesting.',
     category: 'Enterprise Efficiency',
-    buildVsBuyRent: 'Buy',
-    owner: 'Kari Hilder, Bert Spunberg',
+    buildVsBuyRent: 'Subscribe',
+    owner: 'Kari Hilder, Bertrand  Spunberg',
     team: 'SmartIMS',
     status: 'Discovery',
-    impact: 'Q3 2026',
+    timeline: 'Q3 2026',
     vendorUrl: 'https://smartims.com/industries/insurance/xymphony/',
     tags: ['Xymphony'],
+    subRows: [
+      {
+        id: 'proj-006a',
+        name: 'Claims Ops - FNOL',
+        description: 'FNOL Intake, Triage & Routing Process Automation',
+        category: 'Enterprise Efficiency',
+        buildVsBuyRent: 'Subscribe',
+        owner: 'Irene Koutzoulis',
+        team: 'SmartIMS',
+        status: 'In Progress',
+        timeline: 'Q3 2026',
+        vendorUrl: 'https://smartims.com/industries/insurance/xymphony/',
+        tags: ['Xymphony'],
+      },
+      {
+        id: 'proj-006b',
+        name: 'Treasury Ops - Cash Log',
+        description: 'Cash Log Process Automation',
+        category: 'Enterprise Efficiency',
+        buildVsBuyRent: 'Subscribe',
+        owner: 'Ralph Trama',
+        team: 'SmartIMS',
+        status: 'In Progress',
+        timeline: 'Q3 2026',
+        vendorUrl: 'https://smartims.com/industries/insurance/xymphony/',
+        tags: ['Xymphony'],
+      },
+      {
+        id: 'proj-006c',
+        name: 'UW Ops - Loss Runs',
+        description: 'Loss Run Process Auttomation',
+        category: 'Enterprise Efficiency',
+        buildVsBuyRent: 'Subscribe',
+        owner: 'Peggy House',
+        team: 'SmartIMS',
+        status: 'Discovery',
+        timeline: 'TBD',
+        vendorUrl: 'https://smartims.com/industries/insurance/xymphony/',
+        tags: ['Xymphony'],
+      },
+    ],
   },
   {
-    id: 'proj-008',
+    id: 'proj-007',
     order: 7,
     name: 'Project Cortex',
     description: 'AI Assisted Underwriting Workbench for CoAction Underwriters',
     category: 'Underwriting Workbench',
-    buildVsBuyRent: 'Buy',
+    buildVsBuyRent: 'Subscribe',
     owner: 'Tim Ryan',
     team: 'Underwriting',
     status: 'In Progress',
-    impact: 'Q3 2026',
+    timeline: 'Q3 2026',
     vendorUrl: 'https://convr.com/workbench/',
     tags: ['Underwriter Workbench'],
+    subRows: [
+      {
+        id: 'proj-007a',
+        name: 'E&S Property',
+        description: 'AI Assisted Underwriting Workbench for CoAction Underwriters',
+        category: 'Underwriting Workbench',
+        buildVsBuyRent: 'Subscribe',
+        owner: 'Tim Ryan',
+        team: 'Underwriting',
+        status: 'In Progress',
+        timeline: 'Q3 2026',
+        vendorUrl: 'https://convr.com/workbench/',
+        tags: ['Underwriter Workbench'],
+      },
+      {
+        id: 'proj-007b',
+        name: 'Excess Casualty',
+        description: 'AI Assisted Underwriting Workbench for CoAction Underwriters',
+        category: 'Underwriting Workbench',
+        buildVsBuyRent: 'Subscribe',
+        owner: 'Tim Ryan',
+        team: 'Underwriting',
+        status: 'In Progress',
+        timeline: '',
+        vendorUrl: 'https://convr.com/workbench/',
+        tags: ['Underwriter Workbench'],
+      },
+      {
+        id: 'proj-007c',
+        name: 'Rater Prep across all verticals',
+        description: 'AI Assisted Underwriting Workbench for CoAction Underwriters',
+        category: 'Underwriting Workbench',
+        buildVsBuyRent: 'Subscribe',
+        owner: 'Tim Ryan',
+        team: 'Underwriting',
+        status: 'In Progress',
+        timeline: '',
+        vendorUrl: 'https://convr.com/workbench/',
+        tags: ['Underwriter Workbench'],
+      },
+      {
+        id: 'proj-007d',
+        name: 'Ingestion across all verticals',
+        description: 'AI Assisted Underwriting Workbench for CoAction Underwriters',
+        category: 'Underwriting Workbench',
+        buildVsBuyRent: 'Subscribe',
+        owner: 'Tim Ryan',
+        team: 'Underwriting',
+        status: 'In Progress',
+        timeline: '',
+        vendorUrl: 'https://convr.com/workbench/',
+        tags: ['Underwriter Workbench'],
+      },
+    ],
   },
   {
-    id: 'proj-009',
+    id: 'proj-008',
     order: 8,
     name: 'Loss Control (OI + Pigeon AI)',
     description: 'AI-enabled inspections and risk insights.',
     category: 'Operational Efficiency',
-    buildVsBuyRent: 'Buy',
+    buildVsBuyRent: 'Subscribe',
     owner: 'Peggy House',
     team: 'UW Operations & Risk Engineering',
     status: 'In Production',
-    impact: 'Active',
+    timeline: 'Active',
     vendorUrl: 'https://www.oipinsurtech.com/',
     tags: [],
   },
   {
-    id: 'proj-010',
+    id: 'proj-009',
     order: 9,
     name: 'AI Assisted Subjectivity Management',
     description: 'Subjectivity extraction and monitoring in underwriting workflows.',
     category: 'Operational Efficiency',
-    buildVsBuyRent: 'Buy',
+    buildVsBuyRent: 'Subscribe',
     owner: 'Peggy House',
     team: 'UW Operations & Risk Engineering',
     status: 'In Production',
-    impact: 'Active',
+    timeline: 'Active',
     vendorUrl: 'https://pigeonsubjectivities.com/',
     tags: [],
   },
   {
-    id: 'proj-011',
+    id: 'proj-010',
     order: 10,
     name: 'GP NSAI for Claims',
     description: 'Claims Workflows & Decision Insights',
     category: 'Decision Intelligence',
-    buildVsBuyRent: 'Buy',
+    buildVsBuyRent: 'Subscribe',
     owner: 'Jolene Casatelli',
     team: 'Growth Protocol',
     status: 'Discovery',
-    impact: 'TBD',
+    timeline: 'TBD',
+    vendorUrl: 'https://growthprotocol.ai',
+    tags: ['NSAI'],
+  },
+  {
+    id: 'proj-011',
+    order: 11,
+    name: 'GP NSAI for Underwriting',
+    description: 'Underwriting Workflows & Decision Insights',
+    category: 'Decision Intelligence',
+    buildVsBuyRent: 'Subscribe',
+    owner: 'Jon Levy',
+    team: 'Growth Protocol',
+    status: 'Discovery',
+    timeline: 'TBD',
     vendorUrl: 'https://growthprotocol.ai',
     tags: ['NSAI'],
   },
   {
     id: 'proj-012',
-    order: 11,
-    name: 'GP NSAI for Underwriting',
-    description: 'Underwriting Workflows & Decision Insights',
+    order: 12,
+    name: 'Inspection Review',
+    description: 'Variance Detection at Scale, Carrier-Guideline Compliance, Compliance Tracking + Audit Trail',
+    category: 'Operational Efficiency',
+    buildVsBuyRent: 'Subscribe',
+    owner: 'Peggy House',
+    team: 'UW Operations & Risk Engineering',
+    status: 'Discovery',
+    timeline: 'Q3 2026',
+    vendorUrl: 'https://www.boundai.ai/',
+    tags: [],
+  },
+  {
+    id: 'proj-013',
+    order: 13,
+    name: 'Policy Checking',
+    description: 'Underlying-Layer Reconciliation, Tower Integrity Validation, Forms & Exclusions Audit',
+    category: 'Operational Efficiency',
+    buildVsBuyRent: 'Subscribe',
+    owner: 'Peggy House',
+    team: 'UW Operations & Risk Engineering',
+    status: 'Discovery',
+    timeline: 'Q3 2026',
+    vendorUrl: '',
+    tags: [],
+  },
+  {
+    id: 'proj-014',
+    order: 14,
+    name: 'Quote Comparison',
+    description: 'Expiring ↔ Renewal Reconciliation, Material-Change Detection, UA-Friendly Workflow',
+    category: 'Operational Efficiency',
+    buildVsBuyRent: 'Subscribe',
+    owner: 'Peggy House',
+    team: 'UW Operations & Risk Engineering',
+    status: 'Discovery',
+    timeline: 'Q4 2026',
+    vendorUrl: '',
+    tags: [],
+  },
+  {
+    id: 'proj-015',
+    order: 15,
+    name: 'File Audit',
+    description: 'Authority & Binding Compliance, 19-Point Automated File Score, Auto-Generated UER',
+    category: 'Operational Efficiency',
+    buildVsBuyRent: 'Subscribe',
+    owner: 'Peggy House',
+    team: 'UW Operations & Risk Engineering',
+    status: 'Discovery',
+    timeline: 'Q1 2027',
+    vendorUrl: '',
+    tags: [],
+  },
+  {
+    id: 'proj-016',
+    order: 16,
+    name: '3rd Party Data Integration into GP',
+    description: '3rd party data integration into GP to drive insights',
     category: 'Decision Intelligence',
-    buildVsBuyRent: 'Buy',
-    owner: 'Jon Levy',
+    buildVsBuyRent: 'Subscribe',
+    owner: 'Bertrand  Spunberg',
     team: 'Growth Protocol',
     status: 'Discovery',
-    impact: 'TBD',
+    timeline: 'Q3 2026',
     vendorUrl: 'https://growthprotocol.ai',
     tags: ['NSAI'],
+    subRows: [
+      {
+        id: 'proj-016a',
+        name: 'CRC',
+        description: '3rd party data integration into GP to drive insights',
+        category: 'Decision Intelligence',
+        buildVsBuyRent: 'Subscribe',
+        owner: 'Bertrand  Spunberg',
+        team: 'Growth Protocol',
+        status: 'Discovery',
+        timeline: 'Q3 2026',
+        vendorUrl: 'https://growthprotocol.ai',
+        tags: ['NSAI'],
+      },
+      {
+        id: 'proj-016b',
+        name: 'Verisk',
+        description: '3rd party data integration into GP to drive insights',
+        category: 'Decision Intelligence',
+        buildVsBuyRent: 'Subscribe',
+        owner: 'Bertrand  Spunberg',
+        team: 'Growth Protocol',
+        status: 'Discovery',
+        timeline: 'Q3 2026',
+        vendorUrl: 'https://growthprotocol.ai',
+        tags: ['NSAI'],
+      },
+    ],
   },
 ];
 
@@ -207,7 +429,17 @@ const ProjectCatalogue = () => {
   const [selectedStatus, setSelectedStatus] = useState<string>('All');
   const [selectedSummary, setSelectedSummary] = useState<SummaryFilter>('all');
 
-  const isBuildBuy = (project: CatalogueProject) => /build|buy/i.test(project.buildVsBuyRent);
+  const projectOrderById = useMemo(
+    () =>
+      Object.fromEntries(
+        [...sampleProjects]
+          .sort((left, right) => left.name.localeCompare(right.name))
+          .map((project, index) => [project.id, index + 1]),
+      ) as Record<string, number>,
+    [],
+  );
+
+  const isBuildBuy = (project: CatalogueProject) => /build|subscribe/i.test(project.buildVsBuyRent);
   const isDeliveryProductionDiscovery = (project: CatalogueProject) =>
     project.status === 'In Progress' || project.status === 'In Production' || project.status === 'Discovery';
 
@@ -228,7 +460,7 @@ const ProjectCatalogue = () => {
       const matchesStatus = selectedStatus === 'All' || p.status === selectedStatus;
       const matchesSummary = (() => {
         switch (selectedSummary) {
-          case 'build-buy':
+          case 'build-subscribe':
             return isBuildBuy(p);
           case 'delivery-production-discovery':
             return isDeliveryProductionDiscovery(p);
@@ -243,7 +475,7 @@ const ProjectCatalogue = () => {
   const totalBuildBuy = sampleProjects.filter(isBuildBuy).length;
   const totalDeliveryProductionDiscovery = sampleProjects.filter(isDeliveryProductionDiscovery).length;
   const totalBuild = sampleProjects.filter((project) => /build/i.test(project.buildVsBuyRent)).length;
-  const totalBuy = sampleProjects.filter((project) => /buy/i.test(project.buildVsBuyRent)).length;
+  const totalSubscribe = sampleProjects.filter((project) => /subscribe/i.test(project.buildVsBuyRent)).length;
   const totalInProgress = sampleProjects.filter((project) => project.status === 'In Progress').length;
   const totalInProduction = sampleProjects.filter((project) => project.status === 'In Production').length;
   const totalDiscovery = sampleProjects.filter((project) => project.status === 'Discovery').length;
@@ -254,19 +486,23 @@ const ProjectCatalogue = () => {
       label: '#',
       getValue: (project: CatalogueProject) => project.order,
       cellClassName: 'whitespace-nowrap',
-      render: (project: CatalogueProject) => <div className="text-sm font-semibold text-slate-700">{project.order}</div>,
+      render: (project: CatalogueProject) => (
+        <div className="text-sm font-semibold text-slate-700">
+          {projectOrderById[project.id] ?? ''}
+        </div>
+      ),
     },
     {
       key: 'name',
       label: 'Initiatives',
       getValue: (project: CatalogueProject) => project.name,
-      headerClassName: 'sticky left-0 z-20 bg-slate-900 min-w-[300px]',
-      cellClassName: 'sticky left-0 z-10 bg-white min-w-[300px] border-r border-slate-200',
+      headerClassName: 'sticky left-0 z-20 bg-slate-900 min-w-[500px] w-[500px]',
+      cellClassName: 'sticky left-0 z-10 bg-white min-w-[500px] w-[500px] border-r border-slate-200 align-top',
       render: (project: CatalogueProject) => (
-        <>
+        <div className="max-w-[500px] whitespace-normal break-words">
           <div className="text-slate-900 font-semibold">{project.name}</div>
           <div className="text-xs text-slate-500">{project.description}</div>
-        </>
+        </div>
       ),
     },
     {
@@ -279,21 +515,13 @@ const ProjectCatalogue = () => {
     },
     {
       key: 'buildVsBuyRent',
-      label: 'Build vs Buy/Rent',
+      label: 'Build vs Subscribe',
       getValue: (project: CatalogueProject) => project.buildVsBuyRent,
-      render: (project: CatalogueProject) => <div className="text-sm text-slate-700">{project.buildVsBuyRent}</div>,
-    },
-    {
-      key: 'owner',
-      label: 'Owner',
-      getValue: (project: CatalogueProject) => project.owner,
-      render: (project: CatalogueProject) => <div className="text-sm text-slate-700">{project.owner}</div>,
-    },
-    {
-      key: 'team',
-      label: 'Team',
-      getValue: (project: CatalogueProject) => project.team,
-      render: (project: CatalogueProject) => <div className="text-sm text-slate-700">{project.team}</div>,
+      render: (project: CatalogueProject) => (
+        <div className="text-sm text-slate-700">
+          {project.buildVsBuyRent}
+        </div>
+      ),
     },
     {
       key: 'status',
@@ -309,15 +537,27 @@ const ProjectCatalogue = () => {
             'bg-slate-100 text-slate-500 border-slate-200'
           }`}
         >
-          {project.status}
+          {project.status === 'In Production' ? 'Production' : project.status}
         </span>
       ),
     },
     {
-      key: 'impact',
-      label: 'Impact',
-      getValue: (project: CatalogueProject) => project.impact,
-      render: (project: CatalogueProject) => <div className="text-sm text-slate-700">{project.impact}</div>,
+      key: 'owner',
+      label: 'Owner',
+      getValue: (project: CatalogueProject) => project.owner,
+      render: (project: CatalogueProject) => <div className="text-sm text-slate-700">{project.owner}</div>,
+    },
+    {
+      key: 'team',
+      label: 'Team',
+      getValue: (project: CatalogueProject) => project.team,
+      render: (project: CatalogueProject) => <div className="text-sm text-slate-700">{project.team}</div>,
+    },
+    {
+      key: 'timeline',
+      label: 'Timeline',
+      getValue: (project: CatalogueProject) => project.timeline,
+      render: (project: CatalogueProject) => <div className="text-sm text-slate-700">{project.timeline}</div>,
     },
     {
       key: 'vendorUrl',
@@ -366,8 +606,8 @@ const ProjectCatalogue = () => {
     icon: typeof Layers;
   }> = [
     { key: 'all', label: 'Total initiatives', value: sampleProjects.length, icon: Layers },
-    { key: 'build-buy', label: 'Build + Buy', value: totalBuildBuy, icon: Zap },
-    { key: 'delivery-production-discovery', label: 'Delivery + Production + Discovery', value: totalDeliveryProductionDiscovery, icon: CalendarDays },
+    { key: 'build-subscribe', label: 'Build + Subscribe', value: totalBuildBuy, icon: Zap },
+    { key: 'delivery-production-discovery', label: 'In Progress + In Production + Discovery', value: totalDeliveryProductionDiscovery, icon: CalendarDays },
   ];
 
   return (
@@ -397,7 +637,7 @@ const ProjectCatalogue = () => {
               const isTotal = card.key === 'all';
               const colorClass = (() => {
                 switch (card.key) {
-                  case 'build-buy':
+                  case 'build-subscribe':
                     return 'bg-emerald-100 text-emerald-700 border border-emerald-200';
                   case 'delivery-production-discovery':
                     return 'bg-blue-100 text-blue-700 border border-blue-200';
@@ -411,20 +651,46 @@ const ProjectCatalogue = () => {
                   key={card.key}
                   type="button"
                   onClick={() => setSelectedSummary(card.key)}
-                  className={`rounded-lg px-6 py-4 text-left transition-all min-w-[180px] ${colorClass} ${
+                  className={`rounded-lg text-left transition-all min-w-[180px] overflow-hidden ${
+                    isTotal ? 'px-6 py-4' : ''
+                  } ${colorClass} ${
                     isActive ? 'ring-2 ring-offset-2 ring-slate-900' : ''
                   }`}
                 >
-                  <div className={`text-[10px] font-bold tracking-widest uppercase mb-2 ${isTotal ? 'text-slate-500' : 'text-slate-600'}`}>
-                    {isTotal ? 'Total Initiatives' : card.label}
-                  </div>
-                  <div className={`text-3xl font-bold text-center ${isTotal ? 'text-slate-900' : 'text-slate-900'}`}>
-                    {card.key === 'build-buy'
-                      ? `${totalBuy} + ${totalBuild}`
-                      : card.key === 'delivery-production-discovery'
-                        ? `${totalInProgress} + ${totalInProduction} + ${totalDiscovery}`
-                        : card.value}
-                  </div>
+                  {card.key === 'build-subscribe' ? (
+                    <div className="grid h-full grid-cols-2 divide-x divide-emerald-300">
+                      <div className="px-4 py-4 text-center">
+                        <div className="text-[10px] font-bold uppercase tracking-wider text-emerald-700">Build</div>
+                        <div className="text-3xl font-bold text-slate-900">{totalBuild}</div>
+                      </div>
+                      <div className="px-4 py-4 text-center">
+                        <div className="text-[10px] font-bold uppercase tracking-wider text-emerald-700">Subscribe</div>
+                        <div className="text-3xl font-bold text-slate-900">{totalSubscribe}</div>
+                      </div>
+                    </div>
+                  ) : card.key === 'delivery-production-discovery' ? (
+                    <div className="grid h-full grid-cols-3 divide-x divide-blue-300">
+                      <div className="px-3 py-4 text-center">
+                        <div className="text-[10px] font-bold uppercase tracking-wider text-blue-700">In Progress</div>
+                        <div className="text-3xl font-bold text-slate-900">{totalInProgress}</div>
+                      </div>
+                      <div className="px-3 py-4 text-center">
+                        <div className="text-[10px] font-bold uppercase tracking-wider text-blue-700">Production</div>
+                        <div className="text-3xl font-bold text-slate-900">{totalInProduction}</div>
+                      </div>
+                      <div className="px-3 py-4 text-center">
+                        <div className="text-[10px] font-bold uppercase tracking-wider text-blue-700">Discovery</div>
+                        <div className="text-3xl font-bold text-slate-900">{totalDiscovery}</div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex h-full flex-col justify-center">
+                      <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500 text-center mb-1">Total Initiatives</div>
+                      <div className={`text-3xl font-bold text-center ${isTotal ? 'text-slate-900' : 'text-slate-900'}`}>
+                        {card.value}
+                      </div>
+                    </div>
+                  )}
                 </button>
               );
             })}
@@ -465,11 +731,13 @@ const ProjectCatalogue = () => {
           <SortableTable
             data={filtered}
             columns={tableColumns}
-            initialSortKey="order"
+            initialSortKey="name"
             rowKey={(project) => project.id}
-            rowClassName={(_, idx) => `${idx % 2 === 1 ? 'bg-slate-50' : 'bg-white'} border-b border-slate-200`}
+            rowClassName={() => 'bg-white border-b border-slate-200'}
+            subrowClassName={() => 'bg-white border-l-4 border-l-emerald-300 border-b border-slate-200'}
             emptyMessage="No projects match those filters."
             tableClassName="min-w-[2100px]"
+            getChildren={(project) => project.subRows?.length ? project.subRows : undefined}
           />
         </div>
 

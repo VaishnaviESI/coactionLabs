@@ -15,6 +15,7 @@ import {
   Lightbulb,
   ArrowRight,
   Wrench,
+  Database,
   X,
   Moon,
   Sun,
@@ -34,6 +35,8 @@ import {
 } from '@/components/ui/command';
 import coactionLogo from '../assets/coaction-logo-darkmode-transparent.png';
 import { logOktaEvent } from '@/lib/oktaDebug';
+import { sampleProjects as projectCatalogueItems } from './ProjectCatalogue';
+import { toolboxItems as systemsRegistryItems } from './Toolbox';
 
 type Tile = {
   title: string;
@@ -43,11 +46,12 @@ type Tile = {
   category: string;
   value: string;
   overview?: string;
+  externalUrl?: string;
 };
 
 const tiles: Tile[] = [
   {
-    title: 'Policies and Governance',
+    title: 'AI Policies and Governance',
     description: 'Governance, standards, and enterprise AI policy controls.',
     icon: Shield,
     href: '/policies-governance',
@@ -60,10 +64,10 @@ const tiles: Tile[] = [
     icon: FolderKanban,
     href: '/project-catalogue',
     category: 'Projects',
-    value: '11 total initiatives',
+    value: `${projectCatalogueItems.length} total initiatives`,
   },
   {
-    title: 'Academy',
+    title: 'AI Academy',
     description: 'Courses and learning tracks to build AI fluency.',
     icon: GraduationCap,
     href: '/academy',
@@ -76,7 +80,24 @@ const tiles: Tile[] = [
     icon: Wrench,
     href: '/toolbox',
     category: 'Create',
-    value: '3 tools',
+    value: `${systemsRegistryItems.length} tools`,
+  },
+  {
+    title: 'AI Agent Studio',
+    description: 'A catalogue of all AI agents deployed or in development across CoAction.',
+    icon: Bot,
+    href: '/agents',
+    category: 'Automation',
+    value: '12 agents',
+  },
+  {
+    title: 'Data Hub Portal',
+    description: 'Access the CoAction Data Hub for data assets, pipelines, and platform resources.',
+    icon: Database,
+    href: '#',
+    externalUrl: 'https://data.coactionspecialty.com/',
+    category: 'Data',
+    value: 'data.coactionspecialty.com',
   },
   // {
   //   title: 'Agents',
@@ -250,8 +271,8 @@ const Index = () => {
     <div className="min-h-screen bg-slate-50">
       {/* Combined Header + Hero Section */}
       <header className="sticky top-0 z-50 bg-[#0A1628] text-white shadow-[0_10px_18px_-14px_rgba(15,23,42,0.7)]">
-        <div className="w-full px-4 md:px-8 py-4">
-          <div className="flex w-80 items-center justify-between mb-6">
+        <div className="w-full px-4 md:px-8 py-8 2xl:py-1">
+          <div className="flex w-80 items-center justify-between mb-1 2xl:mb-6">
             <Link to="/" className="flex items-start">
               <div className="p-1.5">
                 <img
@@ -309,25 +330,25 @@ const Index = () => {
           {/* Hero Content */}
           <div className="max-w-4xl mx-auto text-center">
             {/* Welcome Greeting */}
-            <h2 className="text-4xl md:text-4xl font-bold tracking-tight mb-3">
+            <h2 className="text-lg 2xl:text-4xl font-bold tracking-tight mb-0.5 2xl:mb-3">
               {isAuthenticated ? `Welcome back, ${userName}.` : 'Welcome to CO/ACTION LABS'}
             </h2>
 
             {/* Subtitle */}
-            <p className="text-lg text-blue-100 mb-8 max-w-2xl mx-auto">
+            <p className="text-xs 2xl:text-lg text-blue-100 mb-2 2xl:mb-8 max-w-2xl mx-auto">
               Explore, learn, and govern - your enterprise&apos;s AI in one place
             </p>
 
             {/* Search Bar */}
-            <div className="mb-6 flex gap-2">
+            <div className="mb-0 2xl:mb-6 flex gap-2">
               <div className="relative flex-1 max-w-2xl mx-auto">
-                <SearchIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 pointer-events-none" />
+                <SearchIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 2xl:h-5 2xl:w-5 text-slate-400 pointer-events-none" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search pages, policies, agents..."
-                  className="w-full rounded-lg border border-slate-300 bg-white py-3 pl-11 pr-4 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-200 transition-all"
+                  className="w-full rounded-lg border border-slate-300 bg-white py-1.5 2xl:py-3 pl-10 2xl:pl-11 pr-4 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-200 transition-all"
                 />
               </div>
             </div>
@@ -351,7 +372,7 @@ const Index = () => {
         </div>
       </header>
 
-      <main className="w-full max-w-[1900px] mx-auto px-6 xl:px-12 py-10">
+      <main className="w-full max-w-[1900px] mx-auto px-6 xl:px-12 pt-5 pb-0 2xl:py-10">
         {/* Tour Step 1 Message */}
         {tourStep === 1 && (
           <div className="mb-6 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-900">
@@ -423,6 +444,21 @@ const Index = () => {
                 </div>
               </div>
             );
+
+            if (tile.externalUrl) {
+              return (
+                <a
+                  key={tile.title}
+                  href={tile.externalUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group block focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-2xl"
+                  style={animationDelay}
+                >
+                  {cardInner}
+                </a>
+              );
+            }
 
             if (tile.overview) {
               return (

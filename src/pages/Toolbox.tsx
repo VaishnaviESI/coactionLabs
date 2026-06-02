@@ -1,39 +1,47 @@
 import SortableTable from '@/components/SortableTable';
 import EnterpriseHeader from '@/components/EnterpriseHeader';
-import { Wrench } from 'lucide-react';
+import { Wrench, ExternalLink } from 'lucide-react';
 
 type GovernanceStatus = 'approved' | 'in progress';
+type ToolboxType = 'Tool' | 'System' | 'Technology';
 
 interface ToolboxItem {
   id: number;
   order: number;
   name: string;
+  type: ToolboxType;
   description: string;
   govStatus: GovernanceStatus;
   audience: string;
+  launchUrl?: string;
 }
 
-const toolboxItems: ToolboxItem[] = [
+export const toolboxItems: ToolboxItem[] = [
   {
     id: 1,
     order: 1,
     name: 'Microsoft Copilot Chat Authenticated',
+    type: 'Tool',
     description: 'AI assistant for employee productivity',
     govStatus: 'approved',
     audience: 'All Employees',
+    launchUrl: 'https://sso.coactionspecialty.com/home/bookmark/0oa24n9y19ocdf4x90h8/2557',
   },
   {
     id: 2,
     order: 2,
     name: 'GitHub Copilot',
+    type: 'Tool',
     description: 'AI-powered code completion and generation integrated with your development workflow.',
     govStatus: 'approved',
     audience: 'Engineering',
+    launchUrl: 'https://sso.coactionspecialty.com/home/bookmark/0oa23x97lla6FGx8D0h8/2557',
   },
   {
     id: 3,
     order: 3,
     name: 'Rivvit',
+    type: 'Tool',
     description: 'Insights into investment management and reporting',
     govStatus: 'approved',
     audience: 'CoAction Investment Management',
@@ -42,9 +50,11 @@ const toolboxItems: ToolboxItem[] = [
     id: 4,
     order: 4,
     name: 'Claude',
+    type: 'Tool',
     description: 'AI assistant for employee productivity',
     govStatus: 'in progress',
     audience: 'All Employees',
+    launchUrl: 'https://sso.coactionspecialty.com/home/prosightspecialty_claude_1/0oa26t7z0o6vOPsLK0h8/aln26t85hfqFxZVOy0h8',
   },
 ];
 
@@ -65,11 +75,16 @@ const Toolbox = () => {
     },
     {
       key: 'name',
-      label: 'Tool',
+      label: 'Name',
       getValue: (item: ToolboxItem) => item.name,
       render: (item: ToolboxItem) => (
         <div className="text-slate-900 font-semibold">{item.name}</div>
       ),
+    },
+    {
+      key: 'type',
+      label: 'Type',
+      getValue: (item: ToolboxItem) => item.type,
     },
     {
       key: 'description',
@@ -104,6 +119,27 @@ const Toolbox = () => {
         </span>
       ),
     },
+    {
+      key: 'launch',
+      label: 'Launch',
+      getValue: (item: ToolboxItem) => item.launchUrl || '',
+      cellClassName: 'whitespace-nowrap',
+      render: (item: ToolboxItem) => (
+        item.launchUrl ? (
+          <a
+            href={item.launchUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center text-blue-700 hover:text-blue-900 transition-colors"
+            title="Launch"
+          >
+            <ExternalLink className="w-4 h-4" />
+          </a>
+        ) : (
+          <span className="text-slate-500">N/A</span>
+        )
+      ),
+    },
   ];
 
   return (
@@ -123,11 +159,8 @@ const Toolbox = () => {
       <main className="w-full max-w-[1900px] mx-auto px-6 xl:px-12 py-8">
         {/* Title + KPIs */}
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-slate-900 font-['Georgia']">AI Toolbox</h1>
-            <p className="text-sm text-slate-500">Showing {toolboxItems.length} tools</p>
-          </div>
-          <div className="flex flex-nowrap gap-3 overflow-x-auto">
+          <div />
+          <div className="flex justify-end gap-3 overflow-x-auto">
             {[
               { label: 'Total Tools', value: toolboxItems.length, color: 'bg-white text-slate-900 border-2 border-violet-100' },
               { label: 'Approved', value: toolboxItems.filter((i) => i.govStatus === 'approved').length, color: 'bg-blue-100 text-blue-700 border border-blue-200' },
@@ -151,7 +184,7 @@ const Toolbox = () => {
             data={toolboxItems}
             columns={tableColumns}
             rowKey={(item) => String(item.id)}
-            rowClassName={(_, idx) => `${idx % 2 === 1 ? 'bg-slate-50' : 'bg-white'} border-b border-slate-200`}
+            rowClassName={() => 'bg-white border-b border-slate-200'}
             tableClassName="min-w-full"
           />
         </div>
@@ -171,7 +204,7 @@ const Toolbox = () => {
           </div>
         </div>
         <div className="mt-6 rounded-lg border border-slate-200 bg-white p-4">
-          <p className="text-sm text-slate-700">
+          <p className="text-sm text-black">
             Please contact Kip Porterfield or Ashok Narayana with a completed Excel attached to put your AI tool through the AI Governance process.
           </p>
           <a

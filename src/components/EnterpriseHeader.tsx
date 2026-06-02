@@ -40,16 +40,16 @@ const EnterpriseHeader: React.FC<EnterpriseHeaderProps> = ({
       {/* Main Header Bar */}
       <div className="w-full bg-[#0A1628]">
         <div className="w-full max-w-[1900px] mx-auto px-6 xl:px-12 flex items-center justify-start">
-          <Link to="/" className="rounded-md flex items-center h-24 w-58 justify-start my-1" aria-label="Go to home page">
-            <img src={coactionLogo} alt="CO/ACTION Logo" className="h-20 w-58 " />
+          <Link to="/" className="rounded-md flex items-center h-24 w-auto justify-start my-1" aria-label="Go to home page">
+            <img src={coactionLogo} alt="CO/ACTION Logo" className="h-20 w-auto" />
           </Link>
         </div>
       </div>
       {/* Page Hero Section with Logo on Top */}
       <section className="w-full bg-slate-100 border-b border-slate-200">
-        <div className="w-full max-w-[1900px] mx-auto px-6 xl:px-12 pt-6 pb-4 flex flex-col items-start">
+        <div className="w-full max-w-[1900px] mx-auto px-6 xl:px-12 pt-3 pb-2 2xl:pt-6 2xl:pb-4 flex flex-col items-start">
           {/* Breadcrumbs */}
-          <nav className="mb-2 flex items-center text-xs text-slate-500 gap-1" aria-label="Breadcrumb">
+          <nav className="mb-1 2xl:mb-2 flex items-center text-xs text-slate-500 gap-1" aria-label="Breadcrumb">
             {breadcrumbs.map((bc, i) => (
               <span key={i} className="flex items-center">
                 {i > 0 && <ChevronRight className="w-3 h-3 mx-1 text-slate-400" />}
@@ -64,14 +64,14 @@ const EnterpriseHeader: React.FC<EnterpriseHeaderProps> = ({
           {/* Page Title with Icon */}
           <div className="flex items-center gap-3 mb-1">
             {icon && (
-              <div className={`flex items-center justify-center w-10 h-10 rounded-lg ${color || 'bg-indigo-100'}`}>
+              <div className={`flex items-center justify-center w-8 h-8 2xl:w-10 2xl:h-10 rounded-lg ${color || 'bg-indigo-100'}`}>
                 {icon}
               </div>
             )}
-            <h1 className="text-3xl font-serif font-extrabold text-slate-900 tracking-tight">{pageTitle}</h1>
+            <h1 className="text-xl 2xl:text-3xl font-serif font-extrabold text-slate-900 tracking-tight">{pageTitle}</h1>
           </div>
           {/* Description */}
-          <p className="text-base text-slate-600 max-w-2xl mb-0">{pageDescription}</p>
+          <p className="text-sm 2xl:text-base text-slate-600 max-w-2xl mb-0">{pageDescription}</p>
         </div>
       </section>
     </>
