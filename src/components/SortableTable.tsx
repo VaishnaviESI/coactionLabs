@@ -1,4 +1,4 @@
-import { Fragment, useMemo, useState } from 'react';
+import { Fragment, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -30,7 +30,31 @@ interface SortableTableProps<T> {
   getChildren?: (row: T) => T[] | undefined;
   /** Optional className override for subrows. */
   subrowClassName?: (row: T, parentIndex: number, childIndex: number) => string;
+  /**
+   * Wrap the table in a horizontally scrollable container with a themed fade
+   * + always-visible scrollbar so users see the scroll affordance.
+   * Defaults to true.
+   */
+  scrollable?: boolean;
+  /**
+   * Tailwind accent palette used for the scroll fade and scrollbar.
+   * Defaults to 'emerald' (green).
+   */
+  scrollAccent?: 'emerald' | 'blue' | 'slate' | 'amber' | 'violet';
+  /** Optional className for the outer scroll wrapper. */
+  scrollContainerClassName?: string;
 }
+
+const scrollAccentMap: Record<
+  NonNullable<SortableTableProps<unknown>['scrollAccent']>,
+  { fade: string; scrollbar: string }
+> = {
+  emerald: { fade: 'from-emerald-100/50', scrollbar: 'scroll-accent-emerald' },
+  blue: { fade: 'from-blue-100/50', scrollbar: 'scroll-accent-blue' },
+  slate: { fade: 'from-slate-100/50', scrollbar: 'scroll-accent-slate' },
+  amber: { fade: 'from-amber-100/50', scrollbar: 'scroll-accent-amber' },
+  violet: { fade: 'from-violet-100/50', scrollbar: 'scroll-accent-violet' },
+};
 
 const SortableTable = <T,>({
   data,
@@ -46,11 +70,43 @@ const SortableTable = <T,>({
   bodyClassName,
   getChildren,
   subrowClassName,
+  scrollable = true,
+  scrollAccent = 'emerald',
+  scrollContainerClassName,
 }: SortableTableProps<T>) => {
   const defaultSortKey = initialSortKey ?? columns.find((col) => col.sortable !== false)?.key ?? null;
   const [sortKey, setSortKey] = useState<string | null>(defaultSortKey);
   const [sortDirection, setSortDirection] = useState<SortDirection>(initialSortDirection);
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
+
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+  const [showRightFade, setShowRightFade] = useState(false);
+
+  const updateFade = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const maxScroll = el.scrollWidth - el.clientWidth;
+    // 2px tolerance for sub-pixel rounding
+    setShowRightFade(maxScroll > 2 && el.scrollLeft < maxScroll - 2);
+  }, []);
+
+  useLayoutEffect(() => {
+    updateFade();
+  }, [updateFade, data, columns]);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.addEventListener('scroll', updateFade, { passive: true });
+    const ro = new ResizeObserver(updateFade);
+    ro.observe(el);
+    window.addEventListener('resize', updateFade);
+    return () => {
+      el.removeEventListener('scroll', updateFade);
+      ro.disconnect();
+      window.removeEventListener('resize', updateFade);
+    };
+  }, [updateFade]);
 
   const toggleExpanded = (key: string) => {
     setExpandedRows((prev) => {
@@ -105,7 +161,9 @@ const SortableTable = <T,>({
     setSortDirection('asc');
   };
 
-  return (
+  const accent = scrollAccentMap[scrollAccent];
+
+  const tableEl = (
     <table className={cn('min-w-full border-collapse text-sm', tableClassName)}>
       <thead className={cn('bg-slate-900 text-white', headerClassName)}>
         <tr className={headerRowClassName}>
@@ -224,6 +282,27 @@ const SortableTable = <T,>({
         )}
       </tbody>
     </table>
+  );
+
+  if (!scrollable) {
+    return tableEl;
+  }
+
+  return (
+    <div className={cn('relative', scrollContainerClassName)}>
+      <div ref={scrollRef} className={cn('overflow-x-auto overflow-y-hidden', accent.scrollbar)}>
+        {tableEl}
+      </div>
+      {/* Right edge fade to signal horizontal scroll; hidden once scrolled to end */}
+      <div
+        aria-hidden
+        className={cn(
+          'pointer-events-none absolute top-0 right-0 h-full w-10 bg-gradient-to-l to-transparent transition-opacity duration-200',
+          accent.fade,
+          showRightFade ? 'opacity-70' : 'opacity-0',
+        )}
+      />
+    </div>
   );
 };
 

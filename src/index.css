@@ -185,3 +185,78 @@
     transform: rotate(0deg);
   }
 }
+
+/* Always-visible thin scrollbar to signal horizontal scroll affordance */
+.scroll-shadow {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(100, 116, 139, 0.5) transparent;
+}
+.scroll-shadow::-webkit-scrollbar {
+  height: 10px;
+  width: 10px;
+}
+.scroll-shadow::-webkit-scrollbar-track {
+  background: rgba(241, 245, 249, 0.6);
+}
+.scroll-shadow::-webkit-scrollbar-thumb {
+  background-color: rgba(100, 116, 139, 0.5);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+.scroll-shadow::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(71, 85, 105, 0.7);
+  background-clip: padding-box;
+}
+
+/* Themed always-visible scrollbars used by SortableTable */
+[class*="scroll-accent-"] {
+  scrollbar-width: thin;
+}
+[class*="scroll-accent-"]::-webkit-scrollbar {
+  height: 10px;
+  width: 10px;
+}
+[class*="scroll-accent-"]::-webkit-scrollbar-track {
+  background: transparent;
+}
+[class*="scroll-accent-"]::-webkit-scrollbar-thumb {
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.scroll-accent-emerald {
+  scrollbar-color: rgb(16, 185, 129) rgba(209, 250, 229, 0.6);
+}
+.scroll-accent-emerald::-webkit-scrollbar-track { background: rgba(209, 250, 229, 0.6); }
+.scroll-accent-emerald::-webkit-scrollbar-thumb { background-color: rgb(16, 185, 129); }
+.scroll-accent-emerald::-webkit-scrollbar-thumb:hover { background-color: rgb(5, 150, 105); }
+
+.scroll-accent-blue {
+  scrollbar-color: rgb(59, 130, 246) rgba(219, 234, 254, 0.6);
+}
+.scroll-accent-blue::-webkit-scrollbar-track { background: rgba(219, 234, 254, 0.6); }
+.scroll-accent-blue::-webkit-scrollbar-thumb { background-color: rgb(59, 130, 246); }
+.scroll-accent-blue::-webkit-scrollbar-thumb:hover { background-color: rgb(37, 99, 235); }
+
+.scroll-accent-slate {
+  scrollbar-color: rgb(100, 116, 139) rgba(241, 245, 249, 0.6);
+}
+.scroll-accent-slate::-webkit-scrollbar-track { background: rgba(241, 245, 249, 0.6); }
+.scroll-accent-slate::-webkit-scrollbar-thumb { background-color: rgb(100, 116, 139); }
+.scroll-accent-slate::-webkit-scrollbar-thumb:hover { background-color: rgb(71, 85, 105); }
+
+.scroll-accent-amber {
+  scrollbar-color: rgb(245, 158, 11) rgba(254, 243, 199, 0.6);
+}
+.scroll-accent-amber::-webkit-scrollbar-track { background: rgba(254, 243, 199, 0.6); }
+.scroll-accent-amber::-webkit-scrollbar-thumb { background-color: rgb(245, 158, 11); }
+.scroll-accent-amber::-webkit-scrollbar-thumb:hover { background-color: rgb(217, 119, 6); }
+
+.scroll-accent-violet {
+  scrollbar-color: rgb(139, 92, 246) rgba(237, 233, 254, 0.6);
+}
+.scroll-accent-violet::-webkit-scrollbar-track { background: rgba(237, 233, 254, 0.6); }
+.scroll-accent-violet::-webkit-scrollbar-thumb { background-color: rgb(139, 92, 246); }
+.scroll-accent-violet::-webkit-scrollbar-thumb:hover { background-color: rgb(124, 58, 237); }

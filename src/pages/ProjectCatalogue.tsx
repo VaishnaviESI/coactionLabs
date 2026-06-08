@@ -7,6 +7,7 @@ import {
   CalendarDays,
   Zap,
   Layers,
+  MoveHorizontal,
 } from 'lucide-react';
 
 type ProjectStatus = 'Discovery' | 'In Progress' | 'In Production' | '';
@@ -427,7 +428,7 @@ const ProjectCatalogue = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [selectedStatus, setSelectedStatus] = useState<string>('All');
-  const [selectedSummary, setSelectedSummary] = useState<SummaryFilter>('all');
+  const [selectedBuildType, setSelectedBuildType] = useState<'All' | 'Build' | 'Subscribe'>('All');
 
   const projectOrderById = useMemo(
     () =>
@@ -458,19 +459,12 @@ const ProjectCatalogue = () => {
         p.tags.some((t) => t.toLowerCase().includes(q));
       const matchesCategory = selectedCategory === 'All' || p.category === selectedCategory;
       const matchesStatus = selectedStatus === 'All' || p.status === selectedStatus;
-      const matchesSummary = (() => {
-        switch (selectedSummary) {
-          case 'build-subscribe':
-            return isBuildBuy(p);
-          case 'delivery-production-discovery':
-            return isDeliveryProductionDiscovery(p);
-          default:
-            return true;
-        }
-      })();
-      return matchesQuery && matchesCategory && matchesStatus && matchesSummary;
+      const matchesBuildType =
+        selectedBuildType === 'All' ||
+        new RegExp(selectedBuildType, 'i').test(p.buildVsBuyRent);
+      return matchesQuery && matchesCategory && matchesStatus && matchesBuildType;
     });
-  }, [searchQuery, selectedCategory, selectedStatus, selectedSummary, isBuildBuy, isDeliveryProductionDiscovery]);
+  }, [searchQuery, selectedCategory, selectedStatus, selectedBuildType]);
 
   const totalBuildBuy = sampleProjects.filter(isBuildBuy).length;
   const totalDeliveryProductionDiscovery = sampleProjects.filter(isDeliveryProductionDiscovery).length;
@@ -633,7 +627,6 @@ const ProjectCatalogue = () => {
           </div>
           <div className="flex flex-nowrap gap-3">
             {summaryCards.map((card) => {
-              const isActive = selectedSummary === card.key;
               const isTotal = card.key === 'all';
               const colorClass = (() => {
                 switch (card.key) {
@@ -642,56 +635,91 @@ const ProjectCatalogue = () => {
                   case 'delivery-production-discovery':
                     return 'bg-blue-100 text-blue-700 border border-blue-200';
                   default:
-                    return 'bg-white text-slate-900 border border-slate-200';
+                    return 'bg-white text-slate-900 border border-black';
                 }
               })();
 
               return (
-                <button
+                <div
                   key={card.key}
-                  type="button"
-                  onClick={() => setSelectedSummary(card.key)}
-                  className={`rounded-lg text-left transition-all min-w-[180px] overflow-hidden ${
+                  className={`rounded-lg text-left min-w-[180px] overflow-hidden ${
                     isTotal ? 'px-6 py-4' : ''
-                  } ${colorClass} ${
-                    isActive ? 'ring-2 ring-offset-2 ring-slate-900' : ''
-                  }`}
+                  } ${colorClass}`}
                 >
                   {card.key === 'build-subscribe' ? (
                     <div className="grid h-full grid-cols-2 divide-x divide-emerald-300">
-                      <div className="px-4 py-4 text-center">
+                      <button
+                        type="button"
+                        onClick={() => setSelectedBuildType((prev) => (prev === 'Build' ? 'All' : 'Build'))}
+                        className={`px-4 py-4 text-center transition-colors ${
+                          selectedBuildType === 'Build' ? 'bg-emerald-200 ring-2 ring-inset ring-emerald-600' : 'hover:bg-emerald-200/60'
+                        }`}
+                      >
                         <div className="text-[10px] font-bold uppercase tracking-wider text-emerald-700">Build</div>
                         <div className="text-3xl font-bold text-slate-900">{totalBuild}</div>
-                      </div>
-                      <div className="px-4 py-4 text-center">
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setSelectedBuildType((prev) => (prev === 'Subscribe' ? 'All' : 'Subscribe'))}
+                        className={`px-4 py-4 text-center transition-colors ${
+                          selectedBuildType === 'Subscribe' ? 'bg-emerald-200 ring-2 ring-inset ring-emerald-600' : 'hover:bg-emerald-200/60'
+                        }`}
+                      >
                         <div className="text-[10px] font-bold uppercase tracking-wider text-emerald-700">Subscribe</div>
                         <div className="text-3xl font-bold text-slate-900">{totalSubscribe}</div>
-                      </div>
+                      </button>
                     </div>
                   ) : card.key === 'delivery-production-discovery' ? (
                     <div className="grid h-full grid-cols-3 divide-x divide-blue-300">
-                      <div className="px-3 py-4 text-center">
+                      <button
+                        type="button"
+                        onClick={() => setSelectedStatus((prev) => (prev === 'In Progress' ? 'All' : 'In Progress'))}
+                        className={`px-3 py-4 text-center transition-colors ${
+                          selectedStatus === 'In Progress' ? 'bg-blue-200 ring-2 ring-inset ring-blue-600' : 'hover:bg-blue-200/60'
+                        }`}
+                      >
                         <div className="text-[10px] font-bold uppercase tracking-wider text-blue-700">In Progress</div>
                         <div className="text-3xl font-bold text-slate-900">{totalInProgress}</div>
-                      </div>
-                      <div className="px-3 py-4 text-center">
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setSelectedStatus((prev) => (prev === 'In Production' ? 'All' : 'In Production'))}
+                        className={`px-3 py-4 text-center transition-colors ${
+                          selectedStatus === 'In Production' ? 'bg-blue-200 ring-2 ring-inset ring-blue-600' : 'hover:bg-blue-200/60'
+                        }`}
+                      >
                         <div className="text-[10px] font-bold uppercase tracking-wider text-blue-700">Production</div>
                         <div className="text-3xl font-bold text-slate-900">{totalInProduction}</div>
-                      </div>
-                      <div className="px-3 py-4 text-center">
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setSelectedStatus((prev) => (prev === 'Discovery' ? 'All' : 'Discovery'))}
+                        className={`px-3 py-4 text-center transition-colors ${
+                          selectedStatus === 'Discovery' ? 'bg-blue-200 ring-2 ring-inset ring-blue-600' : 'hover:bg-blue-200/60'
+                        }`}
+                      >
                         <div className="text-[10px] font-bold uppercase tracking-wider text-blue-700">Discovery</div>
                         <div className="text-3xl font-bold text-slate-900">{totalDiscovery}</div>
-                      </div>
+                      </button>
                     </div>
                   ) : (
-                    <div className="flex h-full flex-col justify-center">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSelectedCategory('All');
+                        setSelectedStatus('All');
+                        setSelectedBuildType('All');
+                        setSearchQuery('');
+                      }}
+                      className="flex h-full w-full flex-col justify-center hover:bg-slate-50 transition-colors"
+                    >
                       <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500 text-center mb-1">Total Initiatives</div>
                       <div className={`text-3xl font-bold text-center ${isTotal ? 'text-slate-900' : 'text-slate-900'}`}>
                         {card.value}
                       </div>
-                    </div>
+                    </button>
                   )}
-                </button>
+                </div>
               );
             })}
           </div>
@@ -726,8 +754,13 @@ const ProjectCatalogue = () => {
           </div>
         </div>
 
+        <div className="flex items-end justify-end gap-2 px-4 py-3">
+          <span className="text-sm font-semibold text-slate-700">Scroll to see more details</span>
+          <MoveHorizontal className="w-4 h-4 text-slate-400" />
+        </div>
         {/* Table */}
-        <div className="rounded-lg border border-slate-200 overflow-x-auto overflow-y-hidden mb-8">
+        <div className="mb-8 rounded-lg border border-slate-200 overflow-hidden">
+          
           <SortableTable
             data={filtered}
             columns={tableColumns}
@@ -738,6 +771,7 @@ const ProjectCatalogue = () => {
             emptyMessage="No projects match those filters."
             tableClassName="min-w-[2100px]"
             getChildren={(project) => project.subRows?.length ? project.subRows : undefined}
+            scrollAccent="emerald"
           />
         </div>
 
