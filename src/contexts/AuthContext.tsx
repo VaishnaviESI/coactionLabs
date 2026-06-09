@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { logOktaEvent } from '@/lib/oktaDebug';
+import { identify, resetUser } from '@/lib/analytics';
 
 interface User {
   id: string;
@@ -47,7 +48,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const loginWithOkta = async () => {
     logOktaEvent('okta:login-requested');
 
-    const response = await fetch('/api/auth/okta/config');
+    const response = await fetch('/api/auth/config');
     if (!response.ok) {
       logOktaEvent('okta:config-fetch-error', { status: response.status });
       throw new Error('Unable to fetch Okta configuration.');
@@ -97,6 +98,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     window.localStorage.removeItem(TOKEN_KEY);
     window.localStorage.removeItem(ID_TOKEN_KEY);
     setUser(null);
+    resetUser();
     logOktaEvent('okta:logout-local-cleared');
   };
 
@@ -174,6 +176,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           id: meUser?.user_id || meUser?.sub || email || 'unknown',
           name: displayName,
           email,
+          isAdmin: role === 'ADMIN',
+        });
+
+        identify(meUser?.user_id || meUser?.sub || email || 'unknown', {
+          role,
           isAdmin: role === 'ADMIN',
         });
 

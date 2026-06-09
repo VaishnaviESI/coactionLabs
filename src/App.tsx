@@ -17,7 +17,6 @@ import CreateAgent from "./pages/CreateAgent";
 import MyAgentDetail from "./pages/MyAgentDetail";
 import MyTeamsAgents from "./pages/MyTeamsAgents";
 import CertificationQueue from "./pages/CertificationQueue";
-import IdeasWorkshop from "./pages/IdeasWorkshop";
 import PoliciesGovernance from "./pages/PoliciesGovernance";
 import ProjectCatalogue from "./pages/ProjectCatalogue";
 import Toolbox from "./pages/Toolbox";
@@ -25,8 +24,11 @@ import AgentsRegistry from "./pages/AgentsRegistry";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
 import { hydrateOktaDebugEvents, logOktaEvent } from "@/lib/oktaDebug";
+import { initAnalytics } from "@/lib/analytics";
+import { usePageTracking } from "@/hooks/usePageTracking";
 
 hydrateOktaDebugEvents();
+initAnalytics();
 logOktaEvent("auth:frontend-initialized", {
   path: window.location.pathname,
   hasQuery: Boolean(window.location.search),
@@ -35,6 +37,8 @@ logOktaEvent("auth:frontend-initialized", {
 const queryClient = new QueryClient();
 
 const AppContent = () => {
+  usePageTracking();
+
   return (
     <AuthProvider>
       <AgentProvider>
@@ -55,7 +59,6 @@ const AppContent = () => {
             <Route path="/create-agent" element={<CreateAgent />} />
             <Route path="/team-agents" element={<MyTeamsAgents />} />
             <Route path="/certification-queue" element={<CertificationQueue />} />
-            <Route path="/ideas-workshop" element={<IdeasWorkshop />} />
             <Route path="/policies-governance" element={<PoliciesGovernance />} />
             <Route path="/project-catalogue" element={<ProjectCatalogue />} />
             <Route path="/toolbox" element={<Toolbox />} />
