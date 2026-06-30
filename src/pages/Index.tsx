@@ -20,7 +20,6 @@ import {
   Moon,
   Sun,
   Bell,
-  LogIn,
   LogOut,
   Search as SearchIcon,
 } from 'lucide-react';
@@ -37,6 +36,7 @@ import coactionLogo from '../assets/coaction-logo-darkmode-transparent.png';
 import { logOktaEvent } from '@/lib/oktaDebug';
 import { sampleProjects as projectCatalogueItems } from './ProjectCatalogue';
 import { toolboxItems as systemsRegistryItems } from './Toolbox';
+import { agentItems as agentStudioItems } from './AgentsRegistry';
 
 type Tile = {
   title: string;
@@ -88,7 +88,7 @@ const tiles: Tile[] = [
     icon: Bot,
     href: '/agents',
     category: 'Automation',
-    value: '12 agents',
+    value: `${agentStudioItems.length} agents`,
   },
   {
     title: 'Data Hub Portal',
@@ -180,7 +180,7 @@ const tileAccentStyles = [
 
 const Index = () => {
   const navigate = useNavigate();
-  const { user, loading: authLoading, isAuthenticated, logout, loginWithOkta } = useAuth();
+  const { user, loading: authLoading, isAuthenticated } = useAuth();
   const { theme, setTheme } = useTheme();
   const [commandOpen, setCommandOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -197,28 +197,9 @@ const Index = () => {
         .toUpperCase()
     : 'U';
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
     logOktaEvent('okta:signout-clicked', { source: 'Index' });
-    try {
-      await logout();
-      logOktaEvent('okta:signout-complete', { source: 'Index' });
-    } catch (error) {
-      logOktaEvent('okta:signout-error', {
-        source: 'Index',
-        message: error instanceof Error ? error.message : 'Unknown error',
-      });
-    }
-  };
-
-  const handleLogin = async () => {
-    try {
-      await loginWithOkta();
-    } catch (error) {
-      logOktaEvent('okta:signin-error', {
-        source: 'Index',
-        message: error instanceof Error ? error.message : 'Unknown error',
-      });
-    }
+    navigate('/logout');
   };
 
   const toggleTheme = () => {
@@ -272,7 +253,7 @@ const Index = () => {
       {/* Combined Header + Hero Section */}
       <header className="sticky top-0 z-50 bg-[#0A1628] text-white shadow-[0_10px_18px_-14px_rgba(15,23,42,0.7)]">
         <div className="w-full px-4 md:px-8 py-8 2xl:py-1">
-          <div className="flex w-80 items-center justify-between mb-1 2xl:mb-6">
+          <div className="flex w-full items-center justify-between mb-1 2xl:mb-6">
             <Link to="/" className="flex items-start">
               <div className="p-1.5">
                 <img
@@ -325,6 +306,28 @@ const Index = () => {
                  
               </div>
             </div> */}
+            <div className="flex items-center gap-3">
+              {isAuthenticated && !authLoading && user && (
+                <div className="text-right text-xs">
+                  <div className="font-semibold">{user.name || 'User'}</div>
+                  <div className="text-blue-300 text-xs">{user.email}</div>
+                </div>
+              )}
+              {isAuthenticated && (
+                <>
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-blue-950 font-semibold text-sm">
+                    {initials}
+                  </div>
+                  <button
+                    onClick={handleLogout}
+                    className="p-2 text-blue-100 hover:bg-white/10 hover:text-white transition-colors rounded-lg"
+                    title="Sign out of Okta"
+                  >
+                    <LogOut className="w-4 h-4" />
+                  </button>
+                </>
+              )}
+            </div>
           </div>
 
           {/* Hero Content */}

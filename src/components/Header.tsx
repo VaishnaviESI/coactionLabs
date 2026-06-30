@@ -1,41 +1,23 @@
-import { Link } from 'react-router-dom';
-import { Bell, Moon, Sun, LogIn, LogOut } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Bell, Moon, Sun, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTheme } from 'next-themes';
-import { useAuth } from '@/contexts/AuthContext';
 import coactionLogo from '../assets/coaction-logo-darkmode-transparent.png';
+import { useAuth } from '@/contexts/AuthContext';
 import { logOktaEvent } from '@/lib/oktaDebug';
 
 const Header = () => {
   const { theme, setTheme } = useTheme();
-  const { user, loading, isAuthenticated, logout, loginWithOkta } = useAuth();
+  const { user, loading, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
 
   const toggleTheme = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark');
   };
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
     logOktaEvent('okta:signout-clicked', { source: 'Header' });
-    try {
-      await logout();
-      logOktaEvent('okta:signout-complete', { source: 'Header' });
-    } catch (error) {
-      logOktaEvent('okta:signout-error', {
-        source: 'Header',
-        message: error instanceof Error ? error.message : 'Unknown error',
-      });
-    }
-  };
-
-  const handleLogin = async () => {
-    try {
-      await loginWithOkta();
-    } catch (error) {
-      logOktaEvent('okta:signin-error', {
-        source: 'Header',
-        message: error instanceof Error ? error.message : 'Unknown error',
-      });
-    }
+    navigate('/logout');
   };
 
   const initials = user?.name
@@ -60,12 +42,14 @@ const Header = () => {
             </div>
           </Link>
 
-          {/* <div className="flex items-center gap-2">
+          {/* Auth controls */}
+          <div className="flex items-center gap-2">
             <Button
               variant="ghost"
               size="icon"
               className="text-blue-100 hover:bg-white/10 hover:text-white"
               onClick={() => toggleTheme()}
+              title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
             >
               {theme === 'dark' ? (
                 <Sun className="w-5 h-5" />
@@ -106,9 +90,9 @@ const Header = () => {
                     <LogOut className="w-4 h-4" />
                   </Button>
                 </>
-              )} 
+              )}
             </div>
-          </div> */}
+          </div>
         </div>
       </div>
     </header>

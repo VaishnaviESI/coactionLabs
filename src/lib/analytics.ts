@@ -27,8 +27,7 @@ export interface AnalyticsEvent {
   props?: Record<string, unknown>;
   sessionId: string;
   userId: string | null;
-  // Monotonic sequence number, used to track which events have been flushed
-  // to the server so we never re-send the same event.
+  // Monotonic sequence number used to order events within the local buffer.
   seq: number;
 }
 
@@ -68,10 +67,6 @@ declare global {
 const EVENTS_KEY = "analytics_events";
 const SESSION_KEY = "analytics_session";
 const USER_KEY = "analytics_user_id";
-const SENT_KEY = "analytics_last_sent_seq";
-const TOKEN_KEY = "auth_token";
-const FLUSH_ENDPOINT = "/api/analytics/events";
-const FLUSH_INTERVAL_MS = 30 * 1000; // Flush buffered events every 30 seconds.
 const MAX_ENTRIES = 500;
 const SESSION_TIMEOUT_MS = 30 * 60 * 1000; // 30 minutes of inactivity.
 
@@ -80,9 +75,6 @@ let session: AnalyticsSession | null = null;
 let userId: string | null = null;
 let initialized = false;
 let eventSeq = 0; // Last assigned event sequence number.
-let lastSentSeq = 0; // Highest sequence number confirmed delivered to the server.
-let flushInFlight = false;
-let flushTimer: ReturnType<typeof setInterval> | null = null;
 
 const hasWindow = () => typeof window !== "undefined";
 
@@ -126,11 +118,6 @@ const loadEvents = () => {
     if (typeof e.seq !== "number") {
       e.seq = ++eventSeq;
     }
-  }
-  try {
-    lastSentSeq = Number(window.localStorage.getItem(SENT_KEY) ?? 0) || 0;
-  } catch {
-    lastSentSeq = 0;
   }
   window.__analyticsEvents = buffer;
 };
@@ -292,55 +279,10 @@ const buildSummary = (): AnalyticsSummary => {
   };
 };
 
-const persistSentSeq = () => {
-  if (!hasWindow()) return;
-  try {
-    window.localStorage.setItem(SENT_KEY, String(lastSentSeq));
-  } catch {
-    // Ignore storage errors.
-  }
-};
-
-/**
- * Flush unsent buffered events to the backend. Events stay in the localStorage
- * buffer regardless — `lastSentSeq` tracks delivery so a failed POST simply
- * leaves them to be retried on the next flush (localStorage is the fallback).
- *
- * Uses `fetch` with `keepalive` directly (rather than the api client) so the
- * final flush can complete during page unload, where sendBeacon cannot carry
- * the Authorization header.
- */
-export async function flushEvents(useKeepalive = false): Promise<void> {
-  if (!hasWindow() || flushInFlight) return;
-
-  const token = window.localStorage.getItem(TOKEN_KEY);
-  if (!token) return; // Not authenticated yet — keep buffering locally.
-
-  const pending = buffer.filter((e) => e.seq > lastSentSeq);
-  if (pending.length === 0) return;
-
-  const highestSeq = pending[pending.length - 1].seq;
-  flushInFlight = true;
-  try {
-    const res = await fetch(FLUSH_ENDPOINT, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ events: pending }),
-      keepalive: useKeepalive,
-    });
-    if (res.ok) {
-      lastSentSeq = highestSeq;
-      persistSentSeq();
-    }
-  } catch {
-    // Network failure — events remain buffered for the next attempt.
-  } finally {
-    flushInFlight = false;
-  }
-}
+// BACKEND DISABLED: this is a standalone, frontend-only build with no `/api`
+// backend. Analytics are buffered in localStorage only and never transmitted,
+// so there is no flush/POST and no bearer token. Inspect events locally via
+// window.__analytics.getEvents() / window.__analytics.summary().
 
 /**
  * Initialise analytics: hydrate stored state, start/resume a session, and
@@ -359,16 +301,11 @@ export function initAnalytics() {
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "hidden") {
       endSession();
-      void flushEvents(true);
     }
   });
   window.addEventListener("pagehide", () => {
     endSession();
-    void flushEvents(true);
   });
-
-  // Periodic background flush.
-  flushTimer = setInterval(() => void flushEvents(false), FLUSH_INTERVAL_MS);
 
   window.__analytics = {
     getEvents: () => [...buffer],
@@ -377,7 +314,7 @@ export function initAnalytics() {
     track: trackEvent,
     identify,
     reset: resetUser,
-    flush: () => flushEvents(false),
+    flush: () => Promise.resolve(),
     clear: () => {
       buffer = [];
       persistEvents();

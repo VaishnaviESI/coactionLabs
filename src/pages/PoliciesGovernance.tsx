@@ -4,7 +4,6 @@ import { Shield, FileText, Scale, Users, AlertTriangle, Search, BookOpen, Extern
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import acceptableUsePdf from '@/assets/acceptable_use_of_ai_tools_policy.pdf';
-import governancePdf from '@/assets/AI Governance at Coaction - Draft.pdf';
 
 interface PolicyItem {
   title: string;
@@ -71,93 +70,6 @@ const policies = [
   },
 ];
 
-const governanceItems = [
-  {
-    category: 'Core Governance Framework',
-    icon: Shield,
-    iconColor: 'text-black',
-    iconBg: 'bg-indigo-50',
-    cardStyle: 'border-indigo-200 bg-indigo-50/60 hover:border-indigo-400 hover:bg-indigo-100/80',
-    items: [
-      { title: 'AI Governance Program', description: 'Board-approved written program governing AI across the entire organization.', fullText: 'Coaction must maintain a formal, board-approved written program that governs AI across the entire organization. This is a live program with named owners, active processes, and documented evidence of operation. The program covers every AI system used across every function — underwriting, claims, finance, operations, producer services, compliance, and any other area where AI influences a process or outcome. It covers the full lifecycle of each system — from acquisition or build, through deployment, ongoing monitoring, and retirement. All three AI categories are included: predictive models, agentic platforms, and neuro-symbolic systems. Both internally built systems and vendor-supplied systems are covered, as well as AI introduced into processes operated by third-party service partners.', pdfUrl: governancePdf, pdfPage: 2 },
-      { title: 'AI Inventory and Tracking', description: 'Complete, up-to-date inventory of every AI system in use across the organization.', fullText: 'Coaction must maintain a complete, up-to-date inventory of every AI system in use, under active development, under evaluation, or recently retired — across every business function and division. For each entry, the inventory captures: what the system does and what processes it influences; which AI category it belongs to (predictive, agentic, neuro-symbolic, or combination); what data it uses and where that data comes from; who owns it internally, and if externally supplied, who the vendor is; its current deployment status and scope; when it was last validated and when the next review is due; and whether it operates within a third-party or BPO-managed process. Maintaining the inventory is an ongoing operational obligation, not a one-time exercise. This is the first document a regulator will ask for.', pdfUrl: governancePdf, pdfPage: 3 },
-      { title: 'Documented Model and System Governance', description: 'Comprehensive documentation for every AI system covering purpose, validation, monitoring, and lifecycle.', fullText: 'For every AI system in the inventory, Coaction must maintain documentation covering: the system\'s purpose, intended use, and the processes it is designed to support; the data used to build or train it (source, lineage, quality, and suitability); how it was validated before deployment; its known limitations and controls on use; how its performance is monitored; what triggers a review or retirement decision; and how drift or degradation is detected and addressed. For predictive and analytical models, this includes a plain-language model narrative. For agentic AI systems, documentation must cover the defined scope of autonomous action, Human-in-the-Loop design, exception rate thresholds, and change control procedures.', pdfUrl: governancePdf, pdfPage: 3 },
-      { title: 'Board and Management Accountability', description: 'Executive ownership and board oversight of AI governance as an enterprise obligation.', fullText: 'AI governance at Coaction is an enterprise obligation owned at the top of the organization — not delegated to any single function. The board must approve AI governance policies and review them at least annually. Senior management must establish and maintain the program, assign qualified owners across functions, oversee AI risk, and take prompt remedial action when problems are identified. A cross-functional governance structure — spanning underwriting, claims, finance, operations, actuarial, data science, legal, compliance, and risk — must be in place and actively operating. Regular, substantive reporting on AI risk must reach the board.', pdfUrl: governancePdf, pdfPage: 7 },
-    ],
-  },
-  {
-    category: 'Operational Controls',
-    icon: AlertTriangle,
-    iconColor: 'text-black',
-    iconBg: 'bg-orange-50',
-    cardStyle: 'border-orange-200 bg-orange-50/60 hover:border-orange-400 hover:bg-orange-100/80',
-    items: [
-      { title: 'Human-in-the-Loop Governance', description: 'Design and controls for human review of AI decisions as a primary governance control.', fullText: 'For all agentic and neuro-symbolic AI systems operating across Coaction, Human-in-the-Loop (HITL) design is a primary governance control — not an afterthought. Every agent deployment must document: the specific conditions under which human review is required; the escalation path and who receives exceptions; the target exception rate and threshold for system review; and how HITL performance is tracked over time. HITL design must be reviewed as part of every revalidation cycle. A system whose exception rate is trending toward zero requires as much scrutiny as one whose exception rate is too high — both indicate the system may not be operating as intended.', pdfUrl: governancePdf, pdfPage: 4 },
-      { title: 'Ongoing Monitoring and Revalidation', description: 'Active monitoring and regular revalidation processes for all deployed AI systems.', fullText: 'Deploying an AI system is not the end of the governance obligation — it is the beginning. Coaction must maintain active monitoring for every AI system in production across all functions, including: performance tracking against documented baselines; detection of model or system drift and degradation in accuracy or reliability; a defined revalidation cadence triggered by time passage, material system changes, or significant business environment changes; and clear escalation paths with named accountability. For agentic systems, monitoring must also track operational outcomes — not just technical performance.', pdfUrl: governancePdf, pdfPage: 5 },
-    ],
-  },
-  {
-    category: 'Compliance & Regulatory',
-    icon: Scale,
-    iconColor: 'text-black',
-    iconBg: 'bg-amber-50',
-    cardStyle: 'border-amber-200 bg-amber-50/60 hover:border-amber-400 hover:bg-amber-100/80',
-    items: [
-      { title: 'Actuarial Validity of AI-Derived Variables', description: 'Requirements for actuarial defensibility of AI-derived factors in underwriting and pricing.', fullText: 'Any AI-derived factor used in underwriting, pricing, or reserving must be actuarially supportable. Coaction must be able to demonstrate: a clear, empirical, statistically significant relationship between the variable and the risk being assessed; that the variable is not prohibited by applicable insurance law; and that its use produces consistent treatment of similarly situated risks. For commercial lines — and particularly for long-tail lines — this obligation is heightened. AI systems that influence reserving, including neuro-symbolic platforms used in claims severity assessment or litigation risk detection, are subject to the same actuarial defensibility standard as underwriting models.', pdfUrl: governancePdf, pdfPage: 5 },
-      { title: 'Explainability Across All AI Categories', description: 'Requirement to explain AI system operations in plain language for all stakeholders.', fullText: 'Coaction must be able to explain how each AI system operates in plain language that connects inputs to outputs in a logically intuitive way. This applies equally to predictive models used in underwriting and pricing, agentic systems routing documents or processing requests, and neuro-symbolic systems combining pattern recognition with rule-based logic. "The vendor\'s model produced this result" is not an acceptable answer — to a regulator, auditor, senior leader, or a producer or policyholder who asks why a decision was made.', pdfUrl: governancePdf, pdfPage: 6 },
-      { title: 'Examination Readiness', description: 'Preparation and documentation requirements for regulatory examinations of AI governance.', fullText: 'NAIC and NYDFS have signaled clearly that they will examine AI governance. Coaction must be able to produce on request: the written AI governance program; the complete AI inventory; system documentation for any AI system under review; evidence of validation, testing, and drift monitoring; vendor due diligence files and contracts; board minutes evidencing governance oversight; HITL design documentation for agentic systems; and training records. The question is not whether Coaction will face an AI governance examination — it is whether we will be ready when it happens.', pdfUrl: governancePdf, pdfPage: 8 },
-    ],
-  },
-  {
-    category: 'Vendor & Third-Party Management',
-    icon: Users,
-    iconColor: 'text-black',
-    iconBg: 'bg-cyan-50',
-    cardStyle: 'border-cyan-200 bg-cyan-50/60 hover:border-cyan-400 hover:bg-cyan-100/80',
-    items: [
-      { title: 'Vendor and Partner Accountability', description: 'Requirements for ensuring third-party AI systems meet Coaction governance standards.', fullText: 'Coaction cannot outsource its AI governance obligations. For every third-party AI system, external data source, bought agent platform, or AI-enabled service operated by a partner on Coaction\'s behalf, the following must be in place: a documented due diligence process conducted before adoption; contractual terms establishing audit rights and regulatory cooperation; active exercise of those audit rights — not just having them on paper; and an obligation on the vendor to operate to governance standards equivalent to those Coaction applies to its own systems. If a vendor\'s system produces an outcome that violates applicable law or governance standards, that is Coaction\'s problem to remediate. Vendor relationships do not transfer accountability.', pdfUrl: governancePdf, pdfPage: 6 },
-    ],
-  },
-  {
-    category: 'Ethics & Training',
-    icon: Users,
-    iconColor: 'text-black',
-    iconBg: 'bg-rose-50',
-    cardStyle: 'border-rose-200 bg-rose-50/60 hover:border-rose-400 hover:bg-rose-100/80',
-    items: [
-      { title: 'AI Ethics Guidelines', description: 'Principles for responsible and fair AI usage.', fullText: 'These guidelines establish principles for responsible AI usage. AI systems must be designed and operated with fairness, transparency, and accountability. Human dignity and autonomy must be respected in all AI applications. AI should not perpetuate or amplify societal biases. Environmental impact of AI systems should be considered and minimized. Stakeholder interests must be balanced in AI decision-making. Regular ethics reviews assess AI systems against these principles. An AI Ethics Committee provides guidance on complex ethical issues.', pdfUrl: governancePdf, pdfPage: 7 },
-      { title: 'Training and Organizational Readiness', description: 'Personnel training and organizational preparation for responsible AI use across all roles and functions.', fullText: 'All Coaction personnel who interact with, rely on, or are responsible for AI systems must be trained on the responsible and lawful use of those systems. Training must be: tailored to each person\'s specific role and the AI systems they work with; completed promptly on onboarding and refreshed on a regular cadence; and documented, with records maintained and available for examination. Training is not limited to technical staff. Senior leaders, underwriters, claims professionals, operations managers, and finance personnel who use AI-assisted outputs in their work are all within scope. Training records must be maintained and producible for regulatory examination.', pdfUrl: governancePdf, pdfPage: 7 },
-    ],
-  },
-  {
-    category: 'AI Landscape at Coaction',
-    icon: BookOpen,
-    iconColor: 'text-black',
-    iconBg: 'bg-teal-50',
-    cardStyle: 'border-teal-200 bg-teal-50/60 hover:border-teal-400 hover:bg-teal-100/80',
-    items: [
-      { title: 'Predictive and Analytical Models', description: 'AI systems supporting underwriting, pricing, reserving, and fraud detection decisions.', fullText: 'AI systems that analyze data to support underwriting, pricing, reserving, and fraud detection decisions. These are subject to the most direct regulatory scrutiny under NAIC and NYDFS guidance and require full actuarial defensibility.', pdfUrl: governancePdf, pdfPage: 1 },
-      { title: 'Agentic AI (Operational Automation)', description: 'AI agents that autonomously execute multi-step operational tasks across business functions.', fullText: 'AI agents that autonomously execute multi-step operational tasks across any business function — including but not limited to claims processing, policy servicing, financial operations, document management, and producer services. These systems act on behalf of Coaction and are fully subject to this governance framework even where they do not directly influence underwriting or pricing.', pdfUrl: governancePdf, pdfPage: 1 },
-      { title: 'Neuro-Symbolic Platforms', description: 'AI systems combining neural pattern recognition with symbolic rule-based reasoning.', fullText: 'AI systems that combine neural pattern recognition with symbolic rule-based reasoning. These may operate across both analytical and operational domains simultaneously — for example, identifying litigation risk signals in claims while also routing correspondence. Both the neural and symbolic layers require separate, documented governance controls. Any system that does not clearly fit one category should be treated as fitting all three until a determination is made.', pdfUrl: governancePdf, pdfPage: 1 },
-    ],
-  },
-  {
-    category: 'The Practical Test',
-    icon: AlertTriangle,
-    iconColor: 'text-black',
-    iconBg: 'bg-amber-50',
-    cardStyle: 'border-amber-200 bg-amber-50/60 hover:border-amber-400 hover:bg-amber-100/80',
-    items: [
-      { title: 'Do we know what AI we are running?', description: 'Inventory completeness across every function and division.', fullText: 'Is the inventory complete, current, and maintained — across every function and division, not just underwriting?', pdfUrl: governancePdf, pdfPage: 8 },
-      { title: 'Can we explain what each system does and why?', description: 'Plain-language narratives for every material AI system.', fullText: 'Is there a plain-language narrative for every material AI system, covering all three AI categories?', pdfUrl: governancePdf, pdfPage: 8 },
-      { title: 'Do we know if our systems are still working as intended?', description: 'Active monitoring with drift detection and escalation paths.', fullText: 'Is there active monitoring with documented drift detection, exception rate tracking, and escalation paths?', pdfUrl: governancePdf, pdfPage: 8 },
-      { title: 'Can we defend every AI-derived variable actuarially?', description: 'Actuarial support for factors used in underwriting, pricing, and reserving.', fullText: 'Are factors used in underwriting, pricing, and reserving supported by documented actuarial analysis?', pdfUrl: governancePdf, pdfPage: 8 },
-      { title: 'Are we genuinely accountable for our vendors and partners?', description: 'Audit rights exercised, including for agentic platform vendors and BPO partners.', fullText: 'Do we have audit rights — and have we exercised them, including for agentic platform vendors and BPO partners?', pdfUrl: governancePdf, pdfPage: 8 },
-      { title: 'Are our HITL controls documented and functioning?', description: 'Exception design documented, monitored, and reviewed for every agent deployment.', fullText: 'For every agent deployment, is the exception design documented, monitored, and reviewed?', pdfUrl: governancePdf, pdfPage: 8 },
-      { title: 'Could we hand a regulator our documentation today?', description: 'Governance program approved, evidenced, and examination-ready.', fullText: 'Is the governance program approved, evidenced, and examination-ready across the full scope of Coaction\'s AI use? If the answer to any of these is no, that is a gap. Identifying the gap is the first step. Closing it — with documented, evidenced action — is the obligation.', pdfUrl: governancePdf, pdfPage: 8 },
-    ],
-  },
-];
 
 const PoliciesGovernance = () => {
   const [selectedPolicy, setSelectedPolicy] = useState<PolicyItem | null>(null);
@@ -165,9 +77,10 @@ const PoliciesGovernance = () => {
   const [search, setSearch] = useState('');
   const [activeTab, setActiveTab] = useState<'policies' | 'governance'>('policies');
 
-  const activeData = activeTab === 'policies' ? policies : governanceItems;
+  const activeData = activeTab === 'policies' ? policies : [];
 
   const filteredItems = useMemo(() => {
+    if (activeTab !== 'policies') return [];
     const normalizedQuery = normalizeSearchText(search);
     if (!normalizedQuery) return activeData;
 
@@ -262,27 +175,20 @@ const PoliciesGovernance = () => {
               Employee Acceptable Use Policy
             </button>
           )}
-          {activeTab === 'governance' && (
-            <button
-              onClick={() => {
-                setSelectedPolicy({
-                  title: 'AI Governance at Coaction',
-                  description: 'Comprehensive governance framework for AI at Coaction',
-                  fullText: '',
-                  pdfUrl: governancePdf,
-                });
-                setShowDocumentPreview(true);
-              }}
-              title="View the governance document"
-              className="inline-flex items-center gap-2.5 rounded-xl border border-blue-200 bg-blue-50 px-5 py-3 text-sm font-medium text-blue-700 shadow-sm hover:bg-blue-100 hover:border-blue-300 transition-all duration-200"
-            >
-              <BookOpen className="w-4 h-4" />
-              AI Governance Framework
-            </button>
-          )}
         </div>
 
-        {filteredItems.length === 0 && (
+        {activeTab === 'governance' && (
+          <Card className="border-2 border-indigo-100 bg-white/70 backdrop-blur-sm">
+            <CardContent className="py-16 text-center">
+              <Shield className="w-10 h-10 text-blue-700 mx-auto mb-4" />
+              <p className="text-base text-slate-700">
+                Please contact Joshua Grajewski or Ashok Narayana for any details on AI Governance.
+              </p>
+            </CardContent>
+          </Card>
+        )}
+
+        {activeTab === 'policies' && filteredItems.length === 0 && (
           <p className="text-center text-sm text-slate-500 py-12">
             No policies match &ldquo;{search}&rdquo;.
           </p>
